@@ -4,31 +4,35 @@
     <top-bar></top-bar>
     <div class="shim"></div>
     <router-view></router-view>
+    <foot-bar></foot-bar>
   </div>
 </template>
 
 <script>
 import topBar from './components/topbar/topbar'
+import footBar from './components/footbar/footbar'
 export default {
   name: 'app',
   components: {
-    topBar
+    topBar,
+    footBar
   }
 }
 </script>
 
 <style scoped>
 #app {
+  position: relative;
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  min-height:100%;
+  height: auto !important;
 }
 .shim{
-  position: fixed;
   top: 0;
-  height: 55px;
+  height: 65px;
 }
 </style>

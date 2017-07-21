@@ -49,7 +49,7 @@ table {
 
 /* custom */
 a {
-    color: #7e8c8d;
+    color: #000;
     text-decoration: none;
     -webkit-backface-visibility: hidden;
 }
@@ -82,10 +82,11 @@ li {
 
 html, body {
     width: 100%;
+    height: 100%;
 }
 
 body {
     -webkit-text-size-adjust: none;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-    background-color: #f6f6ef;
+    background-color: #fff;
 }
