@@ -8,7 +8,30 @@ import actions from './actions'
 Vue.use(Vuex)
 
 let state = {
-  // 登陆状态
+  // 吐司状态组
+  toastState: {
+    isShowToast: false,
+    toastMsgHeader: '',
+    toastMsgContent: '',
+    toastNum: undefined,
+    deals: '',
+    contract: '',
+    _confirmfunc: null,
+    _cancelfunc: null
+  },
+  // 吐司互动状态组
+  toastInputState: {
+    isShowToast: false,
+    toastMsgHeader: '',
+    toastMsgContent: '',
+    deals: '',
+    contract: '',
+    _confirmfunc: null,
+    _cancelfunc: null
+  },
+  // NEW列表分页公共数据
+  currentPage: 0,
+  // 登陆状态 (转用topbar内部判定)
   isLogin: false,
   // 用户状态
   userInfo: { secret: '', info: {} },
@@ -25,7 +48,9 @@ let state = {
   // 拉取的文章详情
   articleDetail: {},
   // 拉取的文章评论
-  articleCommentList: {}
+  articleCommentList: {},
+  // 转账记录列表
+  transactionList: {}
 }
 
 // export

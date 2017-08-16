@@ -1,289 +1,112 @@
 <template>
 <!--此间内容摘鉴自热门页-->
-  <div class="main-wrap">
+  <div class="main-wrap" @click="showall">
     <ul>
-      <!--测试存留副本<li v-for="item in this.articleNewList.articles">
-        <span class="readcount">
-          {{item.votes}}
-        </span>
-        <span class="title">
-          <router-link :to="'articles/' + item.id">{{item.title}}</router-link>
-          <span class="titlesuffix">{{item.url}}</span>
-        </span>
-        <br/>
-        <span class="meta">
-          <span class="author">
-            <router-link to="user/">{{item.authorId}}</router-link>
-          </span>
-          <span class="time">
-            {{item.timestamp}}
-          </span>&nbsp;|&nbsp;
-          <router-link to="article/">{{item.votes}} 条评论</router-link>
-        </span>
-      </li>-->
-      <li>
-        <div class="count_wrapper">
-          <span class="readcount">
-            <!--阅读计数器-->
-            9090
-          </span>
-        </div>
-        <div class="list_container">
-          <span class="title">
-            <router-link :to="articles/11">HeroKu has been repicked its 'False alarm' plan</router-link>
-            <span class="titlesuffix">www.baidu.com</span>
-          </span>
-          <br/>
-          <span class="meta">
-            <span class="author meta_info">
-              <img src="/static/img/avatar.png"></img>
-              <router-link to="user/">acxaljdwljdiajwia1</router-link>
-            </span>
-            <span class="timestamp meta_info">
-              <img src="/static/img/time.png"></img>
-              2017-09-09
-            </span>&nbsp;|&nbsp;
-            <span class="comment meta_info">
-              <img src="/static/img/comments.png"></img>
-              <router-link to="article/">90980 条评论</router-link>&nbsp;|&nbsp;
-            </span>
-            <span class="vote meta_info">
-              <img src="/static/img/up.png"></img>
-              192213123123123123022票
-            </span>&nbsp;|&nbsp;
-            <span class="price meta_info">
-              <span>$</span>：8929
-            </span>
-          </span>
-        </div>
-      </li>
-      <li>
-        <div class="count_wrapper">
-          <span class="readcount">
-            <!--阅读计数器-->
-            9090
-          </span>
-        </div>
-        <div class="list_container">
-          <span class="title">
-            <router-link :to="articles/11">HeroKu has been repicked its 'False alarm' plan</router-link>
-            <span class="titlesuffix">www.baidu.com</span>
-          </span>
-          <br/>
-          <span class="meta">
-            <span class="author meta_info">
-              <router-link to="user/">awawx123cq2awcxa1</router-link>
-            </span>
-            <span class="timestamp meta_info">
-              <img src="/static/img/time.png"></img>
-              2017-09-09
-            </span>&nbsp;|&nbsp;
-            <span class="comment meta_info">
-              <img src="/static/img/comments.png"></img>
-              <router-link to="article/">999 条评论</router-link>&nbsp;|&nbsp;
-            </span>
-            <span class="vote meta_info">
-              <img src="/static/img/up.png"></img>
-              192022票
-            </span>&nbsp;|&nbsp;
-            <span class="price meta_info">
-              <span>$</span>：8929
-            </span>
-          </span>
-        </div>
-      </li>
-      <li>
-        <div class="count_wrapper">
-          <span class="readcount">
-            <!--阅读计数器-->
-            9090
-          </span>
-        </div>
-        <div class="list_container">
-          <span class="title">
-            <router-link :to="articles/11">HeroKu has been repicked its 'False alarm' plan</router-link>
-            <span class="titlesuffix">www.baidu.com</span>
-          </span>
-          <br/>
-          <span class="meta">
-            <span class="author meta_info">
-              <img src="/static/img/avatar.png"></img>
-              <router-link to="user/">acxaljdwljdiajwia1</router-link>
-            </span>
-            <span class="timestamp meta_info">
-              <img src="/static/img/time.png"></img>
-              2017-09-09
-            </span>&nbsp;|&nbsp;
-            <span class="comment meta_info">
-              <img src="/static/img/comments.png"></img>
-              <router-link to="article/">90980 条评论</router-link>&nbsp;|&nbsp;
-            </span>
-            <span class="vote meta_info">
-              <img src="/static/img/up.png"></img>
-              192213123123123123022票
-            </span>&nbsp;|&nbsp;
-            <span class="price meta_info">
-              <span>$</span>：8929
-            </span>
-          </span>
-        </div>
-      </li>
-      <li>
-        <div class="count_wrapper">
-          <span class="readcount">
-            <!--阅读计数器-->
-            9090
-          </span>
-        </div>
-        <div class="list_container">
-          <span class="title">
-            <router-link :to="articles/11">HeroKu has been repicked its 'False alarm' plan</router-link>
-            <span class="titlesuffix">www.baidu.com</span>
-          </span>
-          <br/>
-          <span class="meta">
-            <span class="author meta_info">
-              <router-link to="user/">awawx123cq2awcxa1</router-link>
-            </span>
-            <span class="timestamp meta_info">
-              <img src="/static/img/time.png"></img>
-              2017-09-09
-            </span>&nbsp;|&nbsp;
-            <span class="comment meta_info">
-              <img src="/static/img/comments.png"></img>
-              <router-link to="article/">999 条评论</router-link>&nbsp;|&nbsp;
-            </span>
-            <span class="vote meta_info">
-              <img src="/static/img/up.png"></img>
-              192022票
-            </span>&nbsp;|&nbsp;
-            <span class="price meta_info">
-              <span>$</span>：8929
-            </span>
-          </span>
-        </div>
-      </li>
-      <li>
-        <div class="count_wrapper">
-          <span class="readcount">
-            <!--阅读计数器-->
-            9090
-          </span>
-        </div>
-        <div class="list_container">
-          <span class="title">
-            <router-link :to="articles/11">HeroKu has been repicked its 'False alarm' plan</router-link>
-            <span class="titlesuffix">www.baidu.com</span>
-          </span>
-          <br/>
-          <span class="meta">
-            <span class="author meta_info">
-              <img src="/static/img/avatar.png"></img>
-              <router-link to="user/">acxaljdwljdiajwia1</router-link>
-            </span>
-            <span class="timestamp meta_info">
-              <img src="/static/img/time.png"></img>
-              2017-09-09
-            </span>&nbsp;|&nbsp;
-            <span class="comment meta_info">
-              <img src="/static/img/comments.png"></img>
-              <router-link to="article/">90980 条评论</router-link>&nbsp;|&nbsp;
-            </span>
-            <span class="vote meta_info">
-              <img src="/static/img/up.png"></img>
-              192213123123123123022票
-            </span>&nbsp;|&nbsp;
-            <span class="price meta_info">
-              <span>$</span>：8929
-            </span>
-          </span>
-        </div>
-      </li>
-      <li>
-        <div class="count_wrapper">
-          <span class="readcount">
-            <!--阅读计数器-->
-            9090
-          </span>
-        </div>
-        <div class="list_container">
-          <span class="title">
-            <router-link :to="articles/11">HeroKu has been repicked its 'False alarm' plan</router-link>
-            <span class="titlesuffix">www.baidu.com</span>
-          </span>
-          <br/>
-          <span class="meta">
-            <span class="author meta_info">
-              <router-link to="user/">awawx123cq2awcxa1</router-link>
-            </span>
-            <span class="timestamp meta_info">
-              <img src="/static/img/time.png"></img>
-              2017-09-09
-            </span>&nbsp;|&nbsp;
-            <span class="comment meta_info">
-              <img src="/static/img/comments.png"></img>
-              <router-link to="article/">999 条评论</router-link>&nbsp;|&nbsp;
-            </span>
-            <span class="vote meta_info">
-              <img src="/static/img/up.png"></img>
-              192022票
-            </span>&nbsp;|&nbsp;
-            <span class="price meta_info">
-              <span>$</span>：8929
-            </span>
-          </span>
-        </div>
-      </li>
+      <new-list v-for="(item, index) in this.switchGroup.articles" :key="index" :item="item" :that="this" :index="realIndex + index + 1" v-on:reFresh="toReFresh"></new-list>
     </ul>
-    <!--测试存留副本<div class="pag">
-      <div class="ctrbtn" @click="goto(currentPage--)" v-show="this.currentPage != 1">上一页</div>
-      <div class="pagespot" v-for="index in page" :class="{'active':this.currentPage == index}" :key="index">{{index}}</div>
-      <div class="ctrbtn" @click="goto(currentPage++)" v-show="this.currentPage == this.allPage && this.allPage != 0">下一页</div>
-    </div>-->
     <div class="pag">
-      <div class="ctrbtn" @click="goto(currentPage--)">上一页</div>
-      <div class="pagespot">1</div>
-      <div class="pagespot">2</div>
-      <div class="pagespot">3</div>
-      <div class="pagespot">4</div>
-      <div class="pagespot active">5</div>
-      <div class="ctrbtn" @click="goto(currentPage++)">下一页</div>
+      <div class="ctrbtn" @click="minPage" v-show="this.currentPage != 0">上一页</div>
+      <div class="pagespot" v-for="(value, index) in this.page" @click="goto(index)" :class="{'active':currentPage + 1 == Number(value)}" v-on:reFresh="toReFresh">{{Number(value)}}</div>
+      <div class="ctrbtn" @click="addPage" v-show="this.allPage != this.currentPage + 1 && this.allPage != 0">下一页</div>
     </div>
   </div>
 </template>
 
 <script>
-  import { mapState } from 'vuex'
+  import { mapGetters, mapState } from 'vuex'
+  import newList from './newList/newList'
   export default {
     name: 'newpost',
     components: {
+      newList
     },
     data: function () {
       return {
         // 分页初始量
-        currentPage: 1,
+        awardNum: undefined,
         pageSpots: 5,
         pageContent: 20,
         pageNum: 0
       }
     },
     methods: {
+      // test click
+      showall: function () {
+        console.log(this.currentPage)
+      },
+      // 跳到顶部
+      jumpToTop: function () {
+        let pos = document.querySelector('.main-wrap')
+        document.body.scrollTop = pos.offsetTop - 100
+      },
+      // 刷新（重新拉取）事件
+      toReFresh: function (start) {
+        let that = this
+        console.log(start)
+        setTimeout(function () {
+          console.log(that)
+          that.$store.dispatch('getAllarticles', {
+            sortBy: 'timestamp',
+            limit: String(that.pageContent),
+            offset: String(that.currentPage * that.pageContent + 1),
+            that: that
+          })
+        }, 10000)
+        console.log('十秒后重新获取数据')
+      },
+      // 操作页面增减
+      addPage: function () {
+        if (this.currentPage < this.allPage - 1) {
+          this.$store.commit('toAddCurrentPage')
+          this.$store.dispatch('getAllarticles', {
+            sortBy: 'timestamp',
+            limit: String(this.pageContent),
+            offset: String(this.offsetNum),
+            that: this
+          })
+          this.jumpToTop()
+        } else {
+          this.$store.commit('toMinCurrentPage')
+        }
+      },
+      minPage: function () {
+        if (this.currentPage > 0) {
+          this.$store.commit('toMinCurrentPage')
+          // this.$store.state.currentPage = this.currentPage - 1
+          this.$store.dispatch('getAllarticles', {
+            sortBy: 'timestamp',
+            limit: String(this.pageContent),
+            offset: String(this.offsetNum),
+            that: this
+          })
+          this.jumpToTop()
+        } else {
+          return
+        }
+      },
       // 页面跳转
       goto: function (index) {
         if (index === this.current) return
-        this.currentPage = index
+        this.$store.commit('toPlusCurrentPage', index)
+        // this.currentPage = index
         this.$store.dispatch('getAllarticles', {
           sortBy: 'timestamp',
-          limit: '',
-          offset: this.offsetNum,
+          limit: String(this.pageContent),
+          offset: String(this.offsetNum),
           that: this
         })
+        this.jumpToTop()
       }
     },
     computed: {
-      ...mapState(['articleNewList']),
+      ...mapGetters(['newArticleList']),
+      ...mapState(['articleNewList', 'currentPage']),
       // 以下是分页内容
       // 分页数组
+      switchGroup: function () {
+        return this.$store.getters['newArticleList']
+      },
+      // 构造页签数组
       page: function () {
         let pag = []
         if (this.currentPage < this.pageSpots) {
@@ -291,11 +114,11 @@
           while (i) {
             pag.unshift(i--)
           }
-        } else {
+        } else if (this.currentPage >= this.pageSpots) {
           let middle = this.currentPage - Math.floor(this.pageSpots / 2)
           let i = this.pageSpots
           if (middle > (this.allPage - this.pageSpots)) {
-            middle = (this.allPage - this.pageSpots + 1)
+            middle = (this.allPage - this.pageSpots) + 1
           }
           while (i--) {
             pag.push(middle++)
@@ -305,22 +128,24 @@
       },
       // 页签总数
       allPage: function () {
-        console.log(this.articleNewList.count)
-        return Math.floor(this.articleNewList.count / this.pageContent)
+        return Math.ceil(Number(this.switchGroup.count) / this.pageContent)
       },
       // 返回偏移量
       offsetNum: function () {
-        return this.currentPage * this.pageContent + 1
+        return this.currentPage * this.pageContent
+      },
+      realIndex: function () {
+        return this.currentPage * this.pageContent
       }
     },
     created: function () {
       // 以下是触发Action内容
       // 输出$state list内容
-      console.log(this)
+      console.log(this.currentPage)
       this.$store.dispatch('getAllarticles', {
         sortBy: 'timestamp',
-        limit: '',
-        offset: '',
+        limit: String(this.pageContent),
+        offset: Number(this.offsetNum),
         that: this
       })
     }
@@ -329,49 +154,26 @@
 
 <style lang="" scoped>
   .main-wrap{
-    width: 80%;
+    width: 66.5%;
+    margin: auto auto;
     background-color: rgb(253, 253, 253);
-    min-height: 700px;
+    min-height: 900px;
+    min-width: 1237px;
     height: 100%;
-    margin: 0 auto;
     overflow: hidden;
-    padding-bottom: 210px;
+    padding-bottom: 150px;
   }
   .main-wrap ul{
     list-style: none;
   }
   .main-wrap ul li{
     position: relative;
-    margin: auto auto;
-    min-width: 760px;
-    width: 70%;
-    height: 60px;
+    min-width: 1237px;
+    width: 100%;
+    height: 75px;
     background-color: #fff;
-    padding: 60px 30px 20px 80px;
-    border-bottom: 1px solid #eee;
+    padding: 0px;
     text-align: left;
-  }
-  .count_wrapper{
-    display: inline-block;
-    height: 60px;
-    width: 7%;
-    text-align: center;
-  }
-  .readcount{
-    position: relative;
-    top: -8px;
-    display: inline-block;
-    min-width: 35px;
-    width: auto;
-    line-height: 35px;
-    height: 35px;
-    color: #fff;
-    padding-right:3px;
-    font-size: 20px;
-    font-weight: 700;
-    text-align: center;
-    background-color: rgb(255, 127, 1);
-    border-radius: 11px;
   }
   .list_container{
     margin-left: 28px;
@@ -415,7 +217,45 @@
     background-size: 18% 63%;
   }
   .meta .vote{
+    cursor: pointer;
+    display: relative;
     background-size: 22% 68%;
+  }
+   .vote .award_c_tool{
+    display: block;
+    width: 220px;
+    height: 30px;
+    top: -40px;
+    left: -150px;
+    background-color: #fff;
+    border: 5px solid rgb(255, 127, 1);
+    position: absolute;
+  }
+  .award_c_tool .award_confirm{
+    cursor: pointer;
+    padding-bottom: 30px;
+    padding-left: 10px;
+    color: rgb(255, 127, 1);
+  }
+  .award_c_tool:after{
+    position: absolute;
+    content: ' ';
+    width: 0;
+    height:0;
+    top: 110%;
+    left: 70%;
+    border: solid transparent;
+    border-width: 9px;
+    border-top-color: rgb(255, 127, 1);
+  }
+  .award_c_tool input{
+    border-radius: 3px;
+    outline: none;
+    display: inline-block;
+    width: 75%;
+  }
+  .award_c_tool div{
+    display: inline-block;
   }
   .meta .price span{
     display: inline-block;
@@ -427,8 +267,12 @@
     color: #ff6600;
   }
   .pag{
-    margin-top: 50px;
+    position: absolute;
+    margin-top: 30px;
+    bottom: 90px;
+    left: 40%;
     display: block;
+    user-select:none;
   }
   .pag div{
     display: inline-block;
@@ -438,13 +282,28 @@
     min-width: 35px;
     font-size: 12px;
     border-radius: 6px;
+    user-select:none;
   }
   .ctrbtn{
-    border: 1px solid rgb(255, 127, 1);
-    color: rgb(255, 127, 1);
+    border: 1px solid rgb(102, 146, 217);
+    color: rgb(102, 146, 217);
     padding: 0 10px;
+    user-select:none;
   }
   .active{
-    background-color: rgb(255, 127, 1);
+    background-color: rgb(102, 146, 217);
+  }
+  @media screen and (max-width: 1441px) {
+    /* 1360屏幕下 */
+    .main-wrap{
+      width: 80%;
+      min-height: 700px;
+      padding-bottom: 175px;
+      min-width: 1092px;
+    }
+    .main-wrap ul li{
+      height: 56px;
+      min-width: 860px;
+    }
   }
 </style>  

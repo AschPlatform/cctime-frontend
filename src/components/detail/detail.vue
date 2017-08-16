@@ -1,168 +1,123 @@
 <template>
-  <div class="article_wrapper">
-    <!-- 文章页上部-->
-    <!-- 测试存留副本<div class="main">
-      <div class="headinfo">
-        <h1 @click="showSS()">{{this.articleDetail.article.title}}</h1>
-        <div class="inner-wrap">
-          <router-link class="author" to="#">{{this.articleDetail.article.authorId}}</router-link>
-          <span class="time">{{this.articleDetail.article.timestamp}}</span>
-          <span class="tag">{{this.articleDetail.article.tags}}</span>
-          <span><div class="votebtn" @click="voteForA()">投票</div><input type="number" v-model="awardNum"></span>
-        </div>
-      </div>
-      <p>{{this.articleDetail.article.text}}</p>
-    </div>-->
+  <div class="article_wrapper" @click="showSS">
     <div class="main">
       <div class="head_info">
-        <div class="count_wrapper">
-          <span class="readcount">
-            <!--阅读计数器-->
-            9090
-          </span>
-        </div>
+        <a class="back_arror" @click="back" title="后退"><img src="/static/img/back.png"></a>
         <div class="list_container">
           <span class="title">
-            <router-link :to="articles/11">HeroKu has been repicked its 'False alarm' plan</router-link>
-            <span class="titlesuffix">www.baidu.com</span>
+            <h1>{{this.articleDetail.article.title}}</h1>
+            <a class="titlesuffix" :href="this.articleDetail.article.url">{{this.getUrl}}</a>
           </span>
           <br/>
           <span class="meta">
             <span class="author meta_info">
-              <img src="/static/img/avatar.png"></img>
-              <router-link to="user/">acxaljdwljdiajwia1</router-link>
+              <img :src="'data:image/png;base64,' + this.articleDetail.article.photo"></img>
+              <span to="#">{{this.articleDetail.article.nickname}}</span>
             </span>
             <span class="timestamp meta_info">
               <img src="/static/img/time.png"></img>
-              2017-09-09
+              {{this.realT}}
             </span>&nbsp;|&nbsp;
-            <!--<span class="comment meta_info">
-              <img src="/static/img/comments.png"></img>
-              <router-link to="article/">90980 条评论</router-link>&nbsp;|&nbsp;
+            <span class="comment meta_info">
+              <a to="#" @click="jumpToCom"><img src="/static/img/comments.png"></img>{{this.articleDetail.article.comments}}</a>&nbsp;|&nbsp;
             </span>
-            <span class="vote meta_info">
+            <span class="vote meta_info" v-on:click.stop.capture="voteBtn">
               <img src="/static/img/up.png"></img>
-              192213123123123123022票
-            </span>&nbsp;|&nbsp;-->
-            <span class="price meta_info">
-              <span>$</span>：8929
+              {{this.articleDetail.article.votes}}
             </span>
           </span>
         </div>
       </div>
       <div class="article">
-        <p>根据国内知名的数字资产交易平台OKCoin币行的数据显示，比特币昨天(7月19日)价格全天维持在反弹高位区15200--16500震荡整理，没有明确的运行方向，最终至收盘小幅收涨，已经连续三个交易日阳线报收。截止今日发稿前，币价依旧在此高位区间盘整，最新交投于15950附近。
-        OKCoin币行分析师称，日内来看，4小时级别，均线系统(5、10、20)的MA5、MA10两条均线正在形成向下交叉，虽然价格上穿MA60，但需要注意MA60依然保持着明显的向下运行，同时该级别主要的高低点下移特征未发生改变，本级别空头格局不改;1小时级别，价格依旧在反弹走势中，MA60保持上行，但是从15200起步的新一轮上涨力度已经明显衰竭，不具备大的反弹动能。
-        综上所述，虽然最近几天价格一直延续看似强劲的上涨走势，但是并没有改变大周期的下跌趋势特征，并且现阶段短期走势也出现上涨动能衰竭迹象，建议离场避险为主。日内主要关注16150—17150的强阻力区，在没有成功站稳前不要继续介入;下方支撑区14360—14800附近可轻仓短线介入。
-        </p>
-        <div class="interaction">
-          <span class="comment meta_info">
-              <img src="/static/img/comments.png"></img>
-              <router-link to="article/">90980 条评论</router-link>&nbsp;|&nbsp;
-            </span>
-            <span class="vote meta_info">
-              <img src="/static/img/up.png"></img>
-              192213123123123123022票
-            </span>
-        </div>
+        <p>{{this.articleDetail.article.text}}</p>
+      </div>
+    </div>
+    <!--文章评论部分-->
+    <div id="article_comment">
+      <div>
+        <input id="comment_input" type="text" @focus="input_change($event)" placeholder="  输入评论" v-model="commentContent">
+        <span class="comment_clear" @click="clearComment()">清除</span>
+        <span class="comment_publish" @click="subCommment()">发布评论</span>
       </div>
     </div>
     <!-- 文章页下部 评论-->
     <div class="comment_part">
       <ul>
-        <li class="comment_list">
-          <div class="user_id"><img src="/static/img/avatar.png"></img>asdasdasdasdasd</div>
-          <p>这是我见过的最逗逼的一条新闻比特币昨天(7月19日)价格全天维持在反弹高位区15200--16500震荡整理，没有明确的运行方向，最终至收盘小幅收涨，已经连续三个交易日阳线报收。截止今日发稿前，币价依旧在此高位区间盘整，最新交投于15950附近。
-          OKCoin币行分析师称，日内来看，4小时级别，均线系统(5、10、20)的MA5、MA10两条均线正在形成向下交叉比特币昨天(7月19日)价格全天维持在反弹高位区15200--16500震荡整理，没有明确的运行方向，最终至收盘小幅收涨，已经连续三个交易日阳线报收。截止今日发稿前，币价依旧在此高位区间盘整，最新交投于15950附近。
-          OKCoin币行分析师称，日内来看，4小时级别，均线系统(5、10、20)的MA5、MA10两条均线正在形成向下交叉比特币昨天(7月19日)价格全天维持在反弹高位区15200--16500震荡整理，没有明确的运行方向，最终至收盘小幅收涨，已经连续三个交易日阳线报收。截止今日发稿前，币价依旧在此高位区间盘整，最新交投于15950附近。
-          OKCoin币行分析师称，日内来看，4小时级别，均线系线系线系线系线系线系线系线系线系线系统(5、10、20)的MA5、MA10两条均线正在形成向下交叉</p>
-          <div class="interaction_c">
-            <span>回复</span>
-            <span class="award_c">
-              <div class="award_c_tool">
-                <input type="number">
-                <div class="award_confirm">确认</div>
-              </div>
-                <div @click="voteForA()">打赏</div></span>
-            </span>
-          </div>
-          <div class="reply_container">
-            <input type="text" v-model="awardNum" placeholder="  输入评论">
-            <div class="interaction_c">
-              <span @click="">取消</span><span>发布评论</span>
-            </div>
-          </div>
-        </li>
-        <li class="comment_list">
-          <div class="user_id"><img src="/static/img/avatar.png"></img>asdasdasdasdasd</div>
-          <p>同感</p>
-          <div class="interaction_c">
-            <span>回复</span><span>打赏</span>
-          </div>
-        </li>
-        <li class="comment_list">
-          <div class="user_id"><img src="/static/img/avatar.png"></img>asdasdasdasdasd</div>
-          <p>比特币昨天(7月19日)价格全天维持在反弹高位区15200--16500震荡整理，没有明确的运行方向，最终至收盘小幅收涨，已经连续三个交易日阳线报收。截止今日发稿前，币价依旧在此高位区间盘整，最新交投于15950附近。
-          OKCoin币行分析师称，日内来看，4小时级别，均线系统(5、10、20)的MA5、MA10两条均线正在形成向下交叉</p>
-          <div class="interaction_c">
-            <span>回复</span><span>打赏</span>
-          </div>
-        </li>
-        <li class="comment_list">
-          <div class="user_id"><img src="/static/img/avatar.png"></img>asdasdasdasdasd</div>
-          <p>比特币昨天(7月19日)价格全天维持在反弹高位区15200--16500震荡整理，没有明确的运行方向，最终至收盘小幅收涨，已经连续三个交易日阳线报收。截止今日发稿前，币价依旧在此高位区间盘整，最新交投于15950附近。
-          OKCoin币行分析师称，日内来看，4小时级别，均线系统(5、10、20)的MA5、MA10两条均线正在形成向下交叉</p>
-          <div class="interaction_c">
-            <span>回复</span><span>打赏</span>
-          </div>
-        </li>
+        <detail-list v-for="(item, index) in this.detailCommentList.comments" :item="item" :key="index" :that="this" @reFresh="toRefreshAll"></detail-list>
       </ul>
       <!--未设置逻辑-->
       <div class="pag">
-        <div class="ctrbtn" @click="goto(currentPage--)">上一页</div>
-        <div class="pagespot">1</div>
-        <div class="pagespot">2</div>
-        <div class="pagespot">3</div>
-        <div class="pagespot">4</div>
-        <div class="pagespot active">5</div>
-        <div class="ctrbtn" @click="goto(currentPage++)">下一页</div>
+        <div class="ctrbtn" @click="minPage" v-show="this.currentPage != 0">上一页</div>
+        <div class="pagespot" v-for="(value, index) in this.page" @click="goto(index)" :class="{'active':currentPage + 1 == Number(value)}">{{Number(value)}}</div>
+        <div class="ctrbtn" @click="addPage" v-show="this.allPage != this.currentPage + 1 && this.allPage != 0">下一页</div>
       </div>
     </div>
-    <!-- 测试存留副本<div class="comment">
-        <h2>全部评论</h2>
-        <ul>
-          <li v-for="(item, index) in this.articleCommentList.comments">
-            <span class="comment-name">{{item.authorId}}</span><span class="reply-target" v-if="item.pid != 0">回复 {{item.pid}}</span><span class="caward"><div class="votebtn" @click="voteForC(item.cid)"></div><input type="number" v-model="awardNum"></span>
-            <p class="comment-content">{{item.content}}</p>
-            <p>{{'#' + item.floor + ' > #' + item.replyFloor}}</p>
-            <input class="reply-window" type="text" placeholder="回复" v-model="commmentContent" v-show="item.isSelected">
-            <div class="reply" @click="reply(item.id, index)">回复</div>
-          </li>
-        </ul>
-        <div class="comment-publish">
-          <textarea cols="75" rows="10" class="comment-publish-input" v-model="commmentContent"></textarea>
-          <div class="comment-publish-btn" @click="subCommment()">提交评论</div>
-        </div>
-    </div>-->
   </div>
 </template>
   
 <script>
-  import {mapState} from 'vuex'
+  import {mapState, mapGetters} from 'vuex'
+  import detailList from './detailList/detailList'
   export default {
     name: 'detail',
     components: {
+      detailList
     },
     data: function () {
       return {
-        commmentContent: '',
-        awardNum: '',
-        isAwardToggle: 'false',
-        isReplyToggle: 'false'
+        replyContent: '',
+        commentContent: '',
+        a_num: '',
+        c_num: '',
+        isAwardToggle: false,
+        isReplyToggle: false,
+        isCommentToggle: false,
+        // 分页初始量
+        awardNum: undefined,
+        currentPage: 0,
+        pageSpots: 5,
+        pageContent: 6,
+        pageNum: 0
       }
     },
     computed: {
+      ...mapGetters(['detailCommentList']),
       ...mapState(['articleDetail', 'articleCommentList']),
+      // 处理url显示
+      getUrl: function () {
+        return this.articleDetail.article.url.split('/')[2]
+      },
+      // 构造页签数组
+      page: function () {
+        let pag = []
+        if (this.currentPage < this.pageSpots) {
+          let i = Math.min(this.pageSpots, this.allPage)
+          while (i) {
+            pag.unshift(i--)
+          }
+        } else if (this.currentPage >= this.pageSpots) {
+          let middle = this.currentPage - Math.floor(this.pageSpots / 2)
+          let i = this.pageSpots
+          if (middle > (this.allPage - this.pageSpots)) {
+            middle = (this.allPage - this.pageSpots) + 1
+          }
+          while (i--) {
+            pag.push(middle++)
+          }
+        }
+        return pag
+      },
+      // 页签总数
+      allPage: function () {
+        return Math.ceil(Number(this.detailCommentList.count) / this.pageContent)
+      },
+      // 返回偏移量
+      offsetNum: function () {
+        return this.currentPage * this.pageContent
+      },
+      realIndex: function () {
+        return this.currentPage * this.pageContent
+      },
       // 获取当前文章ID
       getId: function () {
         return window.location.hash.split('/')[2]
@@ -176,30 +131,178 @@
           isCselected[i].floor = i + 1
         }
         return isCselected
+      },
+      yield: function () {
+        return this.articleDetail.article.votes * 0.0001
+      },
+      realT: function () {
+        let pst = ''
+        let t = Number(this.articleDetail.article.realTime)
+        let ct = Number(new Date().getTime())
+        let pt = ct - t
+        let sec = Number(pt) / 1000
+        let min = 0
+        let hor = 0
+        let day = 0
+        let yea = 0
+        if (sec < 60) {
+          pst = Math.floor(sec) + '秒以前'
+        } else {
+          min = Math.floor(sec / 60)
+          if (min < 60) {
+            pst = Math.floor(min) + '分钟以前'
+          } else {
+            hor = Math.floor(min / 60)
+            if (hor < 24) {
+              pst = hor + '小时以前'
+            } else {
+              day = Math.floor(hor / 24)
+              if (day < 360) {
+                pst = day + '天以前'
+              } else {
+                yea = Math.floor(day / 360)
+                pst = yea + '年以前'
+              }
+            }
+          }
+        }
+        return pst
       }
     },
     methods: {
       // 测试用
       showSS: function () {
-        console.log(this.commentStatus)
+        console.log(this.articleDetail.article.realTime)
       },
-      // 文章大赏
+      // 操作页面增减
+      addPage: function () {
+        if (this.currentPage < this.allPage - 1) {
+          this.currentPage = this.currentPage + 1
+          this.$store.dispatch('getOnearticleComment', {
+            id: this.getId,
+            limit: String(this.pageContent),
+            offset: String(this.currentPage * this.pageContent),
+            that: this
+          })
+        } else {
+          this.currentPage = this.allPage - 1
+        }
+      },
+      minPage: function () {
+        if (this.currentPage > 0) {
+          this.currentPage = this.currentPage - 1
+          this.$store.dispatch('getOnearticleComment', {
+            id: this.getId,
+            limit: String(this.pageContent),
+            offset: String(this.currentPage * this.pageContent),
+            that: this
+          })
+        } else {
+          return
+        }
+      },
+      // 页面跳转
+      goto: function (index) {
+        if (index === this.current) return
+        this.currentPage = index
+        this.$store.dispatch('getOnearticleComment', {
+          id: this.getId,
+          limit: String(this.pageContent),
+          offset: String(this.currentPage * this.pageContent),
+          that: this
+        })
+      },
+      // 全部刷新
+      toRefreshAll: function () {
+        this.toReFreshA()
+        this.toReFreshC()
+      },
+      // 刷新（重新拉取）事件
+      toReFreshC: function (data) {
+        let that = this
+        console.log(data)
+        setTimeout(function () {
+          console.log(that)
+          that.$store.dispatch('getOnearticleComment', {
+            id: that.getId,
+            limit: String(that.pageContent),
+            offset: String(that.currentPage * that.pageContent),
+            that: that
+          })
+        }, 10000)
+        console.log('十秒后重新获取数据')
+      },
+      toReFreshA: function (data) {
+        let that = this
+        console.log(data)
+        setTimeout(function () {
+          that.$store.dispatch('getOnearticle', {
+            id: that.getId,
+            that: that
+          })
+        }, 10000)
+        console.log('十秒后重新获取数据')
+      },
+      // 跳转评论
+      jumpToCom: function () {
+        let pos = document.querySelector('#article_comment')
+        document.body.scrollTop = pos.offsetTop - 300
+      },
+      // 动画开关
+      toggleAward: function () {
+        this.isAwardToggle = !this.isAwardToggle
+      },
+      toggleReply: function (index) {
+        for (let i = 0; i < this.articleCommentList.comments.length; i++) {
+          this.articleCommentList.comments[i].isSelected = false
+        }
+        this.articleCommentList.comments[index].isSelected = this.articleCommentList.comments[index].isSelected ? 'false' : 'true'
+      },
+      /* toggleAward: function (index) {
+        for (let i = 0; i < this.articleCommentList.comments.length; i++) {
+          this.articleCommentList.comments[i].isAward = false
+        }
+        this.articleCommentList.comments[index].isAward = this.articleCommentList.comments[index].isAward ? 'false' : 'true'
+      } */
+      // 调用投票  调用toastinput里的方法
+      voteBtn: function () {
+        let that = this
+        if (that.$store.state.isLogin === false) {
+          that.$store.commit('callToast', {msgHeader: '注意!', msgContent: '仅当您登陆后才能使用打赏功能', _confirmfunc: null, _cancelfunc: null, deals: undefined, contract: 3})
+          return
+        }
+        if (this.a_num === 0) {
+          that.$store.commit('callToast', {msgHeader: '注意!', msgContent: '你不能戏耍CCT', _confirmfunc: null, _cancelfunc: null, deals: undefined, contract: 4})
+          return
+        }
+        this.$store.commit('callInputToast', {msgHeader: '打赏', msgContent: '请输入打赏票数', _confirmfunc: null, _cancelfunc: null, deals: that.articleDetail.article.id, contract: 2})
+      },
+      // 文章打赏
       voteForA: function () {
-        let awArg = this.pushAward(this.getId, this.awardNum)
+        let that = this
+        this.isAwardToggle = false
+        let awArg = this.pushAward(this.getId, this.a_num)
         console.log(awArg)
         this.$store.dispatch('invokeContract', {
           type: '1002',
           fee: '1000000000',
           args: awArg,
-          that: this
+          that: this,
+          callback: function (err, res) {
+            if (err) {
+              return
+            }
+            this.$store.commit('callToast', {msgHeader: '成功！', msgContent: '打赏成功！大约十秒后将看到更新信息', _confirmfunc: null, _cancelfunc: null, deals: undefined, contract: 4})
+            that.toReFreshA()
+          }
         })
 
         // 重新初始化
-        this.awardNum = undefined
+        this.a_num = undefined
       },
-      // 评论大赏
+      // 评论打赏
       voteForC: function (cid) {
-        let awArg = this.pushAward(cid, this.awardNum)
+        let awArg = this.pushAward(cid, this.c_num)
         this.$store.dispatch('invokeContract', {
           type: '1003',
           fee: '1000000000',
@@ -207,53 +310,57 @@
           that: this
         })
         // 重新初始化
-        this.awardNum = undefined
+        this.c_num = undefined
       },
-      // 开关全部关闭
-      toggleAll: function () {
-        for (var i = 0; i <= this.isCommentSelected.length; i++) {
-          this.isCommentSelected[i].isSelected = false
-        }
+      // 评论框效果增添
+      input_change: function (e) {
+        e.target.value = '    '
       },
-      // 回复评论
-      reply: function (pid, index) {
-        // V层逻辑
-        if (this.isCommentSelected[index].isSelected === false) {
-          this.isCommentSelected = this.commentStatus
-          this.toggleAll()
-          this.isCommentSelected[index].isSelected = true
-        } else {
-          let reArg = this.pushInEvent(true, pid, this.commmentContent)
-          this.$store.dispatch('invokeContract', {
-            type: '1001',
-            fee: '1000000000',
-            args: reArg,
-            that: this
-          })
-        }
+      // 清除评论框
+      clearComment: function () {
+        this.commentContent = ''
       },
       // 发布评论
       subCommment: function () {
-        let reArg = this.pushInEvent(false, null, this.commmentContent)
+        if (this.$store.state.isLogin === false) {
+          this.$store.commit('callToast', {msgHeader: '注意!', msgContent: '仅当您登陆后才能使用打赏功能', _confirmfunc: null, _cancelfunc: null, deals: undefined, contract: 3})
+          return
+        }
+        if (this.commentContent === '') {
+          this.$store.commit('callToast', {msgHeader: '注意!', msgContent: '输入内容不能为空呦', _confirmfunc: null, _cancelfunc: null, deals: undefined, contract: 4})
+          return
+        }
+        let that = this
+        let reArg = this.pushInEvent(false, null, this.commentContent)
         this.$store.dispatch('invokeContract', {
           type: '1001',
           fee: '1000000000',
           args: reArg,
-          that: this
+          that: that,
+          callback: function (err, res) {
+            if (err) {
+              return
+            }
+            that.$store.commit('callToast', {msgHeader: '成功！', msgContent: '发布评论成功！大约十秒后看到更新', _confirmfunc: null, _cancelfunc: null, deals: undefined, contract: 4})
+            // 延迟更新公共state
+            that.clearComment()
+            that.toReFreshA()
+            that.toReFreshC()
+          }
         })
       },
       // 组织回复arg
       pushInEvent: function (isReply, pid, commentCotent) {
-        console.log(isReply, pid, commentCotent)
         let arr = []
         if (isReply) {
           arr.push(this.getId)
           arr.push(toString(pid))
-          arr.push(commentCotent)
+          arr.push(this.commentContent)
           return arr
         } else {
           arr.push(this.getId)
-          arr.push(commentCotent)
+          arr.push('')
+          arr.push(this.commentContent)
           return arr
         }
       },
@@ -263,15 +370,20 @@
         arr.push(id)
         arr.push(amount)
         return arr
+      },
+      back: function () {
+        this.$router.back()
       }
     },
-    beforeMount: function () {
+    created: function () {
       this.$store.dispatch('getOnearticle', {
         id: this.getId,
         that: this
       })
       this.$store.dispatch('getOnearticleComment', {
         id: this.getId,
+        limit: String(this.pageContent),
+        offset: String(this.currentPage * this.pageContent),
         that: this
       })
     }
@@ -280,79 +392,81 @@
 
 <style scoped>
   .article_wrapper{
-    width: 80%;
-    background-color: rgb(253, 253, 253);
+    width: 50%;
     min-height: 700px;
     height: 100%;
     margin: 0 auto;
-    overflow: hidden;
-    padding-bottom: 210px;
+    padding-bottom: 170px;
   }
   .main{
     position: relative;
     margin: auto auto;
     min-width: 760px;
-    width: 100%;
-    padding: 60px 30px 20px 50px;
+    width: 94%;
     text-align: left;
+    margin-top: 30px;
   }
-  .count_wrapper{
-    display: inline-block;
-    height: 60px;
-    width: 7%;
-    text-align: center;
+  .back_arror{
+    position: absolute;
+    display: block;
+    height: 48px;
+    width: 24px;
+    left: -40px;
+    cursor: pointer;
   }
-  .readcount{
-    position: relative;
-    top: -16px;
-    display: inline-block;
-    min-width: 35px;
-    width: auto;
-    line-height: 35px;
-    padding-left:3px;
-    padding-right:3px;
-    height: 35px;
-    color: #fff;
-    font-size: 20px;
-    font-weight: 700;
-    text-align: center;
-    background-color: rgb(255, 127, 1);
-    border-radius: 11px;
+  .back_arror img{
+    display: block;
+    height: 48px;
+    width: 28px;
   }
   .list_container{
     margin-left: 0px;
-    padding-left: 18px;
+    padding-left: 26px;
     display: inline-block;
-    border-left: 7px solid rgb(220, 220, 220);
+    border-left: 2px solid rgb(87, 97, 106);
   }
   .list_container a{
-    color: #9f9f9f;
+    color: rgb(87, 97, 106);
   }
-  .title a{
-    font-size: 24px;
+  .title h1{
+    display: inline-block;
+    font-size: 18px;
+    font-weight: bold;
     color: #000;
     text-decoration: none;
   }
   .title span{
+    margin-left: 20px;
+    font-size: 14px;
+    color: rgb(87, 97, 106);
+    font-weight: bold;
+    display: inline-block;
     color: #9f9f9f;
+  }
+  .tittlesuffix{
+    font-size: 12px;
   }
   .meta{
     display: inline-block;
     height: 30px;
     color: #9f9f9f;
-    font-size: 0.8em;
+    font-size: 14px;
+    font-weight: bold;
   }
   .meta .meta_info{
-    position: relative;
     display: inline-block;
     height: 40px;
     line-height: 40px;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 28px;
   }
   .meta_info img{
     display: inline-block;
     height: 20px;
     position: relative;
     top: 6px;
+    margin-right: 5px;
     margin-left: 10px;
   }
   .meta .author img{
@@ -361,11 +475,16 @@
   .meta .timestamp{
     background-size: 22% 68%;
   }
+  .interaction{
+    position: relative;
+  }
   .meta .comment{
     background-size: 18% 63%;
+    cursor: pointer;
   }
   .meta .vote{
     background-size: 22% 68%;
+    cursor: pointer;
   }
   .meta .price span{
     display: inline-block;
@@ -377,15 +496,14 @@
     color: #ff6600;
   }
   .main .article{
-    width:75%;
-    margin: auto auto;
   }
   .article p{
+    user-select: auto;
     display: block;
-    font-size: 18px;
+    font-size: 16px;
     text-indent: 36px;
-    line-height: 30px;
-    margin-left: -7%;
+    line-height: 28px;
+    margin-top: 30px;
   }
   .article .interaction{
     margin-left: -5px;
@@ -396,37 +514,49 @@
   }
   .interaction a{
     color: #9f9f9f;
+    font-size: 9px;
+  }
+  /*文章评论块 */
+  #article_comment{
+    height: 60px;
+    width: 94%;
+    margin: 60px auto 70px auto;
+  }
+  #article_comment>div{
+    position: relative;
+  }
+  #article_comment input{
+    border: 1px solid #9f9f9f;
+    font-size: 18px;
+    outline: none;
+    background-color: rgb(238, 238, 238);
+    margin-top: 10px;
+    display: block;
+    height: 35px;
+    width: 100%;
+    border-radius: 3px;
+  }
+  #article_comment .comment_publish{
+    cursor: pointer;
+    position: absolute;
+    bottom: -34px;
+    right: 0;
+  }
+  #article_comment .comment_clear{
+    cursor: pointer;
+    position: absolute;
+    bottom: -34px;
+    right: 110px;
   }
   /*评论块*/
   .comment_part{
     line-height: 30px;
-    margin-top: 10px;
-    width: 100%;
+    margin: 10px auto 0px auto;
+    width: 94%;
     min-width: 760px;
-    padding: 50px 30px 0 50px;
-
   }
   .comment_part ul{
     width: 100%;
-    margin-left: -2%;
-  }
-  .comment_list{
-    position: relative;
-    font-size: 18px;
-    width: 80%;
-    margin: auto auto;
-    border-left: 7px solid rgb(220, 220, 220);
-    padding-left: 18px;
-  }
-  .comment_list .user_id{
-    position: absolute;
-    left: 18px;
-    font-size: 20px;
-  }
-  .comment_list .interaction_c{
-    margin-right: 2%;
-    position: absolute;
-    right: 0;
   }
   .interaction_c span{
     display: inline-block;
@@ -435,41 +565,40 @@
     margin-left: 12px;
     cursor: pointer;
   }
-  .award_c{
-    position: relative;
-  }
-  .award_c .award_c_tool{
+  .award_a_tool{
     display: block;
     width: 220px;
     height: 30px;
-    top: -40px;
-    left: -150px;
+    top: 10px;
+    left: 370px;
     background-color: #fff;
-    border: 5px solid rgb(255, 127, 1);
+    border: 5px solid rgb(116, 176, 236);
     position: absolute;
   }
-  .award_c_tool .award_confirm{
+  .award_a_tool .award_confirm{
     padding-left: 10px;
-    color: rgb(255, 127, 1);
+    color: rgb(116, 176, 236);
   }
-  .award_c_tool:after{
+  .award_a_tool:after{
     position: absolute;
     content: ' ';
     width: 0;
     height:0;
-    top: 110%;
-    left: 70%;
+    top: 50%;
+    left: -11%;
     border: solid transparent;
     border-width: 9px;
-    border-top-color: rgb(255, 127, 1);
+    border-right-color: rgb(116, 176, 236);
   }
-  .award_c_tool input{
+  .award_a_tool input{
+    height: 30px;
     outline: none;
     display: inline-block;
     width: 75%;
   }
-  .award_c_tool div{
+  .award_a_tool div{
     display: inline-block;
+    cursor: pointer;
   }
   .user_id img{
     display: inline-block;
@@ -479,9 +608,9 @@
   }
   .comment_list p{
     padding-top: 37px;
-    margin-top: 97px;
+    margin-top: 37px;
     text-align: left;
-    margin-bottom: 20px;
+    font-size: 16px;
   }
   .reply_container{
     margin-top: 70px;
@@ -503,9 +632,10 @@
   }
   /*分页*/
   .pag{
-    margin-left: -75px;
-    margin-top: 100px;
-    margin-bottom: 40px;
+    position: absolute;
+    left: 45%;
+    bottom:80px;
+    margin-bottom: 20px;
     display: block;
   }
   .pag div{
@@ -518,120 +648,95 @@
     border-radius: 6px;
   }
   .ctrbtn{
-    border: 1px solid rgb(255, 127, 1);
-    color: rgb(255, 127, 1);
+    border: 1px solid rgb(102, 146, 217);
+    color: rgb(102, 146, 217);
     padding: 0 10px;
   }
   .active{
-    background-color: rgb(255, 127, 1);
+    background-color: rgb(102, 146, 217);
   }
-  /*Origin info*/
-  /*.headinfo{
-    text-align: center;
-  }
-  .headinfo a:hover{
-    color: #f60;
-  }
-  .inner-wrap{
-    margin: 30px 30px 0 0;
-    font-size: .9em;
-  }
-  .main h1{
-    font-size: 2em;
-  }
-  p{
-    text-indent: 50px;
-    text-align: left;
-    margin: 30px auto;
-    line-height: 27px;
-  }
-  .comment{
-    width: 80%;
-    min-width: 760px;
-    max-width:960px;
-    background-color: #fff;
-    padding: 30px 10px 10px 10px;
-    margin: 30px auto auto auto;
-    text-align: left;
-  }
-  .comment h2{
-    font-size: 1.5em;
-  }
-  .comment ul{
-    margin-top: 25px;
-  }
-  .comment li{
-    position: relative;
-    margin-top: 10px;
-    border-bottom: 1px dashed #999999;
-  }
-  .comment-name{
-    font-size: 1.3em;
-  }
-  .reply-target{
-    color: grey;
-    margin-left: 15px;
-  }
-  .comment-content{
-    line-height: 16px;
-    font-size: .7em;
-    text-indent: 0;
-    margin: 15px auto 44px auto;
-  }
-  .reply-window{
-    width: 69%;
-    margin: -55px auto 55px auto;
-    font-size:1.5em;
-    border-bottom: 1px solid #999;
-    outline: medium;
-  }
-  .reply-window-name{
-    width: 27%;
-    margin: -55px auto 55px 10px;
-    font-size:1.5em;
-    border-bottom: 1px solid #999;
-    outline: medium;
-  }
-  .reply{
-    position: absolute;
-    right: 0;
-    bottom: 5px;
-    width: 60px;
-    height: 30px;
-    line-height: 30px;
-    text-align: center;
-    font-size: 1.1em;
-    cursor: pointer;
-    border-radius: 5px;
-    background-color: #5eb95f;
-    float: right;
-  }
-  .comment-publish{
-    position: relative;
-    margin-top: 65px;
-  }
-  textarea{
-    resize: none;
-  }
-  .comment-publish input{
-    display: block;
-    border: 1px solid #999;
-    margin-bottom: 20px;
-    font-size: 1.2em;
-    width: 20%;
-  }
-  .comment-publish-btn{
-    position: absolute;
-    display: inline-block;
-    bottom: 10px;
-    right: 10px;
-    width: 120px;
-    height: 30px;
-    line-height: 30px;
-    text-align: center;
-    font-size: 1.1em;
-    cursor: pointer;
-    border-radius: 5px;
-    background-color: #5eb95f;
-  }*/
+   @media screen and (max-width: 1441px) {
+     .article_wrapper{
+        width: 80%;
+        min-height: 700px;
+        height: 100%;
+        margin: 0 auto;
+        padding-bottom: 170px;
+      }
+       .main{
+        min-width: 760px;
+        width: 94%;
+        margin-top: 30px;
+      }
+      .back_arror{
+        height: 36px;
+        width: 19.5px;
+        left: -30px;
+      }
+      .back_arror img{
+        display: block;
+        height: 36px;
+        width: 19.5px;
+      }
+      .title h1{
+        font-size: 14px;
+      }
+      .title span{
+        margin-left: 20px;
+        font-size: 9px;
+        color: rgb(87, 97, 106);
+      }
+      .meta{
+        height: 20px;
+        font-size: 9px;
+        font-weight: bold;
+      }
+      .meta .meta_info{
+        height: 20px;
+        line-height: 20px;
+        font-size: 9px;
+        font-weight: bold;
+        line-height: 18px;
+      }
+      .meta_info img{
+        height: 16px;
+      }
+      .meta .price span{
+        display: inline-block;
+        position: relative;
+        top: 1px;
+        font-size: 12px;
+      }
+      .interaction a{
+        font-size: 9px;
+      }
+      .interaction .vote{
+        font-size: 9px;
+      }
+      .pag{
+        bottom: 60px;
+      }
+      .pag div{
+        display: inline-block;
+        cursor: pointer;
+        height: 25px;
+        line-height: 25px;
+        min-width: 25px;
+        font-size: 9px;
+        border-radius: 4px;
+      }
+      .tittlesuffix{
+        font-size: 9px;
+      }
+      .comment_list p{
+        padding-top: 37px;
+        margin-top: 67px;
+        text-align: left;
+        font-size: 16px;
+      }
+      .award_a_tool{
+        left: 330px;
+        top: -1px;
+      }
+   }
 </style>

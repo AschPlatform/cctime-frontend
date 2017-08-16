@@ -4,18 +4,31 @@
     <top-bar></top-bar>
     <div class="shim"></div>
     <router-view></router-view>
+    <toast-msg v-show="this.toastState.isShowToast == true"></toast-msg>
+    <toast-input v-show="this.toastInputState.isShowToast == true"></toast-input>
     <foot-bar></foot-bar>
   </div>
 </template>
 
 <script>
+import {mapState} from 'vuex'
 import topBar from './components/topbar/topbar'
 import footBar from './components/footbar/footbar'
+import toastMsg from './components/toastmsg/toastmsg'
+import toastInput from './components/toastinput/toastinput'
 export default {
   name: 'app',
   components: {
     topBar,
-    footBar
+    footBar,
+    toastMsg,
+    toastInput
+  },
+  computed: {
+    ...mapState(['toastState', 'toastInputState'])
+  },
+  beforeDestroy: function () {
+    window.sessionStorage.clear()
   }
 }
 </script>
@@ -23,7 +36,7 @@ export default {
 <style scoped>
 #app {
   position: relative;
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family:Microsoft YaHei,Georgia,Serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -33,6 +46,11 @@ export default {
 }
 .shim{
   top: 0;
-  height: 65px;
+  height: 60px;
+}
+@media screen and (max-width : 1441px) {
+  .shim{
+    height: 40px;
+  }
 }
 </style>

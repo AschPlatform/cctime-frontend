@@ -1,109 +1,59 @@
 <template>
   <div class="main-wrap">
     <ul>
-      <!--测试存留副本<li v-for="item in this.articleTopList.articles">
-        <span class="readcount">
-          {{item.votes}}
-        </span>
-        <span class="title">
-          <router-link :to="'articles/' + item.id">{{item.title}}</router-link>
-          <span class="titlesuffix">{{item.url}}</span>
-        </span>
-        <br/>
-        <span class="meta">
-          <span class="author">
-            <router-link to="user/">{{item.authorId}}</router-link>
-          </span>
-          <span class="time">
-            {{item.timestamp}}
-          </span>&nbsp;|&nbsp;
-          <router-link to="article/">{{item.votes}} 条评论</router-link>
-        </span>
-      </li>-->
-      <li>
-        <div class="count_wrapper">
-          <span class="readcount">
-            <!--阅读计数器-->
-            9090
-          </span>
-        </div>
-        <div class="list_container">
-          <span class="title">
-            <router-link :to="articles/11">HeroKu has been repicked its 'False alarm' plan</router-link>
-            <span class="titlesuffix">www.baidu.com</span>
-          </span>
-          <br/>
-          <span class="meta">
-            <span class="author meta_info">
-              <img src="/static/img/avatar.png"></img>
-              <router-link to="user/">acxaljdwljdiajwia1</router-link>
-            </span>
-            <span class="timestamp meta_info">
-              <img src="/static/img/time.png"></img>
-              2017-09-09
-            </span>&nbsp;|&nbsp;
-            <span class="comment meta_info">
-              <img src="/static/img/comments.png"></img>
-              <router-link to="article/">90980 条评论</router-link>&nbsp;|&nbsp;
-            </span>
-            <span class="vote meta_info">
-              <img src="/static/img/up.png"></img>
-              192213123123123123022票
-            </span>&nbsp;|&nbsp;
-            <span class="price meta_info">
-              <span>$</span>：8929
-            </span>
-          </span>
-        </div>
-      </li>
-      <li>
-        <div class="count_wrapper">
-          <span class="readcount">
-            <!--阅读计数器-->
-            909090
-          </span>
-        </div>
-        <div class="list_container">
-          <span class="title">
-            <router-link :to="articles/11">HeroKu has been repicked its 'False alarm' plan</router-link>
-            <span class="titlesuffix">www.baidu.com</span>
-          </span>
-          <br/>
-          <span class="meta">
-            <span class="author meta_info">
-              <router-link to="user/">awawx123cq2awcxa1</router-link>
-            </span>
-            <span class="timestamp meta_info">
-              <img src="/static/img/time.png"></img>
-              2017-09-09
-            </span>&nbsp;|&nbsp;
-            <span class="comment meta_info">
-              <img src="/static/img/comments.png"></img>
-              <router-link to="article/">999 条评论</router-link>&nbsp;|&nbsp;
-            </span>
-            <span class="vote meta_info">
-              <img src="/static/img/up.png"></img>
-              192022票
-            </span>&nbsp;|&nbsp;
-            <span class="price meta_info">
-              <span>$</span>：8929
-            </span>
-          </span>
-        </div>
-      </li>
+      <top-list v-for="(item, index) in this.topArticleList" :key="index" :item="item" :this="this" :index="index" v-on:reFresh="toReFresh"></top-list>
     </ul>
   </div>
 </template>
 
 <script>
-  import { mapState } from 'vuex'
+  import { mapGetters } from 'vuex'
+  import topList from './topList/topList'
   export default {
     name: 'top',
     components: {
+      topList
     },
-    computed: {
-      ...mapState(['articleTopList'])
+    data: function () {
+      return {
+        awardNum: undefined
+      }
     },
+    methods: {
+      // 刷新（重新拉取）事件
+      toReFresh: function (data) {
+        let that = this
+        console.log(data)
+        setTimeout(function () {
+          console.log(that)
+          that.$store.dispatch('getAllarticles', {
+            sortBy: undefined,
+            limit: '',
+            offset: '',
+            that: that
+          })
+        }, 10000)
+        console.log('十秒后重新获取数据')
+      },
+      // 实时修改对象片段
+      shiftPiece: function (obj) {
+        let newObj = {}
+        newObj = obj
+        newObj.isSelected = !newObj.isSelected
+        return newObj
+      },
+      // 动画开关
+      toggleAward: function (index, item) {
+        console.log(index, item)
+        /* this.articleTopList.articles[index].isSelected = !this.articleTopList.articles[index].isSelected */
+        this.switchGroup.splice(index, 1, this.shiftPiece(item))
+        // this.switchGroupD[index] = !this.switchGroupD[index]
+        // console.log('索引触发事件' + index, this.switchGroupD)
+      }
+    },
+    computed: mapGetters({
+      topArticleList: 'topArticleList'
+    }),
     created: function () {
       // 输出$state list内容
       console.log('TOP: ' + this)
@@ -113,108 +63,57 @@
         offset: '',
         that: this
       })
+      /* for (var i = 0; i < this.articleTopList.articles.length; i++) {
+        this.switchGroupD.push(this.articleTopList.articles[i].isSelected)
+      } */
+      console.log('TOP页面已经dispatch')
+      /* global.hooks[1] = {
+        agree: async function (content) {
+          let res = await invokeContract(content.topic, content.value)
+          if (res.success) toast(success)
+        },
+        refuce: async function () {
+
+        }
+      } */
     }
   }
 </script>
 
-<style lang="" scoped>
+<style scoped>
   .main-wrap{
-    width: 80%;
+    width: 65.5%;
+    margin: auto auto;
     background-color: rgb(253, 253, 253);
-    min-height: 700px;
+    min-height: 900px;
+    min-width: 1237px;
     height: 100%;
-    margin: 0 auto;
     overflow: hidden;
-    padding-bottom: 210px;
+    padding-bottom: 150px;
   }
   .main-wrap ul{
     list-style: none;
   }
   .main-wrap ul li{
     position: relative;
-    margin: auto auto;
-    min-width: 760px;
-    width: 70%;
-    height: 60px;
+    min-width: 1237px;
+    width: 100%;
+    height: 75px;
     background-color: #fff;
-    padding: 60px 30px 20px 80px;
-    border-bottom: 1px solid #eee;
+    padding: 0px;
     text-align: left;
   }
-  .count_wrapper{
-    display: inline-block;
-    height: 60px;
-    width: 7%;
-    text-align: center;
-  }
-  .readcount{
-    position: relative;
-    top: -8px;
-    display: inline-block;
-    min-width: 35px;
-    width: auto;
-    line-height: 35px;
-    padding-left:3px;
-    padding-right:3px;
-    height: 35px;
-    color: #fff;
-    font-size: 20px;
-    font-weight: 700;
-    text-align: center;
-    background-color: rgb(255, 127, 1);
-    border-radius: 11px;
-  }
-  .list_container{
-    margin-left: 28px;
-    padding-left: 18px;
-    display: inline-block;
-    border-left: 5px solid rgb(220, 220, 220);
-  }
-  .title a{
-    color: #000;
-    text-decoration: none;
-  }
-  .title span{
-    color: #9f9f9f;
-  }
-  .meta{
-    display: inline-block;
-    height: 20px;
-    color: #9f9f9f;
-    font-size: 0.8em;
-  }
-  .meta .meta_info{
-    position: relative;
-    display: inline-block;
-    height: 40px;
-    line-height: 40px;
-  }
-  .meta_info img{
-    display: inline-block;
-    height: 20px;
-    position: relative;
-    top: 6px;
-    margin-left: 10px;
-  }
-  .meta .author img{
-    margin-left: 0;
-  }
-  .meta .timestamp{
-    background-size: 22% 68%;
-  }
-  .meta .comment{
-    background-size: 18% 63%;
-  }
-  .meta .vote{
-    background-size: 22% 68%;
-  }
-  .meta .price span{
-    display: inline-block;
-    position: relative;
-    top: 1px;
-    font-size: 17px;
-  }
-  .meta a:hover{
-    color: #ff6600;
+   @media screen and (max-width: 1441px) {
+    /* 1360屏幕下 */
+    .main-wrap{
+      width: 80%;
+      min-height: 700px;
+      padding-bottom: 75px;
+      min-width: 1092px;
+    }
+    .main-wrap ul li{
+      height: 56px;
+      min-width: 860px;
+    }
   }
 </style>

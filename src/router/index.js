@@ -6,11 +6,17 @@ import detail from '@/components/detail/detail'
 import login from '@/components/login/login'
 import account from '@/components/account/account'
 import publish from '@/components/publish/publish'
-import detailcomment from '@/components/detailcomment/detailcomment'
+import recharge from '@/components/recharge/recharge'
+import withdraw from '@/components/withdraw/withdraw'
+import notfound from '@/components/notfound/notfound'
 
 Vue.use(Router)
 
 export default new Router({
+  // mode: 'history',
+  // scrollBehavior: function (to, from, savedPosition) {
+  //   return savedPosition || { x: 0, y: 0 }
+  // },
   routes: [
     {
       path: '/top',
@@ -38,14 +44,29 @@ export default new Router({
       component: account
     },
     {
-      path: '/aaa',
+      path: '/publish',
       name: 'publish',
       component: publish
     },
     {
-      path: '/bbb',
-      name: 'detailcomment',
-      component: detailcomment
+      path: '/recharge',
+      name: 'recharge',
+      component: recharge
+    },
+    {
+      path: '/withdraw',
+      name: 'withdraw',
+      component: withdraw
+    },
+    {
+      path: '/',
+      name: 'top',
+      component: top
+    },
+    {
+      path: '*',
+      name: 'notfound',
+      component: notfound
     }
   ]
 })
