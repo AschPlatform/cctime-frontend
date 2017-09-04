@@ -23,9 +23,7 @@
       // 刷新（重新拉取）事件
       toReFresh: function (data) {
         let that = this
-        console.log(data)
         setTimeout(function () {
-          console.log(that)
           that.$store.dispatch('getAllarticles', {
             sortBy: undefined,
             limit: '',
@@ -33,7 +31,6 @@
             that: that
           })
         }, 10000)
-        console.log('十秒后重新获取数据')
       },
       // 实时修改对象片段
       shiftPiece: function (obj) {
@@ -44,7 +41,6 @@
       },
       // 动画开关
       toggleAward: function (index, item) {
-        console.log(index, item)
         /* this.articleTopList.articles[index].isSelected = !this.articleTopList.articles[index].isSelected */
         this.switchGroup.splice(index, 1, this.shiftPiece(item))
         // this.switchGroupD[index] = !this.switchGroupD[index]
@@ -56,7 +52,6 @@
     }),
     created: function () {
       // 输出$state list内容
-      console.log('TOP: ' + this)
       this.$store.dispatch('getAllarticles', {
         sortBy: undefined,
         limit: '',
@@ -66,7 +61,6 @@
       /* for (var i = 0; i < this.articleTopList.articles.length; i++) {
         this.switchGroupD.push(this.articleTopList.articles[i].isSelected)
       } */
-      console.log('TOP页面已经dispatch')
       /* global.hooks[1] = {
         agree: async function (content) {
           let res = await invokeContract(content.topic, content.value)
@@ -84,7 +78,6 @@
   .main-wrap{
     width: 65.5%;
     margin: auto auto;
-    background-color: rgb(253, 253, 253);
     min-height: 900px;
     min-width: 1237px;
     height: 100%;
@@ -92,6 +85,7 @@
     padding-bottom: 150px;
   }
   .main-wrap ul{
+    margin-top: 20px;
     list-style: none;
   }
   .main-wrap ul li{
@@ -112,7 +106,7 @@
       min-width: 1092px;
     }
     .main-wrap ul li{
-      height: 56px;
+      height: 68px;
       min-width: 860px;
     }
   }

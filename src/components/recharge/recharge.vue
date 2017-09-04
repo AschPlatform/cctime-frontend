@@ -1,29 +1,28 @@
 <template>
   <div class="charge_container">
     <div class="header">
-      <h1>充币</h1>
-    </div>
-    <div class="address">
-      <p>这是您的阿希币钱包地址，请将您的阿希币转入此地址：</p>
-      <span>S21XMNInind9NXNIaxwawxa212e</span>
-    </div>
-    <div class="header">
         <h1>提币</h1>
     </div>
     <div class="deal_part">
-        <span>输入要提取的数额</span>
+        <span>输入要提取的币种</span>
         <div class="deal_form">
         <select type="text" v-model="trans_type">
             <option disabled selected>提币币种</option>
             <option v-for="item in this.userInfo.info.balances">{{item.currency}}</option>
         </select>
         <input type="number" placeholder="提取数量" v-model="trans_num">
-        <input type="text" class="calculate" value="0.00" disabled v-model="trans_fee"><span class="calculate_info">(手续费0.1%)</span>
-        <input type="password" class="psd" v-model="trans_password">
+        <input type="text" class="calculate" placeholder="手续费0.01" disabled><span class="calculate_info"></span>
+        <input type="password" class="psd" v-model="trans_password" placeholder="密钥验证">
         </div>
     </div>
     <div class="confirm_btn">
       <span class="btn" @click="toWithdraw">确认提币</span>
+    </div>
+    <div class="header">
+      <h1>充币</h1>
+    </div>
+    <div class="address">
+      <p>要执行充币的操作请移步阿希钱包</p>
     </div>
   </div>
 </template>
@@ -37,35 +36,53 @@
     data: function () {
       return {
         trans_type: '',
-        trans_num: 0,
+        trans_num: null,
         trans_password: ''
       }
     },
     methods: {
       toWithdraw: function () {
         let that = this
+        if (this.trans_type === '') {
+          this.$store.commit('callToast', {msgHeader: '注意！', msgContent: '请填写交易货币类型', _confirmfunc: '了解', _cancelfunc: '关闭', deals: undefined, contract: 4})
+          return
+        }
+        if (Number(this.trans_num) === 0 || null) {
+          that.$store.commit('callToast', {msgHeader: '注意！', msgContent: '请填写交易数额', _confirmfunc: '了解', _cancelfunc: '关闭', deals: undefined, contract: 4})
+          return
+        }
         let a = []
         a.push(that.trans_type)
         a.push(String(that.trans_num * 1e8))
         a.push(that.userInfo.info.address)
         that.$store.dispatch('invokeContract', {
           type: '2',
-          fee: '1000000000',
+          fee: '10000000',
           args: a,
           that: that,
           callback: function (err, data) {
             if (err) {
               return
             }
-            that.$store.commit('callToast', {msgHeader: '成功！', msgContent: '提币成功！交易将在一定延迟后完成', _confirmfunc: null, _cancelfunc: null, deals: undefined, contract: 4})
+            that.$store.commit('callToast', {msgHeader: '成功！', msgContent: '提币成功！交易将在一定延迟后完成', _confirmfunc: '了解', _cancelfunc: '关闭', deals: undefined, contract: 4})
           }
         })
+        this.init()
+      },
+      init: function () {
+        this.trans_type = ''
+        this.trans_num = undefined
+        this.trans_address = ''
+        this.trans_password = ''
       }
     },
     computed: {
       ...mapState(['userInfo']),
       // 手续费计算
       trans_fee: function () {
+        if (this.trans_num === undefined) {
+          return 0
+        }
         return this.trans_num * 0.001
       }
     }
@@ -88,17 +105,16 @@
     border-left: 5px solid rgb(238, 238, 238);
   }
   .header h1{
-    margin-left: 15px;
+    margin-left: 16px;
     text-align: left;
     font-size: 20px;
     line-height: 20px;
-    font-weight: 500;
+    font-weight: 600;
   }
   .address{
     height: 81px;
     width: 70%;
     margin: 30px auto 0 auto;
-    border-left: 5px solid rgb(238, 238, 238);
   }
   .address p{
     display: block;
@@ -117,11 +133,10 @@
     line-height: 44px;
     border: .5px solid rgb(99, 148, 217);
     background-color: rgb(210, 229, 244);
-    user-select: auto;
   }
   .deal_part{
     width: 70%;
-    height: 160px;
+    height: 210px;
     margin: 30px auto 0 auto;
     border-left: 5px solid rgb(238, 238, 238);
   }
@@ -138,12 +153,14 @@
     width: 40%;
   }
   .deal_form select, .deal_form input{
-    border: 1px solid #000;
-    margin-top: 5px;
+    border: 1px solid #ccc;
+    margin: 10px 0 10px 0;
     height: 30px;
     display: inline-block;
     font-size: 16px;
     line-height: 30px;
+    border-radius: 5px;
+    padding-left: 5px;
     width: 60%;
   }
   .deal_form span{
@@ -189,7 +206,7 @@
     }
     .deal_part{
       width: 70%;
-      height: 160px;
+      height: 210px;
       margin: 20px auto 0 auto;
       border-left: 2px solid rgb(238, 238, 238);
     }

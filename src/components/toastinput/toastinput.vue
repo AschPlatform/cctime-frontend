@@ -3,8 +3,8 @@
     <div class="toastbox">
         <div class="toastmsg">
           <span class="msg-header">{{this.toastInputState.toastMsgHeader}}</span>
-          <span class="msg-content">{{this.toastInputState.toastMsgContent}}</span>
-          <input type="number" placeholder="  请输入奖赏金额" v-model="price" @blur="emitPrice">
+          <span class="msg-content">{{this.toastInputState.toastMsgContent}} 这将花费{{this.getAcccountLost}}CCT</span>
+          <input type="number" placeholder="  请输入奖赏金额" min="0" v-model="price" @blur="emitPrice">
         </div>
         <div class="toastctr">
           <span class="confirm" @click="todo()">确定</span>
@@ -28,14 +28,15 @@ export default {
   methods: {
     todo: function () {
       this.pickMethod(this.$store.state.toastInputState.contract)
-      console.log(this)
       if (this.confirmFunction !== null) {
-        console.log(this)
         this.confirmFunction()
         this.toastInputState.isShowToast = false
         this.$store.commit('toastReset')
+        this.price = 0
       } else {
         this.toastInputState.isShowToast = false
+        this.$store.commit('toastReset')
+        this.price = 0
       }
     },
     callOff: function () {
@@ -44,9 +45,12 @@ export default {
         this.cancelFunction()
         this.toastInputState.isShowToast = false
         this.$store.commit('toastReset')
+        this.price = 0
         return
       } else {
         this.toastInputState.isShowToast = false
+        this.$store.commit('toastReset')
+        this.price = 0
       }
     },
     emitPrice: function () {
@@ -59,31 +63,26 @@ export default {
         // 打赏评论
           this.confirmFunction = function () {
             let that = this
-            // if (this.getPrice === 0) {
-            //   console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
-            //   that.$store.commit('callToast', {msgHeader: '注意！', msgContent: '你不能戏耍CCT！', _confirmfunc: null, _cancelfunc: null, deals: undefined, contract: 4})
-            //   return
-            // }
             let a = []
             // 需要传入一个deal对象,有1,有id, 有num
             a.push(this.toastInputState.deals)
             a.push(String(this.getPrice))
-            this.$store.dispatch('invokeContract', {
+            that.$store.dispatch('invokeContract', {
               type: '1003',
-              fee: '1000000000',
+              fee: '10000000',
               args: a,
               that: this,
               callback: function (err, msg) {
                 if (err) {
                   return
                 }
-                that.$store.commit('callToast', {msgHeader: '成功！', msgContent: '打赏评论成功！', _confirmfunc: null, _cancelfunc: null, deals: undefined, contract: 4})
+                that.$store.commit('callToast', {msgHeader: '成功！', msgContent: '打赏评论成功！', _confirmfunc: '确定', _cancelfunc: '关闭', deals: undefined, contract: 4})
               }
             })
           }
-          this.cancelFunction = function () {
-            return
-          }
+          // this.cancelFunction = function () {
+          //   return
+          // }
           this.cancelFunction = function () {
             this.toastInputState.isShowToast = false
           }
@@ -98,14 +97,14 @@ export default {
             a.push(String(this.getPrice))
             this.$store.dispatch('invokeContract', {
               type: '1002',
-              fee: '1000000000',
+              fee: '10000000',
               args: a,
               that: this,
               callback: function (err, msg) {
                 if (err) {
                   return
                 }
-                that.$store.commit('callToast', {msgHeader: '成功！', msgContent: '打赏文章成功！', _confirmfunc: null, _cancelfunc: null, deals: undefined, contract: 4})
+                that.$store.commit('callToast', {msgHeader: '成功！', msgContent: '打赏文章成功！', _confirmfunc: '了解', _cancelfunc: '关闭', deals: undefined, contract: 4})
               }
             })
           }
@@ -119,7 +118,10 @@ export default {
   computed: {
     ...mapState(['toastInputState']),
     getPrice: function () {
-      return this.price * 100000
+      return this.price * 10000
+    },
+    getAcccountLost: function () {
+      return this.price * 0.0001
     }
   }
 }
@@ -133,14 +135,14 @@ export default {
     background-color: rgba(0, 0, 0, .6);
     width: 100%;
     height: 100%;
-    z-index: 9999;
+    z-index: 9998;
   }
   .toastbox{
     position: fixed;
     top: 35%;
     left: 40%;
-    width: 20%;
-    height: 20%;
+    width: 25%;
+    height: 25%;
     background-color: rgba(237, 237, 237, .9);
     border-radius: 8px;
   }
@@ -153,7 +155,12 @@ export default {
     font-size: 16px;
   }
   .toastmsg input{
+    outline: none;
+    display: inline-block;
+    width: 80%;
+    height: 30px;
     margin-top: 15px;
+    border-radius: 6px;
   }
   .msg-header{
     font-weight: 800;
@@ -175,7 +182,7 @@ export default {
   .toastctr span{
     display: inline-block;
     height: 96%;
-    line-height: 200%;
+    line-height: 350%;
     width: 49%;
     font-size: 18px;
     font-weight: 700;
@@ -204,6 +211,15 @@ export default {
     .toastmsg span{
       display: block;
       font-size: 14px;
+    }
+    .toastctr span{
+      line-height: 200%;
+    }
+    .toastmsg input{
+      width: 60%;
+      height: 20px;
+      margin-top: 10px;
+      border-radius: 6px;
     }
   }
 </style>

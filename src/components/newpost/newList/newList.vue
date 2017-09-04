@@ -48,7 +48,6 @@ export default {
   methods: {
     toggleAward: function (item) {
       this.deToggle = !this.deToggle
-      console.log(this.item.url.split('/')[2])
     },
     // 组织打赏arg
     pushAward: function (id, amount) {
@@ -61,7 +60,7 @@ export default {
     voteBtn: function () {
       let that = this
       if (that.$store.state.isLogin === false) {
-        that.$store.commit('callToast', {msgHeader: '注意!', msgContent: '仅当您登陆后才能使用打赏功能', _confirmfunc: null, _cancelfunc: null, deals: undefined, contract: 3})
+        that.$store.commit('callToast', {msgHeader: '注意!', msgContent: '仅当您登陆后才能使用打赏功能', _confirmfunc: '去登录', _cancelfunc: '不了', deals: undefined, contract: 3})
         return
       }
       this.$store.commit('callInputToast', {msgHeader: '打赏', msgContent: '请输入打赏票数', _confirmfunc: null, _cancelfunc: null, deals: that.item.id, contract: 2})
@@ -74,10 +73,10 @@ export default {
     reportBtn: function () {
       let that = this
       if (that.$store.state.isLogin === false) {
-        that.$store.commit('callToast', {msgHeader: '注意!', msgContent: '仅当您登陆后才能使用举报功能', _confirmfunc: null, _cancelfunc: null, deals: undefined, contract: 3})
+        that.$store.commit('callToast', {msgHeader: '注意!', msgContent: '仅当您登陆后才能使用举报功能', _confirmfunc: '去登录', _cancelfunc: '不了', deals: undefined, contract: 3})
         return
       }
-      this.$store.commit('callToast', {msgHeader: '警告', msgContent: '是否对该文章进行举报？', _confirmfunc: null, _cancelfunc: null, deals: that.item.id, contract: 2})
+      this.$store.commit('callToast', {msgHeader: '警告', msgContent: '是否对该文章进行举报？', _confirmfunc: '举报', _cancelfunc: '不了', deals: that.item.id, contract: 2})
     }
   },
   computed: {
@@ -97,22 +96,22 @@ export default {
       let day = 0
       let yea = 0
       if (sec < 60) {
-        pst = Math.floor(sec) + '秒以前'
+        pst = Math.floor(sec) + '秒前'
       } else {
         min = Math.floor(sec / 60)
         if (min < 60) {
-          pst = Math.floor(min) + '分钟以前'
+          pst = Math.floor(min) + '分钟前'
         } else {
           hor = Math.floor(min / 60)
           if (hor < 24) {
-            pst = hor + '小时以前'
+            pst = hor + '小时前'
           } else {
             day = Math.floor(hor / 24)
             if (day < 360) {
-              pst = day + '天以前'
+              pst = day + '天前'
             } else {
               yea = Math.floor(day / 360)
-              pst = yea + '年以前'
+              pst = yea + '年前'
             }
           }
         }
@@ -137,7 +136,7 @@ export default {
     color: #000;
     font-size: 18px;
     text-align: center;
-    top: -27px;
+    top: -29px;
   }
   .list_container{
     position:  relative;
@@ -146,6 +145,7 @@ export default {
     display: inline-block;
   }
   .list_container .title{
+    display: inline-block;
     padding-left: 10px;
     border-left: 1px solid rgb(87, 97, 106);
   }
@@ -159,10 +159,11 @@ export default {
     cursor: pointer;
   }
   .title a{
+    height:20px;
+    line-height:20px;
     font-size: 18px;
     font-weight: bold;
     color: #000;
-    text-decoration: none;
     display: inline-block;
     max-width: 900px;
     text-overflow: clip;
@@ -216,7 +217,7 @@ export default {
   }
   .meta .author span{
     display: inline-block;
-    width: 50px;
+    width: 70px;
     overflow: hidden;
     text-overflow: ellipsis;
     height: 20px;
@@ -226,11 +227,16 @@ export default {
     margin-left: 0;
   }
   .meta .timestamp{
+    width: 85px;
     background-size: 22% 68%;
     cursor: default;
   }
   .meta .comment{
+    width: 110px;
     background-size: 18% 63%;
+  }
+  .comment a{
+    color: rgb(87, 97, 106);
   }
   .meta .vote{
     cursor: pointer;
@@ -308,18 +314,13 @@ export default {
     .readcount{
       line-height: 14px;
       font-size: 14px;
-      top: -24px;
-    }
-    .list_container .title{
-      padding-left: 10px;
-      margin-top: 10px;
+      top: -28px;
     }
     .list_container .titlesuffix{
       font-size: 9px;
       width: 100px;
     }
     .title a{
-      font-size: 14px;
       max-width: 500px;
     }
     .title span{
@@ -328,20 +329,29 @@ export default {
     .meta{
       margin-top: 2px;
       height: 20px;
-      font-size: 9px;
+      font-size: 12px;
    }
    .meta .meta_info{
       height: 20px;
       margin-left: 15px;
       line-height: 20px;
     }
+    .meta .timestamp{
+      width:70px;
+    }
+    .meta .comment{
+      width: 85px;
+    }
     .meta .author{
       margin-left: 0px;
     }
     .meta .author span{
+      display: inline-block;
+      overflow: hidden;
+      text-overflow: ellipsis;
       width: 50px;
       height: 20px;
-      line-height: 28px;
+      line-height: 30px;
     }
     .meta_info img{
       height: 14px;

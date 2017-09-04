@@ -6,7 +6,7 @@
         <div class="list_container">
           <span class="title">
             <h1>{{this.articleDetail.article.title}}</h1>
-            <a class="titlesuffix" :href="this.articleDetail.article.url">{{this.getUrl}}</a>
+            <a class="titlesuffix" :href="this.articleDetail.article.url" target="_blank">{{this.getUrl}}</a>
           </span>
           <br/>
           <span class="meta">
@@ -17,9 +17,9 @@
             <span class="timestamp meta_info">
               <img src="/static/img/time.png"></img>
               {{this.realT}}
-            </span>&nbsp;|&nbsp;
+            </span>&nbsp;&nbsp;
             <span class="comment meta_info">
-              <a to="#" @click="jumpToCom"><img src="/static/img/comments.png"></img>{{this.articleDetail.article.comments}}</a>&nbsp;|&nbsp;
+              <a to="#" @click="jumpToCom"><img src="/static/img/comments.png"></img>{{this.articleDetail.article.comments}}</a>&nbsp;&nbsp;
             </span>
             <span class="vote meta_info" v-on:click.stop.capture="voteBtn">
               <img src="/static/img/up.png"></img>
@@ -28,7 +28,8 @@
           </span>
         </div>
       </div>
-      <div class="article">
+      <div id="article">
+        <!--<vue-markdown :source="this.articleDetail.article.text"></vue-markdown>-->
         <p>{{this.articleDetail.article.text}}</p>
       </div>
     </div>
@@ -83,6 +84,15 @@
     computed: {
       ...mapGetters(['detailCommentList']),
       ...mapState(['articleDetail', 'articleCommentList']),
+      // 处理文章格式
+      formlizedArticle: function () {
+        let article = String(this.articleDetail.article.text)
+        article.replace(/[\r\n]]/g, '123123')
+        article = '<p>' + article
+        article = article + '</p>'
+        console.log(this.articleDetail.article)
+        return 1
+      },
       // 处理url显示
       getUrl: function () {
         return this.articleDetail.article.url.split('/')[2]
@@ -146,22 +156,22 @@
         let day = 0
         let yea = 0
         if (sec < 60) {
-          pst = Math.floor(sec) + '秒以前'
+          pst = Math.floor(sec) + '秒前'
         } else {
           min = Math.floor(sec / 60)
           if (min < 60) {
-            pst = Math.floor(min) + '分钟以前'
+            pst = Math.floor(min) + '分钟前'
           } else {
             hor = Math.floor(min / 60)
             if (hor < 24) {
-              pst = hor + '小时以前'
+              pst = hor + '小时前'
             } else {
               day = Math.floor(hor / 24)
               if (day < 360) {
-                pst = day + '天以前'
+                pst = day + '天前'
               } else {
                 yea = Math.floor(day / 360)
-                pst = yea + '年以前'
+                pst = yea + '年前'
               }
             }
           }
@@ -172,7 +182,7 @@
     methods: {
       // 测试用
       showSS: function () {
-        console.log(this.articleDetail.article.realTime)
+        console.log(this.formlizedArticle)
       },
       // 操作页面增减
       addPage: function () {
@@ -220,9 +230,7 @@
       // 刷新（重新拉取）事件
       toReFreshC: function (data) {
         let that = this
-        console.log(data)
         setTimeout(function () {
-          console.log(that)
           that.$store.dispatch('getOnearticleComment', {
             id: that.getId,
             limit: String(that.pageContent),
@@ -230,18 +238,15 @@
             that: that
           })
         }, 10000)
-        console.log('十秒后重新获取数据')
       },
       toReFreshA: function (data) {
         let that = this
-        console.log(data)
         setTimeout(function () {
           that.$store.dispatch('getOnearticle', {
             id: that.getId,
             that: that
           })
         }, 10000)
-        console.log('十秒后重新获取数据')
       },
       // 跳转评论
       jumpToCom: function () {
@@ -268,31 +273,30 @@
       voteBtn: function () {
         let that = this
         if (that.$store.state.isLogin === false) {
-          that.$store.commit('callToast', {msgHeader: '注意!', msgContent: '仅当您登陆后才能使用打赏功能', _confirmfunc: null, _cancelfunc: null, deals: undefined, contract: 3})
+          that.$store.commit('callToast', {msgHeader: '注意!', msgContent: '仅当您登陆后才能使用打赏功能', _confirmfunc: '去登陆', _cancelfunc: '不了', deals: undefined, contract: 3})
           return
         }
         if (this.a_num === 0) {
-          that.$store.commit('callToast', {msgHeader: '注意!', msgContent: '你不能戏耍CCT', _confirmfunc: null, _cancelfunc: null, deals: undefined, contract: 4})
+          that.$store.commit('callToast', {msgHeader: '注意!', msgContent: '你不能戏耍CCT', _confirmfunc: '知道了', _cancelfunc: '嗯', deals: undefined, contract: 4})
           return
         }
-        this.$store.commit('callInputToast', {msgHeader: '打赏', msgContent: '请输入打赏票数', _confirmfunc: null, _cancelfunc: null, deals: that.articleDetail.article.id, contract: 2})
+        this.$store.commit('callInputToast', {msgHeader: '打赏', msgContent: '请输入打赏票数', _confirmfunc: '确认', _cancelfunc: '取消', deals: that.articleDetail.article.id, contract: 2})
       },
       // 文章打赏
       voteForA: function () {
         let that = this
         this.isAwardToggle = false
         let awArg = this.pushAward(this.getId, this.a_num)
-        console.log(awArg)
         this.$store.dispatch('invokeContract', {
           type: '1002',
-          fee: '1000000000',
+          fee: '10000000',
           args: awArg,
           that: this,
           callback: function (err, res) {
             if (err) {
               return
             }
-            this.$store.commit('callToast', {msgHeader: '成功！', msgContent: '打赏成功！大约十秒后将看到更新信息', _confirmfunc: null, _cancelfunc: null, deals: undefined, contract: 4})
+            this.$store.commit('callToast', {msgHeader: '成功！', msgContent: '打赏成功！大约十秒后将看到更新信息', _confirmfunc: '了解', _cancelfunc: '关闭', deals: undefined, contract: 4})
             that.toReFreshA()
           }
         })
@@ -305,7 +309,7 @@
         let awArg = this.pushAward(cid, this.c_num)
         this.$store.dispatch('invokeContract', {
           type: '1003',
-          fee: '1000000000',
+          fee: '10000000',
           args: awArg,
           that: this
         })
@@ -323,25 +327,29 @@
       // 发布评论
       subCommment: function () {
         if (this.$store.state.isLogin === false) {
-          this.$store.commit('callToast', {msgHeader: '注意!', msgContent: '仅当您登陆后才能使用打赏功能', _confirmfunc: null, _cancelfunc: null, deals: undefined, contract: 3})
+          this.$store.commit('callToast', {msgHeader: '注意!', msgContent: '仅当您登陆后才能使用评论功能', _confirmfunc: '去登陆', _cancelfunc: '取消', deals: undefined, contract: 3})
           return
         }
-        if (this.commentContent === '') {
-          this.$store.commit('callToast', {msgHeader: '注意!', msgContent: '输入内容不能为空呦', _confirmfunc: null, _cancelfunc: null, deals: undefined, contract: 4})
+        let reg = '^[ ]+$'
+        let regu = new RegExp(reg)
+        let result = regu.test(this.commentContent)
+        if (result === true || this.commentContent === '') {
+          this.commentContent.test
+          this.$store.commit('callToast', {msgHeader: '注意!', msgContent: '输入内容不能为空呦', _confirmfunc: '确定', _cancelfunc: '关闭', deals: undefined, contract: 4})
           return
         }
         let that = this
         let reArg = this.pushInEvent(false, null, this.commentContent)
         this.$store.dispatch('invokeContract', {
           type: '1001',
-          fee: '1000000000',
+          fee: '10000000',
           args: reArg,
           that: that,
           callback: function (err, res) {
             if (err) {
               return
             }
-            that.$store.commit('callToast', {msgHeader: '成功！', msgContent: '发布评论成功！大约十秒后看到更新', _confirmfunc: null, _cancelfunc: null, deals: undefined, contract: 4})
+            that.$store.commit('callToast', {msgHeader: '成功！', msgContent: '发布评论成功！大约十秒后看到更新', _confirmfunc: '了解', _cancelfunc: '关闭', deals: undefined, contract: 4})
             // 延迟更新公共state
             that.clearComment()
             that.toReFreshA()
@@ -376,6 +384,28 @@
       }
     },
     created: function () {
+      // 首先 判断是否session有文章url字段
+      if (window.sessionStorage.articleDetail) {
+        // 如果有字段
+        let sign = window.location.href.split('/')[5]
+        let signS = window.sessionStorage.articleDetail.split('/')[5]
+        if (sign === signS) {
+          window.location.href = window.sessionStorage.articleDetail
+        } else {
+          this.$store.dispatch('getOnearticle', {
+            id: this.getId,
+            that: this
+          })
+        }
+      } else {
+        // 判断是否为
+        // 说明外界加载该页面
+        this.$store.dispatch('getOnearticle', {
+          id: this.getId,
+          that: this
+        })
+        window.sessionStorage.setItem('articleDetail', window.location.href)
+      }
       this.$store.dispatch('getOnearticle', {
         id: this.getId,
         that: this
@@ -386,13 +416,19 @@
         offset: String(this.currentPage * this.pageContent),
         that: this
       })
+    },
+    destroyed: function () {
+      // 离开页面的数据清空
+      console.log('destroyed begin')
+      this.$store.commit('clearArticleDetail')
+      console.log(this.$store.state.articleDetail)
     }
   }
 </script>
 
 <style scoped>
   .article_wrapper{
-    width: 50%;
+    width: 45%;
     min-height: 700px;
     height: 100%;
     margin: 0 auto;
@@ -409,24 +445,25 @@
   .back_arror{
     position: absolute;
     display: block;
-    height: 48px;
+    height: 31px;
     width: 24px;
-    left: -40px;
+    left: -90px;
+    top: 10px;
     cursor: pointer;
   }
   .back_arror img{
     display: block;
-    height: 48px;
-    width: 28px;
+    height: 31px;
+    width: 18px;
   }
   .list_container{
     margin-left: 0px;
     padding-left: 26px;
     display: inline-block;
-    border-left: 2px solid rgb(87, 97, 106);
+    border-left: 2px solid rgb(238, 238, 238);
   }
   .list_container a{
-    color: rgb(87, 97, 106);
+    color: #9f9f9f;
   }
   .title h1{
     display: inline-block;
@@ -445,6 +482,9 @@
   }
   .tittlesuffix{
     font-size: 12px;
+  }
+  .titlesuffix:hover{
+    color: #ff6600;
   }
   .meta{
     display: inline-block;
@@ -465,12 +505,13 @@
     display: inline-block;
     height: 20px;
     position: relative;
-    top: 6px;
+    top: 4px;
     margin-right: 5px;
     margin-left: 10px;
   }
   .meta .author img{
     margin-left: 0;
+    height: 30px;
   }
   .meta .timestamp{
     background-size: 22% 68%;
@@ -495,26 +536,21 @@
   .meta a:hover{
     color: #ff6600;
   }
-  .main .article{
+  #article{
+    word-break: break-word;
   }
-  .article p{
-    user-select: auto;
+  #article p{
     display: block;
     font-size: 16px;
     text-indent: 36px;
-    line-height: 28px;
+    line-height: 32px;
     margin-top: 30px;
+    text-align: left;
   }
-  .article .interaction{
-    margin-left: -5px;
-    margin-top: 20px;
-    float: right;
-    color: #9f9f9f;
-    cursor: pointer;
-  }
-  .interaction a{
-    color: #9f9f9f;
-    font-size: 9px;
+   /*anti-reset*/
+  #article ol li{
+    margin-left: 20px;
+    list-style: circle;
   }
   /*文章评论块 */
   #article_comment{
@@ -527,12 +563,12 @@
   }
   #article_comment input{
     border: 1px solid #9f9f9f;
-    font-size: 18px;
+    font-size: 14px;
     outline: none;
     background-color: rgb(238, 238, 238);
     margin-top: 10px;
-    display: block;
-    height: 35px;
+    display: inline-block;
+    height: 44px;
     width: 100%;
     border-radius: 3px;
   }
@@ -547,6 +583,12 @@
     position: absolute;
     bottom: -34px;
     right: 110px;
+  }
+  #article_comment .comment_clear:hover{
+    color: #ff6600;
+  }
+  #article_comment .comment_publish:hover{
+    color:rgb(102, 146, 217);
   }
   /*评论块*/
   .comment_part{
@@ -638,6 +680,9 @@
     margin-bottom: 20px;
     display: block;
   }
+  .pagespot{
+    color: rgb(102, 146, 217);
+  }
   .pag div{
     display: inline-block;
     cursor: pointer;
@@ -654,6 +699,7 @@
   }
   .active{
     background-color: rgb(102, 146, 217);
+    color: #fff;
   }
    @media screen and (max-width: 1441px) {
      .article_wrapper{
@@ -675,11 +721,11 @@
       }
       .back_arror img{
         display: block;
-        height: 36px;
-        width: 19.5px;
+        height: 26px;
+        width: 13.5px;
       }
       .title h1{
-        font-size: 14px;
+        font-size: 23px;
       }
       .title span{
         margin-left: 20px;
@@ -709,6 +755,10 @@
       }
       .interaction a{
         font-size: 9px;
+      }
+      #article p{
+        font-size: 16px;
+        line-height: 32px;
       }
       .interaction .vote{
         font-size: 9px;

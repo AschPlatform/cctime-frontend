@@ -21,7 +21,6 @@ function getPhotoImage (id) {
 const actions = {
   // 验证用户信息获取account
   getUserInfo: async ({ commit }, { secret, that }) => {
-    console.log(secret)
     /* if (state.mock) { 延时传送来直接写入数据
       return setTimeout(()=> {
         commit('writeInuser', {secret: '', account: })
@@ -30,13 +29,11 @@ const actions = {
     that.$axios.post(loginurl, {
       secret: secret
     }).then((res) => {
-      console.log(res)
       if (res.status === 200 && res.data.success) {
         res.data.account.logo = getPhotoImage(res.data.account.address)
         commit('writeInuser', { secret: secret, account: res.data.account })
         window.sessionStorage.setItem('userInfo', JSON.stringify(res.data.account))
         window.sessionStorage.setItem('secret', secret)
-        console.log(res.data.account)
       } else if (res.data.success === false) {
         // 统一alert，后期模态框调教
         that.$store.commit('callToast', {msgHeader: '发生错误', msgContent: '用户登录失败', _confirmfunc: null, _cancelfunc: null, deals: undefined, contract: 4})
@@ -45,7 +42,6 @@ const actions = {
   },
   // 获取文章列表
   getAllarticles: ({ commit }, { sortBy, limit, offset, that }) => {
-    console.log('that', that)
     that.$axios.get(articleslisturl, {
       params: {
         sortBy: sortBy,
@@ -53,39 +49,32 @@ const actions = {
         offset: offset
       }
     }).then(({ data }) => {
-      console.log(data)
       for (let i of data.articles) {
         i.photo = getPhotoImage(i.authorId)
       }
       if (sortBy !== 'timestamp') {
         commit('writeInToparticleslist', { data })
-        console.log('getall Top res ' + sortBy, data)
       } else {
         commit('writeInNewarticleslist', { data })
-        console.log('getall New res ' + sortBy, data)
       }
     })
   },
 
   // 获取某一篇文章详情
   getOnearticle: async ({ commit }, { id, that }) => {
-    console.log('GetOneArticle-id' + id)
     that.$axios.get(articleslisturl + '/' + id)
       .then(({ data }) => {
-        console.log(data)
         if (data.success === false) {
+          console.log(data)
           commit('callToast', {msgHeader: '抱歉', msgContent: '您访问的这篇文章不存在,如出现问题我们的技术人员将及时解决', _confirmfunc: null, _cancelfunc: null, deals: 0, contract: 4})
           return
         }
-        console.log('现在写入详情')
-        console.log(data)
         commit('writeInDetail', { data })
         data.article.photo = getPhotoImage(data.article.authorId)
       })
   },
   // 获取某一篇文章的评论
   getOnearticleComment: async ({ commit }, { id, limit, offset, that }) => {
-    console.log('GetOneArticle-id' + id)
     that.$axios.get(articleslisturl + '/' + id + '/comments', {
       params: {
         sortBy: 'timestamp:desc',
@@ -94,8 +83,6 @@ const actions = {
       }
     })
       .then(({ data }) => {
-        console.log(data)
-        console.log('现在写入评论', articleslisturl + '/' + id + '/comments')
         for (let i = 0; i < data.comments.length; ++i) {
           let c = data.comments[i]
           c.photo = getPhotoImage(c.authorId)
@@ -114,9 +101,6 @@ const actions = {
       }
     })
       .then(({ data }) => {
-        console.log(data)
-        console.log('记录读取成功！限' + limit + '初始' + offset + '查询人' + that.$store.state.userInfo.info.address + '金额' + currency)
-        console.log(that.$store.state.userInfo.info.address)
         commit('writeRecord', { data })
       })
   },
@@ -130,11 +114,8 @@ const actions = {
       args: JSON.stringify(args)
     }
     /* let fees = String(fee) */
-    console.log('Action has been used!', args, a)
     that.$axios.put(posturl, a, { headers: { 'magic': '594fe0f3', 'version': '' } }).then((res) => {
-      console.log('We have a response!')
       // 返回成功判断
-      console.log(res)
       if (res.status === 200 && res.data.success) {
         callback(null, '这是在action里面的回调信息')
         // 发布成功alert
@@ -143,7 +124,34 @@ const actions = {
         // 这里应该是返回错误信息
         /* alert(res.data.error) */
         // 报错处理
-        commit('callToast', {msgHeader: '发生错误', msgContent: res.data.error, _confirmfunc: null, _cancelfunc: null, deals: undefined, contract: 4})
+        if (res.data.error.indexOf('Insufficient balance') > -1) {
+          commit('callToast', {msgHeader: '发生错误', msgContent: '余额不足', _confirmfunc: '了解', _cancelfunc: '关闭', deals: undefined, contract: 4})
+        }
+        if (res.data.error.indexOf('tags size') > -1) {
+          commit('callToast', {msgHeader: '发生错误', msgContent: 'tag太长喽！', _confirmfunc: '了解', _cancelfunc: '关闭', deals: undefined, contract: 4})
+        }
+        if (res.data.error.indexOf('provide tags') > -1) {
+          commit('callToast', {msgHeader: '发生错误', msgContent: '我们需要你填写一些tag', _confirmfunc: '了解', _cancelfunc: '关闭', deals: undefined, contract: 4})
+        }
+        if (res.data.error.indexOf('amount range') > -1) {
+          commit('callToast', {msgHeader: '发生错误', msgContent: '数额要大于0', _confirmfunc: '了解', _cancelfunc: '关闭', deals: undefined, contract: 4})
+        }
+        if (res.data.error.indexOf('String is too long') > -1) {
+          commit('callToast', {msgHeader: '发生错误', msgContent: '您在登录时的秘钥过长或者输入的数值过大', _confirmfunc: '了解', _cancelfunc: '关闭', deals: undefined, contract: 4})
+        }
+        if (res.data.error.indexOf('Nickname already exists') > -1) {
+          commit('callToast', {msgHeader: '发生错误', msgContent: '您输入的昵称已被使用', _confirmfunc: '了解', _cancelfunc: '关闭', deals: undefined, contract: 4})
+        }
+        if (res.data.error.indexOf('should be integer') > -1) {
+          commit('callToast', {msgHeader: '发生错误', msgContent: '您输入的数额过长或不为整数，请再次确认', _confirmfunc: '了解', _cancelfunc: '关闭', deals: undefined, contract: 4})
+        }
+        if (res.data.error.indexOf('content size') > -1) {
+          commit('callToast', {msgHeader: '发生错误', msgContent: '您输入的内容因为(过长/敏感)而被拒绝', _confirmfunc: '了解', _cancelfunc: '关闭', deals: undefined, contract: 4})
+        }
+        if (res.data.error.indexOf('already set') > -1) {
+          commit('callToast', {msgHeader: '发生错误', msgContent: '用户名只能设置一次', _confirmfunc: '了解', _cancelfunc: '关闭', deals: undefined, contract: 4})
+        }
+        // commit('callToast', {msgHeader: '发生错误', msgContent: res.data.error, _confirmfunc: null, _cancelfunc: null, deals: undefined, contract: 4})
       }
     })
   }

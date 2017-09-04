@@ -6,7 +6,7 @@
     </ul>
     <div class="pag">
       <div class="ctrbtn" @click="minPage" v-show="this.currentPage != 0">上一页</div>
-      <div class="pagespot" v-for="(value, index) in this.page" @click="goto(index)" :class="{'active':currentPage + 1 == Number(value)}" v-on:reFresh="toReFresh">{{Number(value)}}</div>
+      <div class="pagespot" v-for="(value, index) in this.page" @click="goto(Number(value) - 1)" :class="{'active':currentPage + 1 == Number(value)}" v-on:reFresh="toReFresh">{{Number(value)}}</div>
       <div class="ctrbtn" @click="addPage" v-show="this.allPage != this.currentPage + 1 && this.allPage != 0">下一页</div>
     </div>
   </div>
@@ -42,9 +42,7 @@
       // 刷新（重新拉取）事件
       toReFresh: function (start) {
         let that = this
-        console.log(start)
         setTimeout(function () {
-          console.log(that)
           that.$store.dispatch('getAllarticles', {
             sortBy: 'timestamp',
             limit: String(that.pageContent),
@@ -52,7 +50,6 @@
             that: that
           })
         }, 10000)
-        console.log('十秒后重新获取数据')
       },
       // 操作页面增减
       addPage: function () {
@@ -86,7 +83,7 @@
       },
       // 页面跳转
       goto: function (index) {
-        if (index === this.current) return
+        if (index === this.currentPage) return
         this.$store.commit('toPlusCurrentPage', index)
         // this.currentPage = index
         this.$store.dispatch('getAllarticles', {
@@ -141,7 +138,6 @@
     created: function () {
       // 以下是触发Action内容
       // 输出$state list内容
-      console.log(this.currentPage)
       this.$store.dispatch('getAllarticles', {
         sortBy: 'timestamp',
         limit: String(this.pageContent),
@@ -154,9 +150,8 @@
 
 <style lang="" scoped>
   .main-wrap{
-    width: 66.5%;
+    width: 65.5%;
     margin: auto auto;
-    background-color: rgb(253, 253, 253);
     min-height: 900px;
     min-width: 1237px;
     height: 100%;
@@ -165,6 +160,7 @@
   }
   .main-wrap ul{
     list-style: none;
+    margin-top: 20px;
   }
   .main-wrap ul li{
     position: relative;
@@ -272,7 +268,6 @@
     bottom: 90px;
     left: 40%;
     display: block;
-    user-select:none;
   }
   .pag div{
     display: inline-block;
@@ -282,16 +277,15 @@
     min-width: 35px;
     font-size: 12px;
     border-radius: 6px;
-    user-select:none;
   }
   .ctrbtn{
     border: 1px solid rgb(102, 146, 217);
     color: rgb(102, 146, 217);
     padding: 0 10px;
-    user-select:none;
   }
   .active{
     background-color: rgb(102, 146, 217);
+    color: #fff;
   }
   @media screen and (max-width: 1441px) {
     /* 1360屏幕下 */
@@ -302,7 +296,7 @@
       min-width: 1092px;
     }
     .main-wrap ul li{
-      height: 56px;
+      height: 68px;
       min-width: 860px;
     }
   }

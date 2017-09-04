@@ -38,21 +38,17 @@
         if (this.text !== '' && this.url !== '') {
           this.isError = true
           this.errorMsg = '网络地址与文章内容只能选填一个'
-          console.log('Both filled!')
         } else if (this.text === '' && this.url === '') {
           this.isError = true
           this.errorMsg = '网络地址与文章内容至少要填一项'
-          console.log('Both unfilled!')
         } else {
-          console.log(this)
           let tagArr = this.pushInEvent
           this.$store.dispatch('invokeContract', {
             type: '1000',
-            fee: '1000000000',
+            fee: '10000000',
             args: tagArr,
             that: this
           })
-          console.log('Dispatched!')
         }
       },
       clearError: function () {

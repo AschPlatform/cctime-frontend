@@ -6,8 +6,8 @@
           <span class="msg-content">{{this.toastState.toastMsgContent}}</span>
         </div>
         <div class="toastctr">
-          <span class="confirm" @click="todo()">确定</span>
-          <span class="cancel" @click="callOff()">取消</span>
+          <span class="confirm" @click="todo()">{{this.$store.state.toastState._confirmfunc}}</span>
+          <span class="cancel" @click="callOff()">{{this.$store.state.toastState._cancelfunc}}</span>
         </div>
     </div>
   </div>
@@ -26,7 +26,6 @@ export default {
   methods: {
     todo: function () {
       this.pickMethod(this.$store.state.toastState.contract)
-      console.log(this)
       if (this.confirmFunction !== null) {
         this.confirmFunction()
         this.toastState.isShowToast = false
@@ -67,14 +66,14 @@ export default {
             a.push(this.toastState.deals)
             this.$store.dispatch('invokeContract', {
               type: '1004',
-              fee: '1000000000',
+              fee: '10000000',
               args: a,
               that: this,
               callback: function (err, msg) {
                 if (err) {
                   return
                 }
-                that.$store.commit('callToast', {msgHeader: '成功！', msgContent: '举报评论成功！请等待负责人核实', _confirmfunc: null, _cancelfunc: null, deals: 0, contract: 4})
+                that.$store.commit('callToast', {msgHeader: '成功！', msgContent: '举报评论成功！请等待负责人核实', _confirmfunc: '了解', _cancelfunc: '关闭', deals: 0, contract: 4})
               }
             })
           }
@@ -92,14 +91,14 @@ export default {
             a.push(this.toastState.deals)
             this.$store.dispatch('invokeContract', {
               type: '1004',
-              fee: '1000000000',
+              fee: '10000000',
               args: a,
               that: this,
               callback: function (err, msg) {
                 if (err) {
                   return
                 }
-                that.$store.commit('callToast', {msgHeader: '成功！', msgContent: '举报文章成功！请等待负责人核实', _confirmfunc: null, _cancelfunc: null, deals: 0, contract: 4})
+                that.$store.commit('callToast', {msgHeader: '成功！', msgContent: '举报文章成功！请等待负责人核实', _confirmfunc: '了解', _cancelfunc: '关闭', deals: 0, contract: 4})
               }
             })
           }
@@ -120,6 +119,19 @@ export default {
         case 4:
           // 错误处理
           this.confirmFunction = function () {
+            this.toastState.isShowToast = false
+          }
+          this.cancelFunction = function () {
+            this.toastState.isShowToast = false
+          }
+          break
+        case 5:
+          // 注销确认
+          console.log(this)
+          this.confirmFunction = function () {
+            this.$store.commit('logOut')
+            this.$router.push('/top')
+            window.sessionStorage.clear()
             this.toastState.isShowToast = false
           }
           this.cancelFunction = function () {
@@ -148,14 +160,15 @@ export default {
     background-color: rgba(0, 0, 0, .6);
     width: 100%;
     height: 100%;
-    z-index: 9999;
+    z-index: 9998;
   }
   .toastbox{
+    font-size: 16px;
     position: fixed;
     top: 35%;
     left: 40%;
-    width: 20%;
-    height: 20%;
+    width: 25%;
+    height: 25%;
     background-color: rgba(237, 237, 237, .9);
     border-radius: 8px;
   }
@@ -165,7 +178,8 @@ export default {
   }
   .toastmsg span{
     display: block;
-    font-size: 16px;
+    font-size: 17px;
+    line-height: 22px;
   }
   .msg-header{
     font-weight: 800;
@@ -187,9 +201,8 @@ export default {
   .toastctr span{
     display: inline-block;
     height: 96%;
-    line-height: 200%;
+    line-height: 350%;
     width: 49%;
-    font-size: 18px;
     font-weight: 700;
     cursor: pointer;
   }
@@ -206,6 +219,7 @@ export default {
   
   @media screen and (max-width: 1441px) {
     .toastbox{
+      font-size: 12px;
       position: fixed;
       top: 40%;
       left: 40%;
@@ -216,7 +230,6 @@ export default {
     }
     .toastmsg span{
       display: block;
-      font-size: 14px;
     }
   }
 </style>

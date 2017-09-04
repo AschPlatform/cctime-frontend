@@ -2,7 +2,7 @@
   <div class="footbar">
     <div class="link_box">
       <a href="https://www.asch.so" target="_blank">阿希官网</a>&nbsp;|&nbsp;
-      <a href="http://forum.asch.so" target="_blank">阿希生态社区</a>&nbsp;|&nbsp;
+      <a href="http://bbs.asch.so" target="_blank">阿希生态社区</a>&nbsp;|&nbsp;
       <p>官方QQ群1：485979564</p>&nbsp;|&nbsp;
       <p>官方QQ群1：545183438</p>
     </div>
@@ -20,7 +20,7 @@
 
 <style lang="" scoped>
   .footbar{
-      font-size: 16px;
+      font-size: 14px;
       position: absolute;
       left: 50%;
       bottom: 0;
@@ -33,11 +33,15 @@
   .footbar span{
       display: inline-block;
       margin-top: 15px;
+      color: rgb(130, 130, 130);
   }
   .link_box{
-      margin-top: 25px;
+      margin-top: 20px;
       width: 100%;
-      color: #000;
+      color: rgb(130, 130, 130);
+  } 
+  .link_box a{
+      color: rgb(130, 130, 130);
   }
   .link_box p{
       display: inline-block;

@@ -35,15 +35,13 @@
     },
     methods: {
       logout: function () {
-        this.$store.commit('logOut')
-        this.$router.push('/top')
-        window.sessionStorage.clear()
+        this.$store.commit('callToast', {msgHeader: '注意', msgContent: '是否要进行注销？', _confirmfunc: '注销', _cancelfunc: '取消', deals: undefined, contract: 5})
       },
       showPublish: function () {
         if (this.isLogin === true) {
           this.$router.push('/publish')
         } else {
-          this.$store.commit('callToast', {msgHeader: '发生错误', msgContent: '请先登录', _confirmfunc: null, _cancelfunc: null})
+          this.$store.commit('callToast', {msgHeader: '发生错误', msgContent: '请先登录', _confirmfunc: '去登录', _cancelfunc: '不了', deals: undefined, contract: 3})
           this.$router.push('/login')
         }
       }
@@ -68,7 +66,7 @@
   .header{
     background:linear-gradient(rgb(254, 254, 254), rgb(239, 239, 239));; 
     position: fixed;
-    z-index: 999;
+    z-index: 9999;
     height: 60px;
 /*    padding: 0 1% 0 1%;*/
     top: 0;
@@ -121,8 +119,8 @@
   }
   .nav-wrapper .logo{
     display: inline-block;
-    width: 181px;
-    height: 45px;
+    width: 160px;
+    height: 40px;
     background: url(/static/img/logo.png) no-repeat;
     margin-right: 15px;
     margin-top: 6px;
@@ -183,6 +181,7 @@
       height: 25px;
       margin-right: 15px;
       margin-top: 8px;
+      margin-left: 5%;
     }
     .header .btn{
       width: 17%;

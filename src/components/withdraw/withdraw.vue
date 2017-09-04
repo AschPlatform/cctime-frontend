@@ -4,16 +4,18 @@
         <h1>站内转账</h1>
     </div>
     <div class="deal_part">
-        <span>输入要转账的数额(可用余额：0 XAS / 0 BTC / 0 CCT)</span>
+        <span>输入转账信息</span>
         <div class="deal_form">
-        <select type="text" v-model="trans_type" @change="toQuery">
+        <select type="text" v-model="trans_type">
           <option disabled selected>转账币种</option>
           <option v-for="item in this.userInfo.info.balances">{{item.currency}}</option>
         </select>
+          <input style="display:none" type="text" name="fakeusernameremembered"/>
+          <input style="display:none" type="password" name="fakepasswordremembered"/>
           <input type="number" placeholder="转账数量" v-model="trans_num">
           <input type="text" placeholder="转账地址" v-model="trans_address">
-          <input type="text" class="calculate" value="0.00" disabled v-model="trans_fee"><span class="calculate_info">(手续费0.5%)</span>
-          <input type="password" class="psd" v-model="trans_password">
+          <input type="text" class="calculate" placeholder="手续费0.01" disabled>
+          <!-- <input type="password" class="psd" v-model="trans_password" autocomplete="off" placeholder="请输入二级密码，如果未设置请略过"> -->
         </div>
     </div>
     <p>请确保您所填的对方地址是否正确，本操作无法撤销</p>
@@ -22,7 +24,7 @@
     </div>
     <div class="record_title">
       <h3>转账记录</h3>
-      <select type="text" v-model="trans_query_type">
+      <select type="text" v-model="trans_query_type" @change="toQuery">
         <option disabled selected>币种筛选</option>
         <option v-for="item in this.userInfo.info.balances">{{item.currency}}</option>
       </select>
@@ -64,7 +66,7 @@
     data: function () {
       return {
         trans_type: '',
-        trans_num: 0,
+        trans_num: undefined,
         trans_address: '',
         trans_password: '',
         trans_query_type: '',
@@ -80,11 +82,26 @@
       toWithdraw: function () {
         // 整数检测
         if (String(this.trans_num).indexOf('.') > 0) {
-          this.$store.commit('callToast', {msgHeader: '注意！', msgContent: '转账金额必须为整数！', _confirmfunc: null, _cancelfunc: null, deals: undefined, contract: 4})
+          this.$store.commit('callToast', {msgHeader: '注意！', msgContent: '转账金额必须为整数！', _confirmfunc: '了解', _cancelfunc: '关闭', deals: undefined, contract: 4})
           this.init()
           return
         }
-
+        if (this.trans_type === '') {
+          this.$store.commit('callToast', {msgHeader: '注意！', msgContent: '请先选择交易内容！', _confirmfunc: '了解', _cancelfunc: '关闭', deals: undefined, contract: 4})
+          return
+        }
+        if (this.trans_address === '') {
+          this.$store.commit('callToast', {msgHeader: '注意！', msgContent: '请先选择交易对象地址！', _confirmfunc: '了解', _cancelfunc: '关闭', deals: undefined, contract: 4})
+          return
+        }
+        if (this.trans_address.indexOf(' ') !== -1) {
+          this.$store.commit('callToast', {msgHeader: '注意！', msgContent: '交易地址不得有空格/回车', _confirmfunc: '了解', _cancelfunc: '关闭', deals: undefined, contract: 4})
+          return
+        }
+        if (this.trans_num <= 0) {
+          this.$store.commit('callToast', {msgHeader: '注意！', msgContent: '请确认交易数额大于零！', _confirmfunc: '了解', _cancelfunc: '关闭', deals: undefined, contract: 4})
+          return
+        }
         // 组织args
         let that = this
         let a = []
@@ -93,7 +110,7 @@
         a.push(this.trans_address)
         this.$store.dispatch('invokeContract', {
           type: '3',
-          fee: '1000000000',
+          fee: '10000000',
           args: a,
           that: this,
           callback: function (err, res) {
@@ -110,14 +127,14 @@
               })
             }, 10000)
             // 初始化本地state
-            that.$store.commit('callToast', {msgHeader: '成功！', msgContent: '转账成功，根据环境原因转账时间可能会略有延长', _confirmfunc: null, _cancelfunc: null, deals: undefined, contract: 4})
+            that.$store.commit('callToast', {msgHeader: '成功！', msgContent: '转账成功，根据环境原因转账时间可能会略有延长', _confirmfunc: '了解', _cancelfunc: '关闭', deals: undefined, contract: 4})
             that.init()
           }
         })
       },
       init: function () {
         this.trans_type = ''
-        this.trans_num = 0
+        this.trans_num = undefined
         this.trans_address = ''
         this.trans_password = ''
         // 分页初始量
@@ -126,7 +143,6 @@
       // 操作页面增减
       addPage: function () {
         let that = this
-        console.log(that)
         if (that.currentPage < that.allPage - 1) {
           that.currentPage = that.currentPage + 1
           that.$store.dispatch('getTransactionInfo', {
@@ -170,11 +186,10 @@
         let that = this
         // 以下是触发Action内容
         // 输出$state list内容
-        console.log(this.currentPage)
         this.$store.dispatch('getTransactionInfo', {
           limit: String(that.pageContent),
           offset: 0,
-          currency: this.trans_type,
+          currency: this.trans_query_type,
           that: that
         })
       }
@@ -183,12 +198,39 @@
       ...mapState(['userInfo']),
       // 计算手续费
       trans_fee: function () {
+        if (this.trans_num === undefined) {
+          return 0
+        }
         return this.trans_num * 0.005
       },
       // 计算费用传入单位
       trans_unit: function () {
-        return this.trans_num * 1e8
+        return String(this.trans_num * 1e8)
       },
+      // 计算交易时间
+      // trans_realTime: function () {
+      //   // 填写日期
+      //   let t = new Date(item.realTime)
+      //   let year = t.getFullYear()
+      //   let month = Number(t.getMonth()) + 1
+      //   let day = t.getDate()
+      //   let hour = t.getHours()
+      //   let minute = t.getMinutes()
+      //   let sec = t.getSeconds()
+      //   if (month < 10) {
+      //     month = '0' + month
+      //   }
+      //   if (day < 10) {
+      //     day = '0' + day
+      //   }
+      //   if (minute < 10) {
+      //     minute = '0' + minute
+      //   }
+      //   if(sec < 10) {
+      //     sec = '0' + sec
+      //   }
+      //   return year + '.' + month + '.' + day + ' ' + hour + ':' + minute + ':' + 'sec'
+      // },
       // 分页数组
       switchGroup: function () {
         return this.$store.getters['transactionListGetter'].transfers
@@ -226,7 +268,6 @@
       let that = this
       // 以下是触发Action内容
       // 输出$state list内容
-      console.log(this.currentPage)
       this.$store.dispatch('getTransactionInfo', {
         limit: String(that.pageContent),
         offset: 0,
@@ -263,7 +304,7 @@
     text-align: left;
     font-size: 20px;
     line-height: 20px;
-    font-weight: 500;
+    font-weight: 600;
   }
   .deal_part{
     width: 70%;
@@ -284,13 +325,15 @@
     width: 40%;
   }
   .deal_form select, .deal_form input{
-    border: 1px solid #000;
-    margin-top: 5px;
+    border: 1px solid #999;
+    margin: 10px 0 5px 0;
     height: 30px;
     display: inline-block;
-    font-size: 16px;
+    font-size: 13px;
     line-height: 30px;
     width: 60%;
+    border-radius: 5px;
+    padding-left: 5px;
   }
   .deal_form span{
     margin-left: 25px;
@@ -315,28 +358,6 @@
     margin-left: 19%;
     cursor: pointer;
   }
-  /* .info{
-    height: 245px;
-    width: 70%;
-    margin: 30px auto 0 auto;
-    border-left: 5px solid rgb(238, 238, 238);
-  }
-  .info h3{
-    margin-left: 15px;
-    text-align: left;
-    font-size: 16px;
-    font-weight: 500;
-  }
-  .info ol{
-    text-align: left;
-    margin-left: 15px;
-    margin-top: 9px;
-  }
-  .info li{
-    font-size: 16px;
-    line-height: 24px;
-  } */
-  /* form style */
   .record_title{
     display: block;
     width: 70%;
@@ -365,25 +386,24 @@
   }
   .record table{
     margin-top: 15px;
+    min-width: 900px;
     width: 100%;
   }
   .record h3{
     font-size: 20px;
   }
   .table_header{
-    user-select: auto;
     font-size: 14px;
     line-height: 30px;
     background-color: rgb(238, 238, 238);
     border: 1px solid rgb(191, 191, 191);
   }
   .record td{
-    user-select: auto;
-    line-height: 30px;
+    line-height: 26px;
     font-size: 14px;
     max-width: 180px;
     overflow: overlay;
-    padding: 0 15px;
+    padding: 6px 2px;
   }
   .pag{
     position: absolute;
@@ -391,7 +411,6 @@
     bottom: 120px;
     left: 45%;
     display: block;
-    user-select:none;
   }
   .pag div{
     display: inline-block;
@@ -401,21 +420,20 @@
     min-width: 35px;
     font-size: 12px;
     border-radius: 6px;
-    user-select:none;
   }
   .ctrbtn{
     border: 1px solid rgb(102, 146, 217);
     color: rgb(102, 146, 217);
     padding: 0 10px;
-    user-select:none;
   }
   .active{
     background-color: rgb(102, 146, 217);
+    color: #fff;
   }
   @media screen and (max-width: 1441px) {
     .withdraw_container{
       width: 80%;
-      min-height: 500px;
+      min-height: 600px;
       padding-bottom: 210px;
     }
     .withdraw_container > p{
@@ -482,6 +500,7 @@
     }
     .record table{
       margin-top: 15px;
+      min-width: 700px;;
       width: 100%;
     }
     .table_header{

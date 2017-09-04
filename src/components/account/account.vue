@@ -15,14 +15,14 @@
               <div class="check" @click="setNickName">确认</div>
               <div class="check" @click="toggleNickBox">取消</div>
             </div>
-            <img src="/static/img/rewrite.png" @click="toggleNickBox" v-show="!isSetNickToggle"></img>
+            <img src="/static/img/rewrite.png" @click="toggleNickBox" v-show="!isSetNickToggle" :class="{ hidebox: isHide }"></img>
           </div>
           <div class="info_address">地&nbsp;&nbsp;址：<span>{{this.address}}</span></div>
           <span v-if="this.isEmpty" class="warning">{{accountInfo}}</span>
         </div>
       </div>
       <div class="ctr_group">
-        <router-link to="withdraw/">站内转账</router-link>
+        <router-link to="withdraw/">链内转账</router-link>
         <router-link to="recharge/">充/提币</router-link>
       </div>
       <div class="content_table">
@@ -58,26 +58,25 @@
     },
     methods: {
       toggleNickBox: function () {
-        console.log(this)
         this.isSetNickToggle = !this.isSetNickToggle
       },
       setNickName: function () {
         this.toggleNickBox()
         let that = this
         if (this.nickName.length > 20) {
-          this.$store.commit('callToast', {msgHeader: '发生错误', msgContent: '昵称必须小于等于20个字节', _confirmfunc: null, _cancelfunc: null, deals: undefined, contract: 4})
+          this.$store.commit('callToast', {msgHeader: '发生错误', msgContent: '昵称必须小于等于20个字节', _confirmfunc: '了解', _cancelfunc: '关闭', deals: undefined, contract: 4})
           return
         } else {
           this.$store.dispatch('invokeContract', {
             type: '4',
-            fee: '1000000000',
-            args: [String(this.nickName)],
+            fee: '10000000',
+            args: [this.nickName],
             that: this,
             callback: function (err, res) {
               if (err) {
                 return
               }
-              that.$store.commit('callToast', {msgHeader: '成功！', msgContent: '修改昵称成功！(大约十秒后您的信息将被更新)', _confirmfunc: null, _cancelfunc: null, deals: undefined, contract: 4})
+              that.$store.commit('callToast', {msgHeader: '成功！', msgContent: '修改昵称成功！(大约十秒后您的信息将被更新)', _confirmfunc: '了解', _cancelfunc: '关闭', deals: undefined, contract: 4})
               // 先仅仅commit测试下
               setTimeout(function () {
                 that.$store.dispatch('getUserInfo', {
@@ -100,6 +99,10 @@
       }
     },
     created: function () {
+      // this.$store.dispatch('getUserInfo', {
+      //   secret: this.$store.state.userInfo.secret,
+      //   that: this
+      // })
       this.account = this.$store.state.userInfo.info.balances
       this.address = this.$store.state.userInfo.info.address
       if (this.account.length === 0) {
@@ -108,7 +111,12 @@
       } else {
         this.isEmpty = false
       }
-      console.log(this.accountInfo)
+      // 判断是否要显示名称修改
+      if (this.$store.state.userInfo.info.extra === null) {
+        this.isHide = false
+      } else {
+        this.isHide = true
+      }
     }
   }
 </script>
@@ -148,6 +156,7 @@
     position: relative;
     width: 90%;
     margin-left: 10px;
+    margin-top: 35px;
   }
   .content_header .logo{
     float: left;
@@ -267,7 +276,6 @@
     cursor: pointer;
   }
   .info_address > span{
-    user-select: auto;
   }
   @media screen and (max-width: 1441px){
     .account_container{
@@ -337,5 +345,8 @@
       height: 20px;
       line-height: 20px;
     }
+  }
+  .hidebox{
+    display: none;
   }
 </style>

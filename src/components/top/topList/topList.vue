@@ -34,11 +34,7 @@
           <img src="/static/img/up.png"></img>
           {{item.votes}}票
         </span>
-        <!--<span class="price meta_info">
-          <img src="/static/img/dosh.png"></img>
-          {{item.votes * 0.0001}}
-        </span>-->
-        </span>
+      </span>
     </div>
     <div class="reportIn" @click="reportBtn" v-if="this.$store.state.userInfo.info.isDelegate === true">举报该文章</div>
   </li>
@@ -57,11 +53,10 @@ export default {
   methods: {
     // 跳转URL
     jumpTo: function () {
-      window.location = this.item.url
+      window.open(this.item.url)
     },
     toggleAward: function (item) {
       this.deToggle = !this.deToggle
-      console.log(window.location)
     },
     // 组织打赏arg
     pushAward: function (id, amount) {
@@ -74,7 +69,7 @@ export default {
     voteBtn: function () {
       let that = this
       if (that.$store.state.isLogin === false) {
-        that.$store.commit('callToast', {msgHeader: '注意!', msgContent: '仅当您登陆后才能使用打赏功能', _confirmfunc: null, _cancelfunc: null, deals: undefined, contract: 3})
+        that.$store.commit('callToast', {msgHeader: '注意!', msgContent: '仅当您登陆后才能使用打赏功能', _confirmfunc: '去登录', _cancelfunc: '关闭', deals: undefined, contract: 3})
         return
       }
       this.$store.commit('callInputToast', {msgHeader: '打赏', msgContent: '请输入打赏票数', _confirmfunc: null, _cancelfunc: null, deals: that.item.id, contract: 2})
@@ -87,19 +82,18 @@ export default {
     reportBtn: function () {
       let that = this
       if (that.$store.state.isLogin === false) {
-        that.$store.commit('callToast', {msgHeader: '注意!', msgContent: '仅当您登陆后才能使用举报功能', _confirmfunc: null, _cancelfunc: null, deals: undefined, contract: 3})
+        that.$store.commit('callToast', {msgHeader: '注意!', msgContent: '仅当您登陆后才能使用举报功能', _confirmfunc: '去登录', _cancelfunc: '不了', deals: undefined, contract: 3})
         return
       }
-      this.$store.commit('callToast', {msgHeader: '警告', msgContent: '是否对该文章进行举报？', _confirmfunc: null, _cancelfunc: null, deals: that.item.id, contract: 2})
+      this.$store.commit('callToast', {msgHeader: '警告', msgContent: '是否对该文章进行举报？', _confirmfunc: '举报', _cancelfunc: '不了', deals: that.item.id, contract: 2})
     },
     // 替换成模态框输入（环境假设为state）
     voteForA: function (id) {
       let that = this
       let awArg = this.pushAward(id, this.awardNum)
-      console.log(awArg)
       this.$store.dispatch('invokeContract', {
         type: '1002',
-        fee: '1000000000',
+        fee: '10000000',
         args: awArg,
         that: this,
         callback: function (err, msg) {
@@ -116,26 +110,8 @@ export default {
     },
     reportA: function () {
       let that = this
-      this.$store.commit('callInputToast', {msgHeader: '警告', msgContent: '举报文章成功，请等待负责人核实', _confirmfunc: null, _cancelfunc: null, deals: that.item.id, contract: 4})
+      this.$store.commit('callInputToast', {msgHeader: '警告', msgContent: '举报文章成功，请等待负责人核实', _confirmfunc: '了解', _cancelfunc: '关闭', deals: that.item.id, contract: 4})
     }
-    // reportA: function (id) {
-    //   let that = this
-    //   let arg = []
-    //   arg.push('1')
-    //   arg.push(String(id))
-    //   this.$store.dispatch('invokeContract', {
-    //     type: '1004',
-    //     fee: '1000000000',
-    //     args: arg,
-    //     that: this,
-    //     callback: function (err, msg) {
-    //       if (err) {
-    //         return
-    //       }
-    //       that.$store.commit('callToast', {msgHeader: '成功！', msgContent: '举报文章成功，请等待负责人核实', _confirmfunc: null, _cancelfunc: null})
-    //     }
-    //   })
-    // }
   },
   computed: {
     // 处理url显示
@@ -154,22 +130,22 @@ export default {
       let day = 0
       let yea = 0
       if (sec < 60 && sec >= 0) {
-        pst = Math.floor(sec) + '秒以前'
+        pst = Math.floor(sec) + '秒前'
       } else if (sec >= 60) {
         min = Math.floor(sec / 60)
         if (min < 60) {
-          pst = Math.floor(min) + '分钟以前'
+          pst = Math.floor(min) + '分钟前'
         } else {
           hor = Math.floor(min / 60)
           if (hor < 24) {
-            pst = hor + '小时以前'
+            pst = hor + '小时前'
           } else {
             day = Math.floor(hor / 24)
             if (day < 360) {
-              pst = day + '天以前'
+              pst = day + '天前'
             } else {
               yea = Math.floor(day / 360)
-              pst = yea + '年以前'
+              pst = yea + '年前'
             }
           }
         }
@@ -196,7 +172,7 @@ export default {
     color: #000;
     font-size: 18px;
     text-align: center;
-    top: -27px;
+    top: -29px;
   }
   .list_container{
     position:  relative;
@@ -205,6 +181,7 @@ export default {
     display: inline-block;
   }
   .list_container .title{
+    display: inline-block;
     padding-left: 10px;
     border-left: 1px solid rgb(87, 97, 106);
   }
@@ -218,6 +195,8 @@ export default {
     cursor: pointer;
   }
   .title a{
+    height: 20px;
+    line-height: 20px;
     font-size: 18px;
     font-weight: bold;
     color: #000;
@@ -275,17 +254,19 @@ export default {
   }
   .meta .author span{
     display: inline-block;
-    width: 50px;
+    width: 70px;
     overflow: hidden;
     text-overflow: ellipsis;
     height: 20px;
     line-height: 28px;
   }
   .meta .timestamp{
+    width: 85px;
     background-size: 22% 68%;
     cursor: default;
   }
   .meta .comment{
+    width: 110px;
     background-size: 18% 63%;
   }
   .comment a{
@@ -367,18 +348,13 @@ export default {
     .readcount{
       line-height: 14px;
       font-size: 14px;
-      top: -24px;
-    }
-    .list_container .title{
-      padding-left: 10px;
-      margin-top: 10px;
+      top: -28px;
     }
     .list_container .titlesuffix{
       font-size: 9px;
       width: 100px;
     }
     .title a{
-      font-size: 14px;
       max-width: 500px;
     }
     .title span{
@@ -387,12 +363,18 @@ export default {
     .meta{
       margin-top: 2px;
       height: 20px;
-      font-size: 9px;
+      font-size: 12px;
    }
    .meta .meta_info{
       height: 20px;
       margin-left: 15px;
       line-height: 20px;
+    }
+    .meta .timestamp{
+      width:70px;
+    }
+    .meta .comment{
+      width: 85px;
     }
     .meta .author{
       margin-left: 0px;
@@ -413,7 +395,7 @@ export default {
       overflow: hidden;
       text-overflow: ellipsis;
       height: 20px;
-      line-height: 28px;
+      line-height: 30px;
     }
     .award_c_tool{
       top: -25px;

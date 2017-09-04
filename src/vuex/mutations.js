@@ -37,9 +37,7 @@ const mutations = {
   // 最热
   writeInToparticleslist: (state, data) => {
     state.articleTopList = data.data
-    console.log(this._this)
     /* this.$set(state.articleTopList, 'articles', data.data) */
-    console.log('Top res set already!!!!!!!!!!!!!!!!!!!!!!!')
     for (let i = 0; i < state.articleTopList.articles.length; ++i) {
       let c = state.articleTopList.articles[i]
       let t = state.articleTopList.articles[i].timestamp
@@ -71,16 +69,35 @@ const mutations = {
       let t = state.articleCommentList.comments[i].t_timestamp
       c.realTime = getRealTime(t)
     }
-    console.log(state.articleCommentList.comments, '-----')
   },
   // 转账记录写入事件
   writeRecord: (state, data) => {
     state.transactionList = data.data
-    console.log(data)
     for (let i = 0; i < state.transactionList.transfers.length; i++) {
       let c = state.transactionList.transfers[i]
       let t = state.transactionList.transfers[i].t_timestamp
-      c.realTime = getRealTime(t)
+      c.tempTime = getRealTime(t)
+      let ti = new Date(c.tempTime)
+      let year = ti.getFullYear()
+      let month = Number(ti.getMonth()) + 1
+      let day = ti.getDate()
+      let hour = ti.getHours()
+      let minute = ti.getMinutes()
+      let sec = ti.getSeconds()
+      if (month < 10) {
+        month = '0' + month
+      }
+      if (day < 10) {
+        day = '0' + day
+      }
+      if (minute < 10) {
+        minute = '0' + minute
+      }
+      if (sec < 10) {
+        sec = '0' + sec
+      }
+      let timeAfterFac = year + '.' + month + '.' + day + ' ' + hour + ':' + minute + ':' + sec
+      c.realTime = timeAfterFac
     }
   },
   // 合约编号写入事件
@@ -114,6 +131,7 @@ const mutations = {
   // 土司重置事件
   toastReset: (state) => {
     // toastState
+    console.log('toastState reset action')
     state.toastState.isShowToast = false
     state.toastState.toastMsgHeader = ''
     state.toastState.toastMsgContent = ''
@@ -123,9 +141,11 @@ const mutations = {
     state.toastState._confirmfunc = null
     state.toastState._cancelfunc = null
     // toastInputState
+    console.log('toastInputState reset action')
     state.toastInputState.isShowToast = false
     state.toastInputState.toastMsgHeader = ''
     state.toastInputState.toastMsgContent = ''
+    state.toastInputState.toastNum = undefined
     state.toastInputState.deals = ''
     state.toastInputState.contract = ''
     state.toastInputState._confirmfunc = null
@@ -143,6 +163,10 @@ const mutations = {
     // 现页数减少
   toMinCurrentPage: (state) => {
     state.currentPage = state.currentPage - 1
+  },
+  // article 清空
+  clearArticleDetail: (state) => {
+    state.articleDetail = {}
   }
   // 吐司指南
   /* compassToast: (state, {toastState}) => {

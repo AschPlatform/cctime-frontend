@@ -2,13 +2,13 @@
   <li class="comment_list">
     <div class="user_id">
       <img :src="'data:image/png;base64,' + item.photo"></img>{{item.nickname || item.AuthorId}}
-      <span class="reply_msg" v-if="!!item.replyAuthorName">回复&nbsp;&nbsp;{{item.replyAuthorName}}</span>
-      <span class="reply_msg" v-else-if="!!item.replyAuthorId">回复&nbsp;&nbsp;{{item.replyAuthorId}}</span>
+      <span class="reply_msg" v-if="!!item.replyAuthorName">回复&nbsp;&nbsp;&nbsp;&nbsp;{{item.replyAuthorName}}</span>
+      <span class="reply_msg" v-else-if="!!item.replyAuthorId">回复&nbsp;&nbsp;&nbsp;&nbsp;{{item.replyAuthorId}}</span>
       <span class="reply_time">{{this.realT}}</span>
     </div>
     <p>{{item.content}}</p>
     <div class="interaction_c">
-      <span @click="reportBtn">举报</span>
+      <span @click="reportBtn" v-if="this.$store.state.userInfo.info.isDelegate === true">举报</span>
       <span @click="toggleReply()">回复</span>
       <span class="award_c">
         <div class="award_c_tool" v-show="isAwardToggle == true">
@@ -57,22 +57,22 @@ export default {
       let day = 0
       let yea = 0
       if (sec < 60) {
-        pst = Math.floor(sec) + '秒以前'
+        pst = Math.floor(sec) + '秒前'
       } else {
         min = Math.floor(sec / 60)
         if (min < 60) {
-          pst = Math.floor(min) + '分钟以前'
+          pst = Math.floor(min) + '分钟前'
         } else {
           hor = Math.floor(min / 60)
           if (hor < 24) {
-            pst = hor + '小时以前'
+            pst = hor + '小时前'
           } else {
             day = Math.floor(hor / 24)
             if (day < 360) {
-              pst = day + '天以前'
+              pst = day + '天前'
             } else {
               yea = Math.floor(day / 360)
-              pst = yea + '年以前'
+              pst = yea + '年前'
             }
           }
         }
@@ -85,11 +85,10 @@ export default {
     toggleReply: function () {
       let that = this
       if (that.$store.state.isLogin === false) {
-        that.$store.commit('callToast', {msgHeader: '注意!', msgContent: '仅当您登陆后才能使用打赏功能', _confirmfunc: null, _cancelfunc: null, deals: undefined, contract: 3})
+        that.$store.commit('callToast', {msgHeader: '注意!', msgContent: '仅当您登陆后才能使用回复功能', _confirmfunc: '去登录', _cancelfunc: '不了', deals: undefined, contract: 3})
         return
       }
       // let a = window.localStorage.getItem('user_id')
-      console.log(this.item)
       this.isReplyToggle = !this.isReplyToggle
     },
     toggleAward: function () {
@@ -123,14 +122,14 @@ export default {
       let awArg = this.pushAward(cid, num)
       this.$store.dispatch('invokeContract', {
         type: '1003',
-        fee: '1000000000',
+        fee: '10000000',
         args: awArg,
         that: this,
         callback: function (err, msg) {
           if (err) {
             return
           }
-          that.$store.commit('callToast', {msgHeader: '成功！', msgContent: '打赏评论成功！', _confirmfunc: null, _cancelfunc: null, deals: undefined, contract: 4})
+          that.$store.commit('callToast', {msgHeader: '成功！', msgContent: '打赏评论成功！', _confirmfunc: '确定', _cancelfunc: '关闭', deals: undefined, contract: 4})
         }
       })
       // 重新初始化
@@ -139,7 +138,7 @@ export default {
     voteBtn: function () {
       let that = this
       if (that.$store.state.isLogin === false) {
-        that.$store.commit('callToast', {msgHeader: '注意!', msgContent: '仅当您登陆后才能使用打赏功能', _confirmfunc: null, _cancelfunc: null, deals: undefined, contract: 3})
+        that.$store.commit('callToast', {msgHeader: '注意!', msgContent: '仅当您登陆后才能使用打赏功能', _confirmfunc: '去登录', _cancelfunc: '不了', deals: undefined, contract: 3})
         return
       }
       this.$store.commit('callInputToast', {msgHeader: '打赏', msgContent: '请输入打赏票数', _confirmfunc: null, _cancelfunc: null, deals: that.item.id, contract: 1})
@@ -148,16 +147,19 @@ export default {
     reportBtn: function () {
       let that = this
       if (that.$store.state.isLogin === false) {
-        that.$store.commit('callToast', {msgHeader: '注意!', msgContent: '仅当您登陆后才能使用打赏功能', _confirmfunc: null, _cancelfunc: null, deals: undefined, contract: 3})
+        that.$store.commit('callToast', {msgHeader: '注意!', msgContent: '仅当您登陆后才能使用举报功能', _confirmfunc: '去登录', _cancelfunc: '不了', deals: undefined, contract: 3})
         return
       }
-      this.$store.commit('callToast', {msgHeader: '警告', msgContent: '是否对该评论进行举报？', _confirmfunc: null, _cancelfunc: null, deals: that.item.id, contract: 1})
+      this.$store.commit('callToast', {msgHeader: '警告', msgContent: '是否对该评论进行举报？', _confirmfunc: '举报', _cancelfunc: '不了', deals: that.item.id, contract: 1})
     },
     // 回复评论
     reply: function (pid, num) {
       let that = this
-      if (this.replyContent === '') {
-        that.$store.commit('callToast', {msgHeader: '注意!', msgContent: '输入的内容不能为空呦', _confirmfunc: null, _cancelfunc: null, deals: undefined, contract: 4})
+      let reg = '^[ ]+$'
+      let regu = new RegExp(reg)
+      let result = regu.test(this.commentContent)
+      if (this.replyContent === '' || result === true) {
+        that.$store.commit('callToast', {msgHeader: '注意!', msgContent: '输入的内容不能为空呦', _confirmfunc: '了解', _cancelfunc: '关闭', deals: undefined, contract: 4})
         return
       }
       let reArg = this.pushInEvent(true, pid, this.replyContent)
@@ -165,25 +167,22 @@ export default {
       this.$store.dispatch('invokeContract', {
         type: '1001',
         args: reArg,
-        fee: '1000000000',
+        fee: '10000000',
         that: this,
         callback: function (err, msg) {
           if (err) {
             return
           }
-          that.$store.commit('callToast', {msgHeader: '成功！', msgContent: '回复评论成功！大约十秒后看到更新', _confirmfunc: null, _cancelfunc: null, deals: undefined, contract: 4})
-          console.log(msg)
+          that.$store.commit('callToast', {msgHeader: '成功！', msgContent: '回复评论成功！大约十秒后看到更新', _confirmfunc: '了解', _cancelfunc: '关闭', deals: undefined, contract: 4})
           that.$emit('reFresh')
-          console.log('已发送')
         }
       })
-      console.log('已向父组件提出请求')
       /* setTimeout(function () { return window.history.go(0) }, 3000) */
     },
     // 举报评论
     reportC: function () {
       let that = this
-      this.$store.commit('callInputToast', {msgHeader: '警告', msgContent: '是否举报该评论', _confirmfunc: null, _cancelfunc: null, deals: that.item.id, contract: 3})
+      this.$store.commit('callInputToast', {msgHeader: '警告', msgContent: '是否举报该评论', _confirmfunc: '举报', _cancelfunc: '不了', deals: that.item.id, contract: 3})
     }
     // reportC: function (id) {
     //   let that = this
@@ -192,7 +191,7 @@ export default {
     //   arg.push(String(id))
     //   this.$store.dispatch('invokeContract', {
     //     type: '1004',
-    //     fee: '1000000000',
+    //     fee: '10000000',
     //     args: arg,
     //     that: this,
     //     callback: function (err, msg) {
@@ -213,18 +212,18 @@ export default {
     font-size: 18px;
     width: 100%;
     margin: 50px auto 0 auto;
-    border-left: 2px solid rgb(87, 97, 106);
+    border-left: 2px solid rgb(238, 238, 238);
     padding-left: 18px;
   }
   .comment_list .user_id{
     text-align: left;
-    left: 18px;
-    font-size: 2csspx;
+    line-height: 0px;
   }
   .comment_list .reply_msg{
     font-size: 14px;
     color: rgb(87, 97, 106);
     display: inline-block;
+    margin-right: 10px;
   }
   .comment_list .reply_time{
     font-size: 12px;
@@ -237,11 +236,11 @@ export default {
     right: 0;
   }
   .comment_list p{
+    position: relative;
     font-size: 14px;
-    user-select: auto;
-    margin-top: 5px;
     text-align: left;
-    margin-bottom: 20px;
+    line-height: 28px;
+    bottom: -7px;
   }
   .interaction_c span{
     display: inline-block;
@@ -249,6 +248,9 @@ export default {
     font-size: 16px;
     margin-left: 12px;
     cursor: pointer;
+  }
+  .interaction_c span:hover{
+    color:rgb(102, 146, 217);
   }
   .award_c{
     position: relative;
@@ -289,15 +291,15 @@ export default {
   }
   .user_id img{
     display: inline-block;
-    height: 20px;
+    height: 30px;
     position: relative;
+    margin-right: 10px;
     top: 4px;
   }
   .reply_container{
     margin-top: 70px;
     position: relative;
     width: 100%;
-    height: 80px;
   }
   .reply_container input{
     border-radius: 3px;
@@ -310,7 +312,7 @@ export default {
     width: 100%;
   }
   .reply_container>.interaction_c{
-    bottom: 0;
+    bottom: -30px;
   }
   @media screen and (max-width: 1441px){
     .comment_list{

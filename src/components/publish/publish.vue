@@ -11,7 +11,6 @@
         <div class="btn btn_1"  @click="postarticle()">提交</div>
         <div class="btn btn_2" @click="closeModal()">取消</div>
       </div>
-      <span class="err"></span>
     </div>
   </div>
 </template>
@@ -37,14 +36,12 @@
         if (this.text !== '' && this.url !== '') {
           this.isError = true
           this.errorMsg = '网络地址与文章内容只能选填一个'
-          this.$store.commit('callToast', {msgHeader: '发生错误', msgContent: this.errorMsg, _confirmfunc: null, _cancelfunc: null, deals: undefined, contract: 4})
-          console.log('Both filled!')
+          this.$store.commit('callToast', {msgHeader: '发生错误', msgContent: this.errorMsg, _confirmfunc: '确定', _cancelfunc: '关闭', deals: undefined, contract: 4})
           return
         } else if (this.text === '' && this.url === '') {
           this.isError = true
           this.errorMsg = '网络地址与文章内容至少要填一项'
-          this.$store.commit('callToast', {msgHeader: '发生错误', msgContent: this.errorMsg, _confirmfunc: null, _cancelfunc: null, deals: undefined, contract: 4})
-          console.log('Both unfilled!')
+          this.$store.commit('callToast', {msgHeader: '发生错误', msgContent: this.errorMsg, _confirmfunc: '了解', _cancelfunc: '关闭', deals: undefined, contract: 4})
           return
         } else {
           // 处理网址
@@ -54,20 +51,20 @@
               let tagArr = this.pushInEvent
               that.$store.dispatch('invokeContract', {
                 type: '1000',
-                fee: '1000000000',
+                fee: '10000000',
                 args: tagArr,
                 that: that,
                 callback: function (err, res) {
                   if (err) {
                     return
                   }
-                  that.$store.commit('callToast', {msgHeader: '成功！', msgContent: '发布文章成功！大约十秒后看到更新', _confirmfunc: null, _cancelfunc: null, deals: undefined, contract: 4})
+                  that.$store.commit('callToast', {msgHeader: '成功！', msgContent: '发布文章成功！大约十秒后看到更新', _confirmfunc: '了解', _cancelfunc: '关闭', deals: undefined, contract: 4})
                   window.history.go(-1)
                 }
               })
             } else {
               // 错误处理
-              this.$store.commit('callToast', {msgHeader: '发生错误', msgContent: '请确认是否输入正确的网址，推荐直接复制', _confirmfunc: null, _cancelfunc: null, deals: undefined, contract: 4})
+              this.$store.commit('callToast', {msgHeader: '发生错误', msgContent: '请确认是否输入正确的网址，推荐直接复制', _confirmfunc: '了解', _cancelfunc: '关闭', deals: undefined, contract: 4})
             }
             return
           } else {
@@ -75,15 +72,15 @@
             let tagArr = this.pushInEvent
             that.$store.dispatch('invokeContract', {
               type: '1000',
-              fee: '1000000000',
+              fee: '10000000',
               args: tagArr,
               that: that,
               callback: function (err, res) {
                 if (err) {
                   return
                 }
-                that.$store.commit('callToast', {msgHeader: '成功！', msgContent: '发布文章成功！大约十秒后看到更新', _confirmfunc: null, _cancelfunc: null, deals: undefined, contract: 4})
-                that.$router.push('/top')
+                that.$store.commit('callToast', {msgHeader: '成功！', msgContent: '发布文章成功！大约十秒后看到更新', _confirmfunc: '了解', _cancelfunc: '关闭', deals: undefined, contract: 4})
+                that.$router.back()
               }
             })
           }
@@ -94,7 +91,8 @@
         this.errorMsg = ''
       },
       closeModal: function () {
-        this.$router.push('/top')
+        // this.$router.push('/news')
+        this.$router.back()
       },
       // 输入侦测
       trim: function (m) {
@@ -118,9 +116,14 @@
     computed: {
       pushInEvent: function () {
         let arr = []
-        arr.push(this.title)
+        let aftTitle = this.title.trim()
+        arr.push(aftTitle)
         arr.push(this.url)
-        arr.push(this.text)
+        // 格式化text($(_temp))
+        let texta = this.text
+        texta.replace(/\n/g, 'duri')
+        console.log(texta)
+        arr.push(texta)
         arr.push(this.tags)
         return arr
       }
@@ -160,15 +163,11 @@
     margin-top: 25px;
   }
   .lower_form textarea{
-    display: block;
     font-size: 24px;
-    line-height: 50px;
     width: 90%;
     height: 250px;
     margin-left: 31px;
-    background-color: rgb(240, 240, 240);
-    border: 1px solid rgb(220, 220, 220);
-    resize: none;
+    float: left;
   }
   .btn{
     font-size: 25px;
@@ -219,14 +218,11 @@
       margin-top: 12px;
     }
     .lower_form textarea{
-      display: block;
       font-size: 14px;
       line-height: 28px;
       width: 90%;
       height: 250px;
       margin-left: 14px;
-      background-color: rgb(240, 240, 240);
-      border: 1px solid rgb(220, 220, 220);
       resize: none;
     }
     .btn{

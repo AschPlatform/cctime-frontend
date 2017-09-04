@@ -23,6 +23,7 @@ let state = {
   toastInputState: {
     isShowToast: false,
     toastMsgHeader: '',
+    toastNum: undefined,
     toastMsgContent: '',
     deals: '',
     contract: '',
