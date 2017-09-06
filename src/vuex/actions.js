@@ -1,9 +1,12 @@
 
 import Identicon from 'Identicon'
+import aschJS from 'asch-js'
 // 存储异步操作,获取数据用commit操作mutation
 let baseUrl = 'http://101.200.123.124:4096/api/dapps/c81c42a26d3c7a575991c86abed7fe089fc0665ac92c6e3dd959e16459233d7a'
 let loginurl = baseUrl + '/login'
-let posturl = baseUrl + '/transactions/unsigned'
+// 测试环境
+// let posturl = baseUrl + '/transactions/unsigned'
+let posturl = baseUrl + '/transactions/signed'
 let articleslisturl = baseUrl + '/articles'
 let transRecord = baseUrl + '/transfers'
 
@@ -65,8 +68,7 @@ const actions = {
     that.$axios.get(articleslisturl + '/' + id)
       .then(({ data }) => {
         if (data.success === false) {
-          console.log(data)
-          commit('callToast', {msgHeader: '抱歉', msgContent: '您访问的这篇文章不存在,如出现问题我们的技术人员将及时解决', _confirmfunc: null, _cancelfunc: null, deals: 0, contract: 4})
+          commit('callToast', {msgHeader: '抱歉', msgContent: '您访问的这篇文章不存在,如出现问题我们的技术人员将及时解决', _confirmfunc: '了解', _cancelfunc: '关闭', deals: 0, contract: 4})
           return
         }
         commit('writeInDetail', { data })
@@ -107,14 +109,21 @@ const actions = {
   // 发布文章/投票/评论  履行合约
   invokeContract: async ({ commit }, {type, args, fee, that, callback}) => {
     /* let typed = Number(type) */
-    let a = {
-      secret: that.$store.state.userInfo.secret,
+    // 旧版
+    // let a = {
+    //   secret: that.$store.state.userInfo.secret,
+    //   fee: fee,
+    //   type: type,
+    //   args: JSON.stringify(args)
+    // }
+    let a = aschJS.dapp.createInnerTransaction({
       fee: fee,
       type: type,
       args: JSON.stringify(args)
-    }
+    }, that.$store.state.userInfo.secret)
+    //
     /* let fees = String(fee) */
-    that.$axios.put(posturl, a, { headers: { 'magic': '594fe0f3', 'version': '' } }).then((res) => {
+    that.$axios.put(posturl, {transaction: a}, { headers: { 'magic': '594fe0f3', 'version': '' } }).then((res) => {
       // 返回成功判断
       if (res.status === 200 && res.data.success) {
         callback(null, '这是在action里面的回调信息')
@@ -151,7 +160,6 @@ const actions = {
         if (res.data.error.indexOf('already set') > -1) {
           commit('callToast', {msgHeader: '发生错误', msgContent: '用户名只能设置一次', _confirmfunc: '了解', _cancelfunc: '关闭', deals: undefined, contract: 4})
         }
-        // commit('callToast', {msgHeader: '发生错误', msgContent: res.data.error, _confirmfunc: null, _cancelfunc: null, deals: undefined, contract: 4})
       }
     })
   }

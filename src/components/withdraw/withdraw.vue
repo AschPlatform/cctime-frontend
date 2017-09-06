@@ -109,7 +109,7 @@
         a.push(this.trans_unit)
         a.push(this.trans_address)
         this.$store.dispatch('invokeContract', {
-          type: '3',
+          type: 3,
           fee: '10000000',
           args: a,
           that: this,

@@ -12,7 +12,8 @@
           <span class="meta">
             <span class="author meta_info">
               <img :src="'data:image/png;base64,' + this.articleDetail.article.photo"></img>
-              <span to="#">{{this.articleDetail.article.nickname}}</span>
+              <span to="#" v-if="this.articleDetail.article.nickname !== undefined">{{this.articleDetail.article.nickname}}</span>
+              <span to="#" v-if="this.articleDetail.article.nickname === undefined">{{this.articleDetail.article.authorId}}</span>
             </span>
             <span class="timestamp meta_info">
               <img src="/static/img/time.png"></img>
@@ -29,9 +30,12 @@
         </div>
       </div>
       <div id="article">
-        <!--<vue-markdown :source="this.articleDetail.article.text"></vue-markdown>-->
         <p>{{this.articleDetail.article.text}}</p>
       </div>
+      <!-- <div class="guide">
+        <router-link class="prev" to="/articles/"+this.preId>上一篇</router-link>
+        <router-link class="next" to="/articles/"+this.nextId>下一篇</router-link>
+      </div> -->
     </div>
     <!--文章评论部分-->
     <div id="article_comment">
@@ -131,6 +135,14 @@
       // 获取当前文章ID
       getId: function () {
         return window.location.hash.split('/')[2]
+      },
+      // 上一篇文章id
+      preId: function () {
+        return Number(this.getId) - 1
+      },
+      // 下一篇文章id
+      nextId: function () {
+        return Number(this.getId) + 1
       },
       // 组织评论状态表
       commentStatus: function () {
@@ -263,12 +275,6 @@
         }
         this.articleCommentList.comments[index].isSelected = this.articleCommentList.comments[index].isSelected ? 'false' : 'true'
       },
-      /* toggleAward: function (index) {
-        for (let i = 0; i < this.articleCommentList.comments.length; i++) {
-          this.articleCommentList.comments[i].isAward = false
-        }
-        this.articleCommentList.comments[index].isAward = this.articleCommentList.comments[index].isAward ? 'false' : 'true'
-      } */
       // 调用投票  调用toastinput里的方法
       voteBtn: function () {
         let that = this
@@ -288,7 +294,7 @@
         this.isAwardToggle = false
         let awArg = this.pushAward(this.getId, this.a_num)
         this.$store.dispatch('invokeContract', {
-          type: '1002',
+          type: 1002,
           fee: '10000000',
           args: awArg,
           that: this,
@@ -308,7 +314,7 @@
       voteForC: function (cid) {
         let awArg = this.pushAward(cid, this.c_num)
         this.$store.dispatch('invokeContract', {
-          type: '1003',
+          type: 1003,
           fee: '10000000',
           args: awArg,
           that: this
@@ -341,7 +347,7 @@
         let that = this
         let reArg = this.pushInEvent(false, null, this.commentContent)
         this.$store.dispatch('invokeContract', {
-          type: '1001',
+          type: 1001,
           fee: '10000000',
           args: reArg,
           that: that,
@@ -383,13 +389,26 @@
         this.$router.back()
       }
     },
+    beforeCreate: function () {
+      // 渲染以前的session更改
+      let sign = window.location.href.split('/')[5]
+      let signS = window.sessionStorage.articleDetail.split('/')[5]
+      if (sign !== signS) {
+        this.$store.commit('clearArticleDetail')
+      }
+    },
     created: function () {
       // 首先 判断是否session有文章url字段
+      let aaa = window.location.href.split('/')[5]
+      console.log(aaa)
       if (window.sessionStorage.articleDetail) {
         // 如果有字段
+        console.log('察觉到session的缓存')
         let sign = window.location.href.split('/')[5]
         let signS = window.sessionStorage.articleDetail.split('/')[5]
+        console.log(sign, signS, '___________________________________')
         if (sign === signS) {
+          console.log('察觉到原页面刷新')
           window.location.href = window.sessionStorage.articleDetail
         } else {
           this.$store.dispatch('getOnearticle', {
@@ -404,7 +423,6 @@
           id: this.getId,
           that: this
         })
-        window.sessionStorage.setItem('articleDetail', window.location.href)
       }
       this.$store.dispatch('getOnearticle', {
         id: this.getId,
@@ -420,7 +438,8 @@
     destroyed: function () {
       // 离开页面的数据清空
       console.log('destroyed begin')
-      this.$store.commit('clearArticleDetail')
+      console.log(window.location.href)
+      // this.$store.commit('clearArticleDetail')
       console.log(this.$store.state.articleDetail)
     }
   }
@@ -573,12 +592,14 @@
     border-radius: 3px;
   }
   #article_comment .comment_publish{
+    font-size: 16px;
     cursor: pointer;
     position: absolute;
     bottom: -34px;
     right: 0;
   }
   #article_comment .comment_clear{
+    font-size: 16px;
     cursor: pointer;
     position: absolute;
     bottom: -34px;
@@ -787,6 +808,12 @@
       .award_a_tool{
         left: 330px;
         top: -1px;
+      }
+      #article_comment .comment_clear{
+        font-size: 12px;
+      }
+      #article_comment .comment_publish{
+        font-size: 12px;
       }
    }
 </style>

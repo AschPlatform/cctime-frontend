@@ -15,7 +15,8 @@
           <span class="meta">
           <span class="author meta_info">
             <img :src="'data:image/png;base64,' + item.photo"></img>
-            <span to="user/">{{item.nickname}}</span>
+            <span to="user/" v-if="this.item.nickname !== undefined" :title='item.nickname'>{{item.nickname}}</span>
+            <span to="user/" v-if="this.item.nickname === undefined" :title='item.authorId'>{{item.authorId}}</span>
           </span>
         <span class="timestamp meta_info">
             <img src="/static/img/time.png"></img>
@@ -92,7 +93,7 @@ export default {
       let that = this
       let awArg = this.pushAward(id, this.awardNum)
       this.$store.dispatch('invokeContract', {
-        type: '1002',
+        type: 1002,
         fee: '10000000',
         args: awArg,
         that: this,
@@ -254,7 +255,7 @@ export default {
   }
   .meta .author span{
     display: inline-block;
-    width: 70px;
+    width: 90px;
     overflow: hidden;
     text-overflow: ellipsis;
     height: 20px;

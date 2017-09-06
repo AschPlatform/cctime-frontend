@@ -65,7 +65,7 @@ export default {
             a.push('2')
             a.push(this.toastState.deals)
             this.$store.dispatch('invokeContract', {
-              type: '1004',
+              type: 1004,
               fee: '10000000',
               args: a,
               that: this,
@@ -90,7 +90,7 @@ export default {
             a.push('1')
             a.push(this.toastState.deals)
             this.$store.dispatch('invokeContract', {
-              type: '1004',
+              type: 1004,
               fee: '10000000',
               args: a,
               that: this,

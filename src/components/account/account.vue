@@ -68,7 +68,7 @@
           return
         } else {
           this.$store.dispatch('invokeContract', {
-            type: '4',
+            type: 4,
             fee: '10000000',
             args: [this.nickName],
             that: this,

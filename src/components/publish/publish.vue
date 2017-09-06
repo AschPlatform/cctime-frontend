@@ -50,7 +50,7 @@
             if (reg.test(this.url)) {
               let tagArr = this.pushInEvent
               that.$store.dispatch('invokeContract', {
-                type: '1000',
+                type: 1000,
                 fee: '10000000',
                 args: tagArr,
                 that: that,
@@ -71,7 +71,7 @@
             // 文章传入
             let tagArr = this.pushInEvent
             that.$store.dispatch('invokeContract', {
-              type: '1000',
+              type: 1000,
               fee: '10000000',
               args: tagArr,
               that: that,

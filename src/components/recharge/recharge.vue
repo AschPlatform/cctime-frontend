@@ -56,7 +56,7 @@
         a.push(String(that.trans_num * 1e8))
         a.push(that.userInfo.info.address)
         that.$store.dispatch('invokeContract', {
-          type: '2',
+          type: 2,
           fee: '10000000',
           args: a,
           that: that,

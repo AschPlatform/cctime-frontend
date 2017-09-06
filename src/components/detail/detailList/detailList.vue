@@ -88,7 +88,7 @@ export default {
         that.$store.commit('callToast', {msgHeader: '注意!', msgContent: '仅当您登陆后才能使用回复功能', _confirmfunc: '去登录', _cancelfunc: '不了', deals: undefined, contract: 3})
         return
       }
-      // let a = window.localStorage.getItem('user_id')
+      this.replyContent = ''
       this.isReplyToggle = !this.isReplyToggle
     },
     toggleAward: function () {
@@ -121,7 +121,7 @@ export default {
       let that = this
       let awArg = this.pushAward(cid, num)
       this.$store.dispatch('invokeContract', {
-        type: '1003',
+        type: 1003,
         fee: '10000000',
         args: awArg,
         that: this,
@@ -165,7 +165,7 @@ export default {
       let reArg = this.pushInEvent(true, pid, this.replyContent)
       this.toggleReply()
       this.$store.dispatch('invokeContract', {
-        type: '1001',
+        type: 1001,
         args: reArg,
         fee: '10000000',
         that: this,
@@ -177,6 +177,7 @@ export default {
           that.$emit('reFresh')
         }
       })
+      this.replyContent = ''
       /* setTimeout(function () { return window.history.go(0) }, 3000) */
     },
     // 举报评论
@@ -184,24 +185,6 @@ export default {
       let that = this
       this.$store.commit('callInputToast', {msgHeader: '警告', msgContent: '是否举报该评论', _confirmfunc: '举报', _cancelfunc: '不了', deals: that.item.id, contract: 3})
     }
-    // reportC: function (id) {
-    //   let that = this
-    //   let arg = []
-    //   arg.push('2')
-    //   arg.push(String(id))
-    //   this.$store.dispatch('invokeContract', {
-    //     type: '1004',
-    //     fee: '10000000',
-    //     args: arg,
-    //     that: this,
-    //     callback: function (err, msg) {
-    //       if (err) {
-    //         return
-    //       }
-    //       that.$store.commit('callToast', {msgHeader: '成功！', msgContent: '举报评论成功，请等待负责人核实', _confirmfunc: null, _cancelfunc: null})
-    //     }
-    //   })
-    // }
   }
 }
 </script>

@@ -266,7 +266,7 @@
     position: absolute;
     margin-top: 30px;
     bottom: 90px;
-    left: 40%;
+    left: 42%;
     display: block;
   }
   .pag div{
@@ -298,6 +298,22 @@
     .main-wrap ul li{
       height: 68px;
       min-width: 860px;
+    }
+    .pag{
+      position: absolute;
+      margin-top: 30px;
+      bottom: 90px;
+      left: 42%;
+      display: block;
+    }
+    .pag div{
+      display: inline-block;
+      cursor: pointer;
+      height: 25px;
+      line-height: 25px;
+      min-width: 25px;
+      font-size: 10px;
+      border-radius: 6px;
     }
   }
 </style>  

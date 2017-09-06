@@ -27,6 +27,11 @@ export default {
   },
   methods: {
     todo: function () {
+      if (String(this.price).indexOf('.') > 0) {
+        this.$store.commit('callToast', {msgHeader: '注意！', msgContent: '打赏金额必须为整数！', _confirmfunc: '了解', _cancelfunc: '关闭', deals: undefined, contract: 4})
+        this.toastInputState.isShowToast = false
+        return
+      }
       this.pickMethod(this.$store.state.toastInputState.contract)
       if (this.confirmFunction !== null) {
         this.confirmFunction()
@@ -68,7 +73,7 @@ export default {
             a.push(this.toastInputState.deals)
             a.push(String(this.getPrice))
             that.$store.dispatch('invokeContract', {
-              type: '1003',
+              type: 1003,
               fee: '10000000',
               args: a,
               that: this,
@@ -96,7 +101,7 @@ export default {
             a.push(this.toastInputState.deals)
             a.push(String(this.getPrice))
             this.$store.dispatch('invokeContract', {
-              type: '1002',
+              type: 1002,
               fee: '10000000',
               args: a,
               that: this,
@@ -118,7 +123,7 @@ export default {
   computed: {
     ...mapState(['toastInputState']),
     getPrice: function () {
-      return this.price * 10000
+      return this.price * 100000
     },
     getAcccountLost: function () {
       return this.price * 0.0001
@@ -220,6 +225,15 @@ export default {
       height: 20px;
       margin-top: 10px;
       border-radius: 6px;
+    }
+    .toastctr span{
+      display: inline-block;
+      height: 96%;
+      line-height: 350%;
+      width: 49%;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
     }
   }
 </style>

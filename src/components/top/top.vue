@@ -41,10 +41,7 @@
       },
       // 动画开关
       toggleAward: function (index, item) {
-        /* this.articleTopList.articles[index].isSelected = !this.articleTopList.articles[index].isSelected */
         this.switchGroup.splice(index, 1, this.shiftPiece(item))
-        // this.switchGroupD[index] = !this.switchGroupD[index]
-        // console.log('索引触发事件' + index, this.switchGroupD)
       }
     },
     computed: mapGetters({
@@ -58,18 +55,6 @@
         offset: '',
         that: this
       })
-      /* for (var i = 0; i < this.articleTopList.articles.length; i++) {
-        this.switchGroupD.push(this.articleTopList.articles[i].isSelected)
-      } */
-      /* global.hooks[1] = {
-        agree: async function (content) {
-          let res = await invokeContract(content.topic, content.value)
-          if (res.success) toast(success)
-        },
-        refuce: async function () {
-
-        }
-      } */
     }
   }
 </script>
