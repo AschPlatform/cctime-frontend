@@ -144,6 +144,9 @@
         offset: Number(this.offsetNum),
         that: this
       })
+    },
+    destroyed: function () {
+      this.$store.commit('toInitPage')
     }
   }
 </script>

@@ -3,8 +3,7 @@
       <div class="count_wrapper">
         <span class="readcount">
           <!--阅读计数器-->
-          <!-- {{index}} -->
-          {{ item.timestamp }}
+          {{index}}
         </span>
       </div>
     <div class="list_container">

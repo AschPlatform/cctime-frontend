@@ -70,8 +70,8 @@
         trans_address: '',
         trans_password: '',
         trans_query_type: '',
-        // 分页初始量
-        currentPage: 0,
+        // 分页初始量 引入公共state
+        // currentPage: 0,
         pageSpots: 5,
         pageContent: 5,
         pageNum: 0
@@ -144,7 +144,8 @@
       addPage: function () {
         let that = this
         if (that.currentPage < that.allPage - 1) {
-          that.currentPage = that.currentPage + 1
+          that.$store.commit('toAddCurrentPage')
+          // that.currentPage = that.currentPage + 1
           that.$store.dispatch('getTransactionInfo', {
             limit: String(that.pageContent),
             offset: that.offsetNum,
@@ -152,13 +153,15 @@
             that: that
           })
         } else {
-          that.currentPage = that.allPage - 1
+          // that.currentPage = that.allPage - 1
+          this.$store.commit('toMinCurrentPage')
         }
       },
       minPage: function () {
         let that = this
         if (that.currentPage > 0) {
-          that.currentPage = that.currentPage - 1
+          this.$store.commit('toMinCurrentPage')
+          // that.currentPage = that.currentPage - 1
           that.$store.dispatch('getTransactionInfo', {
             limit: String(that.pageContent),
             offset: that.offsetNum,
@@ -172,8 +175,9 @@
       // 页面跳转
       goto: function (index) {
         let that = this
-        if (index === that.current) return
-        that.currentPage = index
+        if (index === this.current) return
+        this.$store.commit('toPlusCurrentPage', index)
+        // that.currentPage = index
         that.$store.dispatch('getTransactionInfo', {
           limit: String(that.pageContent),
           offset: that.offsetNum,
@@ -195,7 +199,7 @@
       }
     },
     computed: {
-      ...mapState(['userInfo']),
+      ...mapState(['userInfo', 'currentPage']),
       // 计算手续费
       trans_fee: function () {
         if (this.trans_num === undefined) {
@@ -274,6 +278,9 @@
         currency: 'XAS',
         that: that
       })
+    },
+    destroyed: function () {
+      this.$store.commit('toInitPage')
     }
   }
 </script>
@@ -477,14 +484,7 @@
       font-weight: 500;
       text-align: left;
       margin: 20px auto 0 auto;
-      border-left: 5px solid rgb(238, 238, 238);
-    }
-    .record_title{
-      font-size: 20px;
-      font-weight: 500;
-      text-align: left;
-      margin: 20px auto 0 auto;
-      border-left: 5px solid rgb(238, 238, 238);
+      border-left: 2px solid rgb(238, 238, 238);
     }
     .record_title th{
       min-width: 100px;

@@ -30,7 +30,7 @@ let state = {
     _confirmfunc: null,
     _cancelfunc: null
   },
-  // NEW列表分页公共数据
+  // NEW/转账记录/评论列表分页公共数据
   currentPage: 0,
   // 登陆状态 (转用topbar内部判定)
   isLogin: false,

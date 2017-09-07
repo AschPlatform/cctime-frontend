@@ -79,7 +79,8 @@
         isCommentToggle: false,
         // 分页初始量
         awardNum: undefined,
-        currentPage: 0,
+        // 引入公共state
+        // currentPage: 0,
         pageSpots: 5,
         pageContent: 6,
         pageNum: 0
@@ -87,7 +88,7 @@
     },
     computed: {
       ...mapGetters(['detailCommentList']),
-      ...mapState(['articleDetail', 'articleCommentList']),
+      ...mapState(['articleDetail', 'articleCommentList', 'currentPage']),
       // 处理文章格式
       formlizedArticle: function () {
         let article = String(this.articleDetail.article.text)
@@ -199,7 +200,8 @@
       // 操作页面增减
       addPage: function () {
         if (this.currentPage < this.allPage - 1) {
-          this.currentPage = this.currentPage + 1
+          this.$store.commit('toAddCurrentPage')
+          // this.currentPage = this.currentPage + 1
           this.$store.dispatch('getOnearticleComment', {
             id: this.getId,
             limit: String(this.pageContent),
@@ -212,7 +214,8 @@
       },
       minPage: function () {
         if (this.currentPage > 0) {
-          this.currentPage = this.currentPage - 1
+          this.$store.commit('toMinCurrentPage')
+          // this.currentPage = this.currentPage - 1
           this.$store.dispatch('getOnearticleComment', {
             id: this.getId,
             limit: String(this.pageContent),
@@ -226,7 +229,8 @@
       // 页面跳转
       goto: function (index) {
         if (index === this.current) return
-        this.currentPage = index
+        this.$store.commit('toPlusCurrentPage', index)
+        // this.currentPage = index
         this.$store.dispatch('getOnearticleComment', {
           id: this.getId,
           limit: String(this.pageContent),
@@ -441,6 +445,8 @@
       console.log(window.location.href)
       // this.$store.commit('clearArticleDetail')
       console.log(this.$store.state.articleDetail)
+      // 清空page
+      this.$store.commit('toInitPage')
     }
   }
 </script>

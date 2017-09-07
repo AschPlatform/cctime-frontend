@@ -164,6 +164,10 @@ const mutations = {
   toMinCurrentPage: (state) => {
     state.currentPage = state.currentPage - 1
   },
+    // 重置页码
+  toInitPage: (state) => {
+    state.currentPage = 0
+  },
   // article 清空
   clearArticleDetail: (state) => {
     state.articleDetail = {}

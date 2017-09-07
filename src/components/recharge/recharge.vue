@@ -12,7 +12,6 @@
         </select>
         <input type="number" placeholder="提取数量" v-model="trans_num">
         <input type="text" class="calculate" placeholder="手续费0.01" disabled><span class="calculate_info"></span>
-        <input type="password" class="psd" v-model="trans_password" placeholder="密钥验证">
         </div>
     </div>
     <div class="confirm_btn">
@@ -22,7 +21,7 @@
       <h1>充币</h1>
     </div>
     <div class="address">
-      <p>要执行充币的操作请移步阿希钱包</p>
+      <p>要执行充币的操作请移步<a href="http://mainnet.asch.so">阿希钱包</a></p>
     </div>
   </div>
 </template>
@@ -116,6 +115,12 @@
     width: 70%;
     margin: 30px auto 0 auto;
   }
+  .address a{
+    color: rgb(109, 152, 221);
+  }
+  .address a:hover{
+    color: coral;
+  }
   .address p{
     display: block;
     height: 35px;
@@ -136,7 +141,7 @@
   }
   .deal_part{
     width: 70%;
-    height: 210px;
+    height: 160px;
     margin: 30px auto 0 auto;
     border-left: 5px solid rgb(238, 238, 238);
   }
@@ -206,7 +211,7 @@
     }
     .deal_part{
       width: 70%;
-      height: 210px;
+      height: 160px;
       margin: 20px auto 0 auto;
       border-left: 2px solid rgb(238, 238, 238);
     }

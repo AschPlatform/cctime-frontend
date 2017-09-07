@@ -3,7 +3,8 @@ import Identicon from 'Identicon.js'
 import aschJS from 'asch-js'
 // 存储异步操作,获取数据用commit操作mutation
 let baseUrl = 'http://101.200.123.124:4096/api/dapps/c81c42a26d3c7a575991c86abed7fe089fc0665ac92c6e3dd959e16459233d7a'
-let loginurl = baseUrl + '/login'
+// let loginurl = baseUrl + '/login'测试环境下login传输， 有暴露secret可能
+let loginurl = baseUrl + '/accounts/'
 // 测试环境
 // let posturl = baseUrl + '/transactions/unsigned'
 let posturl = baseUrl + '/transactions/signed'
@@ -29,17 +30,32 @@ const actions = {
         commit('writeInuser', {secret: '', account: })
       }, 200)
     } */
-    that.$axios.post(loginurl, {
-      secret: secret
-    }).then((res) => {
+    // that.$axios.post(loginurl, {
+    //   secret: secret
+    // }).then((res) => {
+    //   if (res.status === 200 && res.data.success) {
+    //     res.data.account.logo = getPhotoImage(res.data.account.address)
+    //     commit('writeInuser', { secret: secret, account: res.data.account })
+    //     window.sessionStorage.setItem('userInfo', JSON.stringify(res.data.account))
+    //     window.sessionStorage.setItem('secret', secret)
+    //   } else if (res.data.success === false) {
+    //     // 统一alert，后期模态框调教
+    //     that.$store.commit('callToast', {msgHeader: '发生错误', msgContent: '用户登录失败', _confirmfunc: null, _cancelfunc: null, deals: undefined, contract: 4})
+    //   }
+    // })
+    let keypair = aschJS.crypto.getKeys(secret)
+    let address = aschJS.crypto.getAddress(keypair.publicKey)
+    that.$axios.get(loginurl + address).then((res) => {
       if (res.status === 200 && res.data.success) {
-        res.data.account.logo = getPhotoImage(res.data.account.address)
+        console.log(res.data)
+        res.data.account.logo = getPhotoImage(address)
+        res.data.account.address = address
         commit('writeInuser', { secret: secret, account: res.data.account })
         window.sessionStorage.setItem('userInfo', JSON.stringify(res.data.account))
         window.sessionStorage.setItem('secret', secret)
       } else if (res.data.success === false) {
         // 统一alert，后期模态框调教
-        that.$store.commit('callToast', {msgHeader: '发生错误', msgContent: '用户登录失败', _confirmfunc: null, _cancelfunc: null, deals: undefined, contract: 4})
+        that.$store.commit('callToast', {msgHeader: '发生错误', msgContent: '用户登录失败', _confirmfunc: '确认', _cancelfunc: '关闭', deals: undefined, contract: 4})
       }
     })
   },
