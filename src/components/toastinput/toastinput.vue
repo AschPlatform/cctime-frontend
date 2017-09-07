@@ -123,7 +123,7 @@ export default {
   computed: {
     ...mapState(['toastInputState']),
     getPrice: function () {
-      return this.price * 100000
+      return this.price * 100000000
     },
     getAcccountLost: function () {
       return this.price * 0.0001

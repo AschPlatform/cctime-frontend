@@ -3,6 +3,7 @@ import Identicon from 'Identicon.js'
 import aschJS from 'asch-js'
 // 存储异步操作,获取数据用commit操作mutation
 let baseUrl = '/api/dapps/c81c42a26d3c7a575991c86abed7fe089fc0665ac92c6e3dd959e16459233d7a'
+// let baseUrl = 'http://101.200.123.124:4096/api/dapps/c81c42a26d3c7a575991c86abed7fe089fc0665ac92c6e3dd959e16459233d7a'
 // let loginurl = baseUrl + '/login'测试环境下login传输， 有暴露secret可能
 let loginurl = baseUrl + '/accounts/'
 // 测试环境
