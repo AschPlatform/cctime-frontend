@@ -264,6 +264,7 @@
             id: that.getId,
             that: that
           })
+          console.log(that.getId, 'toReFreshA')
         }, 10000)
       },
       // 跳转评论
@@ -399,10 +400,7 @@
       // 渲染以前的session更改
       this.$store.commit('clearArticleDetail')
       console.log(window.location.href)
-      this.$store.dispatch('getOnearticle', {
-        id: this.getId,
-        that: this
-      })
+      console.log(this.getId, 'beforeCreate')
     },
     created: function () {
       // 首先 判断是否session有文章url字段
@@ -426,6 +424,7 @@
             id: this.getId,
             that: this
           })
+          console.log(this.getId, 'created')
           window.sessionStorage.articleDetail = window.location.href
         }
       } else {
@@ -435,12 +434,14 @@
           id: this.getId,
           that: this
         })
+        console.log(this.getId, 'created2')
         window.sessionStorage.setItem('articleDetail', window.location.href)
       }
       this.$store.dispatch('getOnearticle', {
         id: this.getId,
         that: this
       })
+      console.log(this.getId, 'created3')
       this.$store.dispatch('getOnearticleComment', {
         id: this.getId,
         limit: String(this.pageContent),

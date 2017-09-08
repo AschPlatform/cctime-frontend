@@ -3,7 +3,7 @@
     <div class="toastbox">
         <div class="toastmsg">
           <span class="msg-header">{{this.toastInputState.toastMsgHeader}}</span>
-          <span class="msg-content">{{this.toastInputState.toastMsgContent}} 这将花费{{this.getAcccountLost}}CCT</span>
+          <span class="msg-content">{{this.toastInputState.toastMsgContent}} 这将花费{{this.getAcccountLost}}时讯币</span>
           <input type="number" placeholder="  请输入奖赏金额" min="0" v-model="price" @blur="emitPrice">
         </div>
         <div class="toastctr">
@@ -126,7 +126,7 @@ export default {
       return this.price * 100000000
     },
     getAcccountLost: function () {
-      return this.price * 0.0001
+      return this.price
     }
   }
 }

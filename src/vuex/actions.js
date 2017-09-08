@@ -2,8 +2,8 @@
 import Identicon from 'Identicon.js'
 import aschJS from 'asch-js'
 // 存储异步操作,获取数据用commit操作mutation
-let baseUrl = '/api/dapps/d352263c517195a8b612260971c7af869edca305bb64b471686323817e57b2c1' // 真实环境
-// let baseUrl = 'http://101.200.123.124:4096/api/dapps/c81c42a26d3c7a575991c86abed7fe089fc0665ac92c6e3dd959e16459233d7a'
+// let baseUrl = '/api/dapps/d352263c517195a8b612260971c7af869edca305bb64b471686323817e57b2c1' // 真实环境
+let baseUrl = 'http://101.200.123.124:4096/api/dapps/c81c42a26d3c7a575991c86abed7fe089fc0665ac92c6e3dd959e16459233d7a'
 // let loginurl = baseUrl + '/login'测试环境下login传输， 有暴露secret可能
 let loginurl = baseUrl + '/accounts/'
 // 测试环境
@@ -176,6 +176,9 @@ const actions = {
         }
         if (res.data.error.indexOf('already set') > -1) {
           commit('callToast', {msgHeader: '发生错误', msgContent: '用户名只能设置一次', _confirmfunc: '了解', _cancelfunc: '关闭', deals: undefined, contract: 4})
+        }
+        if (res.data.error.indexOf('Invalid timestamp') > -1) {
+          commit('callToast', {msgHeader: '发生错误', msgContent: '本地时间不精准，请先校准本地时间', _confirmfunc: '了解', _cancelfunc: '关闭', deals: undefined, contract: 4})
         }
       }
     })
