@@ -94,6 +94,7 @@
           secret: window.sessionStorage.secret,
           that: this
         })
+        this.$store.commit('callToast', {msgHeader: '成功！', msgContent: '刷新成功(不推荐使用F5)', _confirmfunc: '我看见了', _cancelfunc: '关闭', deals: undefined, contract: 4})
         // window.history.go(0)
       }
     },
