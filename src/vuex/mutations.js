@@ -156,17 +156,36 @@ const mutations = {
   toPlusCurrentPage: (state, num) => {
     state.currentPage = num
   },
+  toPlusCurrentPage_a: (state, num) => {
+    state.currentPage_account = num
+  },
+  toPlusCurrentPage_c: (state, num) => {
+    state.currentPage_comment = num
+  },
     // 现页数增加
   toAddCurrentPage: (state) => {
     state.currentPage = state.currentPage + 1
+  },
+  toAddCurrentPage_a: (state) => {
+    state.currentPage_account = state.currentPage_account + 1
+  },
+  toAddCurrentPage_c: (state) => {
+    state.currentPage_comment = state.currentPage_comment + 1
   },
     // 现页数减少
   toMinCurrentPage: (state) => {
     state.currentPage = state.currentPage - 1
   },
+  toMinCurrentPage_a: (state) => {
+    state.currentPage_account = state.currentPage_account - 1
+  },
+  toMinCurrentPage_c: (state) => {
+    state.currentPage_comment = state.currentPage_comment - 1
+  },
     // 重置页码
   toInitPage: (state) => {
-    state.currentPage = 0
+    state.currentPage_account = 0
+    state.currentPage_comment = 0
   },
   // article 清空
   clearArticleDetail: (state) => {

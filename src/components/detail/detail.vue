@@ -52,9 +52,9 @@
       </ul>
       <!--未设置逻辑-->
       <div class="pag">
-        <div class="ctrbtn" @click="minPage" v-show="this.currentPage != 0">上一页</div>
-        <div class="pagespot" v-for="(value, index) in this.page" @click="goto(index)" :class="{'active':currentPage + 1 == Number(value)}">{{Number(value)}}</div>
-        <div class="ctrbtn" @click="addPage" v-show="this.allPage != this.currentPage + 1 && this.allPage != 0">下一页</div>
+        <div class="ctrbtn" @click="minPage" v-show="this.currentPage_comment != 0">上一页</div>
+        <div class="pagespot" v-for="(value, index) in this.page" @click="goto(index)" :class="{'active':currentPage_comment + 1 == Number(value)}">{{Number(value)}}</div>
+        <div class="ctrbtn" @click="addPage" v-show="this.allPage != this.currentPage_comment + 1 && this.allPage != 0">下一页</div>
       </div>
     </div>
   </div>
@@ -88,7 +88,7 @@
     },
     computed: {
       ...mapGetters(['detailCommentList']),
-      ...mapState(['articleDetail', 'articleCommentList', 'currentPage']),
+      ...mapState(['articleDetail', 'articleCommentList', 'currentPage_comment']),
       // 处理文章格式
       formlizedArticle: function () {
         let article = String(this.articleDetail.article.text)
@@ -106,13 +106,13 @@
       // 构造页签数组
       page: function () {
         let pag = []
-        if (this.currentPage < this.pageSpots) {
+        if (this.currentPage_comment < this.pageSpots) {
           let i = Math.min(this.pageSpots, this.allPage)
           while (i) {
             pag.unshift(i--)
           }
-        } else if (this.currentPage >= this.pageSpots) {
-          let middle = this.currentPage - Math.floor(this.pageSpots / 2)
+        } else if (this.currentPage_comment >= this.pageSpots) {
+          let middle = this.currentPage_comment - Math.floor(this.pageSpots / 2)
           let i = this.pageSpots
           if (middle > (this.allPage - this.pageSpots)) {
             middle = (this.allPage - this.pageSpots) + 1
@@ -129,10 +129,10 @@
       },
       // 返回偏移量
       offsetNum: function () {
-        return this.currentPage * this.pageContent
+        return this.currentPage_comment * this.pageContent
       },
       realIndex: function () {
-        return this.currentPage * this.pageContent
+        return this.currentPage_comment * this.pageContent
       },
       // 获取当前文章ID
       getId: function () {
@@ -201,27 +201,27 @@
       },
       // 操作页面增减
       addPage: function () {
-        if (this.currentPage < this.allPage - 1) {
-          this.$store.commit('toAddCurrentPage')
+        if (this.currentPage_comment < this.allPage - 1) {
+          this.$store.commit('toAddCurrentPage_c')
           // this.currentPage = this.currentPage + 1
           this.$store.dispatch('getOnearticleComment', {
             id: this.getId,
             limit: String(this.pageContent),
-            offset: String(this.currentPage * this.pageContent),
+            offset: String(this.currentPage_comment * this.pageContent),
             that: this
           })
         } else {
-          this.currentPage = this.allPage - 1
+          this.currentPage_comment = this.allPage - 1
         }
       },
       minPage: function () {
-        if (this.currentPage > 0) {
-          this.$store.commit('toMinCurrentPage')
+        if (this.currentPage_comment > 0) {
+          this.$store.commit('toMinCurrentPage_c')
           // this.currentPage = this.currentPage - 1
           this.$store.dispatch('getOnearticleComment', {
             id: this.getId,
             limit: String(this.pageContent),
-            offset: String(this.currentPage * this.pageContent),
+            offset: String(this.currentPage_comment * this.pageContent),
             that: this
           })
         } else {
@@ -231,12 +231,12 @@
       // 页面跳转
       goto: function (index) {
         if (index === this.current) return
-        this.$store.commit('toPlusCurrentPage', index)
+        this.$store.commit('toPlusCurrentPage_c', index)
         // this.currentPage = index
         this.$store.dispatch('getOnearticleComment', {
           id: this.getId,
           limit: String(this.pageContent),
-          offset: String(this.currentPage * this.pageContent),
+          offset: String(this.currentPage_comment * this.pageContent),
           that: this
         })
       },
@@ -252,7 +252,7 @@
           that.$store.dispatch('getOnearticleComment', {
             id: that.getId,
             limit: String(that.pageContent),
-            offset: String(that.currentPage * that.pageContent),
+            offset: String(that.currentPage_comment * that.pageContent),
             that: that
           })
         }, 10000)
@@ -403,6 +403,8 @@
       console.log(this.getId, 'beforeCreate')
     },
     created: function () {
+      // 重置页码
+      this.$store.commit('toInitPage')
       // 首先 判断是否session有文章url字段
       console.log(window.location.href)
       console.log('5SP')
@@ -445,7 +447,7 @@
       this.$store.dispatch('getOnearticleComment', {
         id: this.getId,
         limit: String(this.pageContent),
-        offset: String(this.currentPage * this.pageContent),
+        offset: String(this.currentPage_comment * this.pageContent),
         that: this
       })
     },

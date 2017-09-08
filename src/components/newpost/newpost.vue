@@ -146,7 +146,6 @@
       })
     },
     destroyed: function () {
-      this.$store.commit('toInitPage')
     }
   }
 </script>

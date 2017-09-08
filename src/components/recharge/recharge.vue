@@ -11,7 +11,7 @@
             <option v-for="item in this.userInfo.info.balances">{{item.currency}}</option>
         </select>
         <input type="number" placeholder="提取数量" v-model="trans_num">
-        <input type="text" class="calculate" placeholder="手续费0.01" disabled><span class="calculate_info"></span>
+        <input type="text" class="calculate" placeholder="手续费0.1" disabled><span class="calculate_info"></span>
         </div>
     </div>
     <div class="confirm_btn">

@@ -14,7 +14,7 @@
           <input style="display:none" type="password" name="fakepasswordremembered"/>
           <input type="number" placeholder="转账数量" v-model="trans_num">
           <input type="text" placeholder="转账地址" v-model="trans_address">
-          <input type="text" class="calculate" placeholder="手续费0.01" disabled>
+          <input type="text" class="calculate" placeholder="手续费0.1" disabled>
           <!-- <input type="password" class="psd" v-model="trans_password" autocomplete="off" placeholder="请输入二级密码，如果未设置请略过"> -->
         </div>
     </div>
@@ -50,9 +50,9 @@
       </table>
     </div>
     <div class="pag">
-      <div class="ctrbtn" @click="minPage" v-show="this.currentPage != 0">上一页</div>
-      <div class="pagespot" v-for="(value, index) in this.page" @click="goto(index)" :class="{'active':currentPage + 1 == Number(value)}">{{Number(value)}}</div>
-      <div class="ctrbtn" @click="addPage" v-show="this.allPage != this.currentPage + 1 && this.allPage != 0">下一页</div>
+      <div class="ctrbtn" @click="minPage" v-show="this.currentPage_account != 0">上一页</div>
+      <div class="pagespot" v-for="(value, index) in this.page" @click="goto(index)" :class="{'active':currentPage_account + 1 == Number(value)}">{{Number(value)}}</div>
+      <div class="ctrbtn" @click="addPage" v-show="this.allPage != this.currentPage_account + 1 && this.allPage != 0">下一页</div>
     </div>
   </div>
 </template>
@@ -142,9 +142,10 @@
       },
       // 操作页面增减
       addPage: function () {
+        console.log('+')
         let that = this
-        if (that.currentPage < that.allPage - 1) {
-          that.$store.commit('toAddCurrentPage')
+        if (that.currentPage_account < that.allPage - 1) {
+          that.$store.commit('toAddCurrentPage_a')
           // that.currentPage = that.currentPage + 1
           that.$store.dispatch('getTransactionInfo', {
             limit: String(that.pageContent),
@@ -154,13 +155,14 @@
           })
         } else {
           // that.currentPage = that.allPage - 1
-          this.$store.commit('toMinCurrentPage')
+          this.$store.commit('toMinCurrentPage_a')
         }
       },
       minPage: function () {
+        console.log('-')
         let that = this
-        if (that.currentPage > 0) {
-          this.$store.commit('toMinCurrentPage')
+        if (that.currentPage_account > 0) {
+          this.$store.commit('toMinCurrentPage_a')
           // that.currentPage = that.currentPage - 1
           that.$store.dispatch('getTransactionInfo', {
             limit: String(that.pageContent),
@@ -174,9 +176,10 @@
       },
       // 页面跳转
       goto: function (index) {
+        console.log('goto', index)
         let that = this
         if (index === this.current) return
-        this.$store.commit('toPlusCurrentPage', index)
+        this.$store.commit('toPlusCurrentPage_a', index)
         // that.currentPage = index
         that.$store.dispatch('getTransactionInfo', {
           limit: String(that.pageContent),
@@ -199,7 +202,7 @@
       }
     },
     computed: {
-      ...mapState(['userInfo', 'currentPage']),
+      ...mapState(['userInfo', 'currentPage_account']),
       // 计算手续费
       trans_fee: function () {
         if (this.trans_num === undefined) {
@@ -242,13 +245,13 @@
       // 构造页签数组
       page: function () {
         let pag = []
-        if (this.currentPage < this.pageSpots) {
+        if (this.currentPage_account < this.pageSpots) {
           let i = Math.min(this.pageSpots, this.allPage)
           while (i) {
             pag.unshift(i--)
           }
-        } else if (this.currentPage >= this.pageSpots) {
-          let middle = this.currentPage - Math.floor(this.pageSpots / 2)
+        } else if (this.currentPage_account >= this.pageSpots) {
+          let middle = this.currentPage_account - Math.floor(this.pageSpots / 2)
           let i = this.pageSpots
           if (middle > (this.allPage - this.pageSpots)) {
             middle = (this.allPage - this.pageSpots) + 1
@@ -265,7 +268,7 @@
       },
       // 返回偏移量
       offsetNum: function () {
-        return this.currentPage * this.pageContent
+        return this.currentPage_account * this.pageContent
       }
     },
     created: function () {
