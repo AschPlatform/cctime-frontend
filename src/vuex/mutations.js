@@ -1,12 +1,25 @@
 // 临时方法
+function getEpochTime (time) {
+  if (time === undefined) {
+    time = (new Date()).getTime()
+  }
+  var d = beginEpochTime()
+  var t = d.getTime()
+  return Math.floor((time - t) / 1000)
+}
+
 function beginEpochTime () {
-  var d = new Date(Date.UTC(2015, 2, 6, 0, 0, 0, 0))
+  var d = new Date(Date.UTC(2016, 5, 27, 20, 0, 0, 0))
   return d
 }
+
+function getTime (time) {
+  return getEpochTime(time)
+}
+
 function getRealTime (epochTime) {
   if (epochTime === undefined) {
-    let n = new Date()
-    epochTime = n.getTime()
+    epochTime = getTime()
   }
   var d = beginEpochTime()
   var t = Math.floor(d.getTime() / 1000) * 1000

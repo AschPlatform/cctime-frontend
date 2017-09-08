@@ -96,9 +96,9 @@ export default {
       let hor = 0
       let day = 0
       let yea = 0
-      if (sec < 60) {
+      if (sec < 60 && sec >= 0) {
         pst = Math.floor(sec) + '秒前'
-      } else {
+      } else if (sec >= 60) {
         min = Math.floor(sec / 60)
         if (min < 60) {
           pst = Math.floor(min) + '分钟前'
@@ -116,6 +116,8 @@ export default {
             }
           }
         }
+      } else {
+        pst = '刚刚'
       }
       return pst
     }
