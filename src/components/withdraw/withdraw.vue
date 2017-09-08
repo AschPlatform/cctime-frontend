@@ -287,6 +287,7 @@
 
 <style lang="" scoped>
   .withdraw_container{
+    min-width: 1024px;
     width: 60%;
     min-height: 700px;
     height: 100%;

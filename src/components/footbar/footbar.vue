@@ -20,6 +20,7 @@
 
 <style lang="" scoped>
   .footbar{
+    min-width: 700px;
       font-size: 14px;
       position: absolute;
       left: 50%;

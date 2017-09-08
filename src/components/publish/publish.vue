@@ -139,6 +139,7 @@
 
 <style lang="" scoped>
   .pub_container{
+    min-width: 1000px;
     width: 80%;
     min-height: 700px;
     height: 100%;

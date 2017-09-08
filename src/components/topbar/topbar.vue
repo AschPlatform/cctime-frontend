@@ -58,6 +58,7 @@
 
 <style lang="" scoped>
   .header{
+    min-width: 1000px;
     background:linear-gradient(rgb(254, 254, 254), rgb(239, 239, 239));; 
     position: fixed;
     z-index: 9999;

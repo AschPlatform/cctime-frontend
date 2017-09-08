@@ -462,6 +462,7 @@
 
 <style scoped>
   .article_wrapper{
+    min-width: 1000px;
     width: 45%;
     min-height: 700px;
     height: 100%;

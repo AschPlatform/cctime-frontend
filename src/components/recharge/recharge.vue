@@ -90,6 +90,7 @@
 
 <style lang="" scoped>
   .charge_container{
+    min-width: 1024px;
     width: 80%;
     min-height: 700px;
     height: 100%;

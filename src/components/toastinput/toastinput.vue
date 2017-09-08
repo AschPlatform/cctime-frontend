@@ -143,6 +143,8 @@ export default {
     z-index: 9998;
   }
   .toastbox{
+    min-width: 300px;
+    min-height: 250px;
     position: fixed;
     top: 35%;
     left: 40%;
