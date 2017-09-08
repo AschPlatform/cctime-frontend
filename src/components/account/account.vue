@@ -2,6 +2,7 @@
   <div class="account_container">
     <div class="header">
       <p>我的账户</p>
+      <img src="/static/img/refresh.png" alt="刷新" title="刷新" @click="clickRefresh">
     </div>
     <div class="content">
       <div class="content_header">
@@ -31,7 +32,7 @@
             <th>币种</th>
             <th>数量</th>
           </tr>
-          <tr v-for="cash in account">
+          <tr v-for="cash in this.$store.getters['newAccount'].balances">
             <td>{{cash.currency}}</td>
             <td>{{cash.balance / 1e8}}</td>
           </tr>
@@ -87,6 +88,13 @@
             }
           })
         }
+      },
+      clickRefresh: function () {
+        this.$store.dispatch('getUserInfo', {
+          secret: window.sessionStorage.secret,
+          that: this
+        })
+        // window.history.go(0)
       }
     },
     computed: {
@@ -99,10 +107,10 @@
       }
     },
     created: function () {
-      // this.$store.dispatch('getUserInfo', {
-      //   secret: this.$store.state.userInfo.secret,
-      //   that: this
-      // })
+      this.$store.dispatch('getUserInfo', {
+        secret: window.sessionStorage.secret,
+        that: this
+      })
       this.account = this.$store.state.userInfo.info.balances
       this.address = this.$store.state.userInfo.info.address
       if (this.account.length === 0) {
@@ -135,11 +143,18 @@
     margin: 40px auto 20px auto;
     border-bottom: 6px solid rgb(238, 238, 238);
     padding-bottom: 15px;
+    text-align: left;
+    line-height: 20px;
   }
   .header p{
-    display: block;
+    display: inline-block;
     text-align: left;
     font-size: 20px;
+  }
+  .header img{
+    height: 20px;
+    cursor: pointer;
+    float: right;
   }
   .content{
     position: relative;
@@ -288,9 +303,12 @@
       padding-bottom: 15px;
     }
     .header p{
-      display: block;
-      text-align: left;
       font-size: 16px;
+    }
+    .header img{
+      height: 16px;
+      cursor: pointer;
+      float: right;
     }
     .content_header .logo{
       height: 40px;
@@ -335,7 +353,7 @@
     }
     .info_contain{
       display: inline-block;
-      margin-top: -10px;
+      margin-top: -5px;
       width: 70%;
       margin-left: 10px;
     }

@@ -100,6 +100,7 @@
       },
       // 处理url显示
       getUrl: function () {
+        console.log('1SP')
         return this.articleDetail.article.url.split('/')[2]
       },
       // 构造页签数组
@@ -135,6 +136,7 @@
       },
       // 获取当前文章ID
       getId: function () {
+        console.log('2SP')
         return window.location.hash.split('/')[2]
       },
       // 上一篇文章id
@@ -395,20 +397,25 @@
     },
     beforeCreate: function () {
       // 渲染以前的session更改
-      let sign = window.location.href.split('/')[5]
-      let signS = window.sessionStorage.articleDetail.split('/')[5]
-      if (sign !== signS) {
-        this.$store.commit('clearArticleDetail')
-      }
+      this.$store.commit('clearArticleDetail')
+      console.log(window.location.href)
+      this.$store.dispatch('getOnearticle', {
+        id: this.getId,
+        that: this
+      })
     },
     created: function () {
       // 首先 判断是否session有文章url字段
+      console.log(window.location.href)
+      console.log('5SP')
       let aaa = window.location.href.split('/')[5]
       console.log(aaa)
       if (window.sessionStorage.articleDetail) {
         // 如果有字段
         console.log('察觉到session的缓存')
+        console.log('6SP')
         let sign = window.location.href.split('/')[5]
+        console.log('7SP')
         let signS = window.sessionStorage.articleDetail.split('/')[5]
         console.log(sign, signS, '___________________________________')
         if (sign === signS) {
@@ -419,6 +426,7 @@
             id: this.getId,
             that: this
           })
+          window.sessionStorage.articleDetail = window.location.href
         }
       } else {
         // 判断是否为
@@ -427,6 +435,7 @@
           id: this.getId,
           that: this
         })
+        window.sessionStorage.setItem('articleDetail', window.location.href)
       }
       this.$store.dispatch('getOnearticle', {
         id: this.getId,

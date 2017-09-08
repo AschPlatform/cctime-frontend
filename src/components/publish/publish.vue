@@ -127,6 +127,12 @@
         arr.push(this.tags)
         return arr
       }
+    },
+    created: function () {
+      if (this.$store.state.isLogin === false) {
+        console.log('判断成功')
+        this.$router.push('/top')
+      }
     }
   }
 </script>

@@ -138,7 +138,7 @@
         this.trans_address = ''
         this.trans_password = ''
         // 分页初始量
-        this.currentPage = 0
+        // this.currentPage = 0
       },
       // 操作页面增减
       addPage: function () {
@@ -275,7 +275,7 @@
       this.$store.dispatch('getTransactionInfo', {
         limit: String(that.pageContent),
         offset: 0,
-        currency: 'XAS',
+        currency: '',
         that: that
       })
     },
