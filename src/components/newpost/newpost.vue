@@ -9,6 +9,7 @@
       <div class="pagespot" v-for="(value, index) in this.page" @click="goto(Number(value) - 1)" :class="{'active':currentPage + 1 == Number(value)}" v-on:reFresh="toReFresh">{{Number(value)}}</div>
       <div class="ctrbtn" @click="addPage" v-show="this.allPage != this.currentPage + 1 && this.allPage != 0">下一页</div>
     </div>
+    <div class="cursion" v-show="this.isCursion === true"></div>
   </div>
 </template>
 
@@ -26,7 +27,8 @@
         awardNum: undefined,
         pageSpots: 5,
         pageContent: 20,
-        pageNum: 0
+        pageNum: 0,
+        isCursion: false
       }
     },
     methods: {
@@ -136,6 +138,7 @@
       }
     },
     created: function () {
+      console.log('created!!')
       // 以下是触发Action内容
       // 输出$state list内容
       this.$store.dispatch('getAllarticles', {
@@ -288,6 +291,14 @@
   .active{
     background-color: rgb(102, 146, 217);
     color: #fff;
+  }
+  .cursion{
+    display: block;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    z-index: 99999;
   }
   @media screen and (max-width: 1441px) {
     /* 1360屏幕下 */

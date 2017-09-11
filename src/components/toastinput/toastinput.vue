@@ -102,8 +102,8 @@ export default {
             a.push(String(this.getPrice))
             this.$store.dispatch('invokeContract', {
               type: 1002,
-              fee: '10000000',
               args: a,
+              fee: '10000000',
               that: this,
               callback: function (err, msg) {
                 if (err) {

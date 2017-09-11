@@ -168,6 +168,7 @@ const mutations = {
     // 现页数赋值
   toPlusCurrentPage: (state, num) => {
     state.currentPage = num
+    state.articleNewList = {}
   },
   toPlusCurrentPage_a: (state, num) => {
     state.currentPage_account = num
@@ -178,6 +179,7 @@ const mutations = {
     // 现页数增加
   toAddCurrentPage: (state) => {
     state.currentPage = state.currentPage + 1
+    state.articleNewList = {}
   },
   toAddCurrentPage_a: (state) => {
     state.currentPage_account = state.currentPage_account + 1
@@ -188,6 +190,7 @@ const mutations = {
     // 现页数减少
   toMinCurrentPage: (state) => {
     state.currentPage = state.currentPage - 1
+    state.articleNewList = {}
   },
   toMinCurrentPage_a: (state) => {
     state.currentPage_account = state.currentPage_account - 1
