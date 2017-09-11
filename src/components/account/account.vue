@@ -63,8 +63,13 @@
         this.isSetNickToggle = !this.isSetNickToggle
       },
       setNickName: function () {
-        this.toggleNickBox()
+        // this.toggleNickBox()
         let that = this
+        let nick = this.nickName
+        if (nick.trim() === '') {
+          this.$store.commit('callToast', {msgHeader: '发生错误', msgContent: '昵称不能为空', _confirmfunc: '了解', _cancelfunc: '关闭', deals: undefined, contract: 4})
+          return
+        }
         if (this.nickName.length > 20) {
           this.$store.commit('callToast', {msgHeader: '发生错误', msgContent: '昵称必须小于等于20个字节', _confirmfunc: '了解', _cancelfunc: '关闭', deals: undefined, contract: 4})
           return
@@ -89,6 +94,7 @@
             }
           })
         }
+        this.toggleNickBox()
       },
       clickRefresh: function () {
         this.$store.dispatch('getUserInfo', {
