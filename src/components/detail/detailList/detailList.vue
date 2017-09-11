@@ -1,7 +1,7 @@
 <template>
   <li class="comment_list">
     <div class="user_id">
-      <img :src="'data:image/png;base64,' + item.photo"></img>{{item.nickname || item.AuthorId}}
+      <img :src="'data:image/png;base64,' + item.photo"></img>{{item.nickname || item.authorId}}
       <span class="reply_msg" v-if="!!item.replyAuthorName">回复&nbsp;&nbsp;&nbsp;&nbsp;{{item.replyAuthorName}}</span>
       <span class="reply_msg" v-else-if="!!item.replyAuthorId">回复&nbsp;&nbsp;&nbsp;&nbsp;{{item.replyAuthorId}}</span>
       <span class="reply_time">{{this.realT}}</span>
@@ -83,6 +83,7 @@ export default {
   methods: {
     // 动画开关
     toggleReply: function () {
+      console.log(this.item)
       let that = this
       if (that.$store.state.isLogin === false) {
         that.$store.commit('callToast', {msgHeader: '注意!', msgContent: '仅当您登陆后才能使用回复功能', _confirmfunc: '去登录', _cancelfunc: '不了', deals: undefined, contract: 3})
