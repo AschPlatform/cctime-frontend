@@ -27,7 +27,7 @@
         <router-link to="recharge/">充/提币</router-link>
       </div>
       <div class="content_table">
-        <table>
+        <table cellspacing="10">
           <tr>
             <th>币种</th>
             <th>数量</th>

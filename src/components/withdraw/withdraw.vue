@@ -432,13 +432,16 @@
     font-size: 12px;
     border-radius: 6px;
   }
+  .pag div:hover{
+    background-color: gainsboro;
+  }
   .ctrbtn{
     border: 1px solid rgb(102, 146, 217);
     color: rgb(102, 146, 217);
     padding: 0 10px;
   }
   .active{
-    background-color: rgb(102, 146, 217);
+    background-color: rgb(102, 146, 217) !important;
     color: #fff;
   }
   @media screen and (max-width: 1441px) {
