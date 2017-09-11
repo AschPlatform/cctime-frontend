@@ -48,7 +48,7 @@
     <!-- 文章页下部 评论-->
     <div class="comment_part">
       <ul>
-        <detail-list v-for="(item, index) in this.detailCommentList.comments" :item="item" :key="index" :that="this" @reFresh="toRefreshAll"></detail-list>
+        <detail-list v-for="(item, index) in this.detailCommentList.comments" :item="item" :key="item.id" :that="this" @reFresh="toRefreshAll"></detail-list>
       </ul>
       <!--未设置逻辑-->
       <div class="pag">
@@ -402,21 +402,70 @@
       console.log(window.location.href)
       console.log(this.getId, 'beforeCreate')
     },
-    created: function () {
+    // created: function () {
+    //   // 重置页码
+    //   this.$store.commit('toInitPage')
+    //   // 首先 判断是否session有文章url字段
+    //   console.log(window.location.href)
+    //   console.log('5SP')
+    //   let aaa = window.location.href.split('/')[5]
+    //   console.log(aaa, 'this is window.location.href.split("/")[5]')
+    //   if (window.sessionStorage.articleDetail) {
+    //     // 如果有字段
+    //     console.log('察觉到session的缓存')
+    //     console.log('6SP')
+    //     let sign = window.location.href.split('/')[5]
+    //     console.log('7SP')
+    //     let signS = window.sessionStorage.articleDetail.split('/')[5]
+    //     console.log(sign, signS, '___________________________________')
+    //     if (sign === signS) {
+    //       console.log('察觉到原页面刷新')
+    //       window.location.href = window.sessionStorage.articleDetail
+    //     } else {
+    //       this.$store.dispatch('getOnearticle', {
+    //         id: this.getId,
+    //         that: this
+    //       })
+    //       console.log(this.getId, 'created')
+    //       window.sessionStorage.articleDetail = window.location.href
+    //     }
+    //   } else {   // 并没有articleDetail 字段
+    //     // 判断是否为
+    //     // 说明外界加载该页面
+    //     this.$store.dispatch('getOnearticle', {
+    //       id: this.getId,
+    //       that: this
+    //     })
+    //     console.log(this.getId, 'created2')
+    //     window.sessionStorage.setItem('articleDetail', window.location.href)
+    //   }
+    //   this.$store.dispatch('getOnearticle', {
+    //     id: this.getId,
+    //     that: this
+    //   })
+    //   console.log(this.getId, 'created3')
+    //   this.$store.dispatch('getOnearticleComment', {
+    //     id: this.getId,
+    //     limit: String(this.pageContent),
+    //     offset: String(this.currentPage_comment * this.pageContent),
+    //     that: this
+    //   })
+    // },
+    created: function created () {
       // 重置页码
       this.$store.commit('toInitPage')
       // 首先 判断是否session有文章url字段
       console.log(window.location.href)
       console.log('5SP')
-      let aaa = window.location.href.split('/')[5]
+      var aaa = window.location.href.split('/')[5]
       console.log(aaa)
       if (window.sessionStorage.articleDetail) {
         // 如果有字段
         console.log('察觉到session的缓存')
         console.log('6SP')
-        let sign = window.location.href.split('/')[5]
+        var sign = window.location.href.split('/')[5]
         console.log('7SP')
-        let signS = window.sessionStorage.articleDetail.split('/')[5]
+        var signS = window.sessionStorage.articleDetail.split('/')[5]
         console.log(sign, signS, '___________________________________')
         if (sign === signS) {
           console.log('察觉到原页面刷新')
