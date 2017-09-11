@@ -59,6 +59,7 @@
     },
     methods: {
       toggleNickBox: function () {
+        this.nickName = ''
         this.isSetNickToggle = !this.isSetNickToggle
       },
       setNickName: function () {

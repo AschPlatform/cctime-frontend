@@ -245,6 +245,9 @@ export default {
     cursor: pointer;
     background-size: 22% 68%;
   }
+  .meta .vote:hover{
+    color: #f60;
+  }
   .award_c_tool{
     display: block;
     width: 220px;
