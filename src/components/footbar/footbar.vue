@@ -3,8 +3,8 @@
     <div class="link_box">
       <a href="https://www.asch.so" target="_blank">阿希官网</a>&nbsp;|&nbsp;
       <a href="http://bbs.asch.so" target="_blank">阿希生态社区</a>&nbsp;|&nbsp;
-      <p>官方QQ群1：485979564</p>&nbsp;|&nbsp;
-      <p>官方QQ群1：545183438</p>
+      <p>官方QQ群：485979564</p>&nbsp;|&nbsp;
+      <p>官方QQ群：545183438</p>
     </div>
     <span>&copy;Asch</span>
   </div>

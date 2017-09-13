@@ -3,7 +3,8 @@ import Identicon from 'Identicon.js'
 import aschJS from 'asch-js'
 // 存储异步操作,获取数据用commit操作mutation
 // let baseUrl = '/api/dapps/d352263c517195a8b612260971c7af869edca305bb64b471686323817e57b2c1' // 真实环境
-let baseUrl = 'http://101.200.123.124:4096/api/dapps/c81c42a26d3c7a575991c86abed7fe089fc0665ac92c6e3dd959e16459233d7a' // 本地测试环境
+let baseUrl = 'http://testnet.cctime.org/api/dapps/d352263c517195a8b612260971c7af869edca305bb64b471686323817e57b2c1' // 真实本地环境
+// let baseUrl = 'http://101.200.123.124:4096/api/dapps/c81c42a26d3c7a575991c86abed7fe089fc0665ac92c6e3dd959e16459233d7a' // 本地测试环境
 // let loginurl = baseUrl + '/login'测试环境下login传输， 有暴露secret可能
 let loginurl = baseUrl + '/accounts/'
 // 测试环境
@@ -138,6 +139,9 @@ const actions = {
       type: type,
       args: JSON.stringify(args)
     }, that.$store.state.userInfo.secret)
+    let conso = JSON.stringify(args)
+    console.log(conso)
+    console.log(a)
     //
     /* let fees = String(fee) */
     that.$axios.put(posturl, {transaction: a}, { headers: { 'magic': '594fe0f3', 'version': '' } }).then((res) => {
@@ -157,7 +161,7 @@ const actions = {
           commit('callToast', {msgHeader: '发生错误', msgContent: 'tag太长喽！', _confirmfunc: '了解', _cancelfunc: '关闭', deals: undefined, contract: 4})
         }
         if (res.data.error.indexOf('provide tags') > -1) {
-          commit('callToast', {msgHeader: '发生错误', msgContent: '我们需要你填写一些tag', _confirmfunc: '了解', _cancelfunc: '关闭', deals: undefined, contract: 4})
+          commit('callToast', {msgHeader: '发生错误', msgContent: '我们需要你填写标签', _confirmfunc: '了解', _cancelfunc: '关闭', deals: undefined, contract: 4})
         }
         if (res.data.error.indexOf('amount range') > -1) {
           commit('callToast', {msgHeader: '发生错误', msgContent: '数额要大于0', _confirmfunc: '了解', _cancelfunc: '关闭', deals: undefined, contract: 4})

@@ -20,7 +20,7 @@ export default {
   name: 'toastinput',
   data: function () {
     return {
-      price: 0,
+      price: 1,
       confirmFunction: null,
       cancelFunction: null
     }
@@ -37,11 +37,11 @@ export default {
         this.confirmFunction()
         this.toastInputState.isShowToast = false
         this.$store.commit('toastReset')
-        this.price = 0
+        this.price = 1
       } else {
         this.toastInputState.isShowToast = false
         this.$store.commit('toastReset')
-        this.price = 0
+        this.price = 1
       }
     },
     callOff: function () {
@@ -50,12 +50,12 @@ export default {
         this.cancelFunction()
         this.toastInputState.isShowToast = false
         this.$store.commit('toastReset')
-        this.price = 0
+        this.price = 1
         return
       } else {
         this.toastInputState.isShowToast = false
         this.$store.commit('toastReset')
-        this.price = 0
+        this.price = 1
       }
     },
     emitPrice: function () {
@@ -126,7 +126,7 @@ export default {
       return this.price * 100000000
     },
     getAcccountLost: function () {
-      return this.price
+      return this.price + 0.1
     }
   }
 }

@@ -4,10 +4,10 @@
       <div class="upper_form">
         <input type="text" placeholder="  标题" @focus="clearError()" v-model="title">
         <input type="text" placeholder="  URL" @focus="clearError()" v-model="url">
-        <input type="text" placeholder="  标签" @focus="clearError()" @keyup="dealWithTags()" v-model="tags">
+        <input type="text" placeholder="  标签" @focus="clearError()" @keyup="dealWithTags()" v-model="tags" maxlength="20">
       </div>
       <div class="lower_form">
-        <textarea placeholder="文章内容" v-model="text"></textarea>
+        <textarea placeholder="文章内容(最多4096个字符)" maxlength="4096" v-model="text"></textarea>
         <div class="btn btn_1"  @click="postarticle()">提交</div>
         <div class="btn btn_2" @click="closeModal()">取消</div>
       </div>
@@ -33,6 +33,11 @@
     methods: {
       postarticle: function () {
         let that = this
+        // untest
+        if (this.text.length > 4096) {
+          this.$store.commit('callToast', {msgHeader: '警告', msgContent: '发布文章的内容长度要小于4096字节', _confirmfunc: '确定', _cancelfunc: '关闭', deals: undefined, contract: 4})
+          return
+        }
         if (this.text !== '' && this.url !== '') {
           this.isError = true
           this.errorMsg = '网络地址与文章内容只能选填一个'

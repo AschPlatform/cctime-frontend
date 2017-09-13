@@ -12,7 +12,7 @@
         </select>
           <input style="display:none" type="text" name="fakeusernameremembered"/>
           <input style="display:none" type="password" name="fakepasswordremembered"/>
-          <input type="number" placeholder="转账数量" v-model="trans_num">
+          <input type="number" placeholder="转账数量" v-model="trans_num" min="0">
           <input type="text" placeholder="转账地址" v-model="trans_address">
           <input type="text" class="calculate" placeholder="手续费0.1" disabled>
           <!-- <input type="password" class="psd" v-model="trans_password" autocomplete="off" placeholder="请输入二级密码，如果未设置请略过"> -->

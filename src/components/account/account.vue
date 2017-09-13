@@ -72,8 +72,10 @@
         }
         if (this.nickName.length > 20) {
           this.$store.commit('callToast', {msgHeader: '发生错误', msgContent: '昵称必须小于等于20个字节', _confirmfunc: '了解', _cancelfunc: '关闭', deals: undefined, contract: 4})
+          this.nickName = ''
           return
         } else {
+          console.log('gonna change your name')
           this.$store.dispatch('invokeContract', {
             type: 4,
             fee: '10000000',
