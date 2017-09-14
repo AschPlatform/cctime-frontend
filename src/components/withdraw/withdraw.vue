@@ -8,7 +8,7 @@
         <div class="deal_form">
         <select type="text" v-model="trans_type">
           <option disabled selected>转账币种</option>
-          <option v-for="item in this.userInfo.info.balances">{{item.currency}}</option>
+          <option v-for="item in this.userInfo.info.balances">{{item.currency}}&nbsp;&nbsp;&nbsp;(可用余额{{item.balance/1e8}})</option>
         </select>
           <input style="display:none" type="text" name="fakeusernameremembered"/>
           <input style="display:none" type="password" name="fakepasswordremembered"/>
