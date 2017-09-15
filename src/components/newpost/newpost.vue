@@ -138,6 +138,17 @@
       }
     },
     created: function () {
+      let that = this
+      // 定义轮询方法
+      let func = function () {
+        console.log('更新了一次')
+        that.$store.dispatch('getAllarticles', {
+          sortBy: 'timestamp',
+          limit: String(that.pageContent),
+          offset: Number(that.offsetNum),
+          that: that
+        })
+      }
       console.log('created!!')
       // 以下是触发Action内容
       // 输出$state list内容
@@ -147,6 +158,7 @@
         offset: Number(this.offsetNum),
         that: this
       })
+      setInterval(func(), 3000)
     },
     destroyed: function () {
     }

@@ -30,7 +30,7 @@
         </div>
       </div>
       <div id="article">
-        <p>{{this.articleDetail.article.text}}</p>
+        <pre>{{this.textContent}}</pre>
       </div>
       <!-- <div class="guide">
         <router-link class="prev" to="/articles/"+this.preId>上一篇</router-link>
@@ -95,12 +95,12 @@
         article.replace(/[\r\n]]/g, '123123')
         article = '<p>' + article
         article = article + '</p>'
-        console.log(this.articleDetail.article)
         return 1
       },
       // 处理url显示
       getUrl: function () {
         console.log('1SP')
+        console.log(this.articleDetail.article)
         return this.articleDetail.article.url.split('/')[2]
       },
       // 构造页签数组
@@ -159,6 +159,13 @@
       },
       yield: function () {
         return this.articleDetail.article.votes * 0.0001
+      },
+      // 尝试解析text
+      textContent: function () {
+        let txt = this.articleDetail.article.text
+        console.log(txt, '______________________________________')
+        txt.replace(/空格/g, 'BIP')
+        return txt
       },
       realT: function () {
         let pst = ''
@@ -626,13 +633,15 @@
   #article{
     word-break: break-word;
   }
-  #article p{
+  #article pre{
+    white-space: pre-wrap;
     display: block;
     font-size: 16px;
     text-indent: 36px;
     line-height: 32px;
     margin-top: 30px;
     text-align: left;
+    font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
   }
    /*anti-reset*/
   #article ol li{
@@ -848,7 +857,7 @@
       .interaction a{
         font-size: 9px;
       }
-      #article p{
+      #article pre{
         font-size: 16px;
         line-height: 32px;
       }
