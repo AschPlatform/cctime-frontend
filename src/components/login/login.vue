@@ -11,6 +11,7 @@
 </template>
 
 <script>
+  var Mnemonic = Mnemonic = require('bitcore-mnemonic')
   export default {
     name: 'loginform',
     components: {
@@ -30,8 +31,8 @@
           that.$store.commit('callToast', {msgHeader: '注意!', msgContent: '秘钥不能为空呦', _confirmfunc: '了解', _cancelfunc: '关闭', deals: undefined, contract: 4})
           return
         }
-        if (this.secret.length < 20) {
-          that.$store.commit('callToast', {msgHeader: '注意!', msgContent: '秘钥不正确', _confirmfunc: '了解', _cancelfunc: '关闭', deals: undefined, contract: 4})
+        if (!Mnemonic.isValid(this.secret)) {
+          that.$store.commit('callToast', {msgHeader: '注意!', msgContent: '秘钥不符合规则', _confirmfunc: '了解', _cancelfunc: '关闭', deals: undefined, contract: 4})
           return
         }
         this.$store.dispatch('getUserInfo', {
