@@ -26,24 +26,6 @@ function getPhotoImage (id) {
 const actions = {
   // 验证用户信息获取account
   getUserInfo: async ({ commit }, { secret, that }) => {
-    /* if (state.mock) { 延时传送来直接写入数据
-      return setTimeout(()=> {
-        commit('writeInuser', {secret: '', account: })
-      }, 200)
-    } */
-    // that.$axios.post(loginurl, {
-    //   secret: secret
-    // }).then((res) => {
-    //   if (res.status === 200 && res.data.success) {
-    //     res.data.account.logo = getPhotoImage(res.data.account.address)
-    //     commit('writeInuser', { secret: secret, account: res.data.account })
-    //     window.sessionStorage.setItem('userInfo', JSON.stringify(res.data.account))
-    //     window.sessionStorage.setItem('secret', secret)
-    //   } else if (res.data.success === false) {
-    //     // 统一alert，后期模态框调教
-    //     that.$store.commit('callToast', {msgHeader: '发生错误', msgContent: '用户登录失败', _confirmfunc: null, _cancelfunc: null, deals: undefined, contract: 4})
-    //   }
-    // })
     let keypair = aschJS.crypto.getKeys(secret)
     let address = aschJS.crypto.getAddress(keypair.publicKey)
     that.$axios.get(loginurl + address).then((res) => {

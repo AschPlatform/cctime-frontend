@@ -84,7 +84,6 @@
       toWithdraw: function () {
         // 阀门检测
         if (this.isDealed === true) {
-          console.log('阀门拒绝')
           this.$store.commit('callToast', {msgHeader: '注意！', msgContent: '上一次交易尚未完成，请稍后', _confirmfunc: '了解', _cancelfunc: '关闭', deals: undefined, contract: 4})
           return
         }
@@ -117,7 +116,6 @@
         a.push(this.trans_type)
         a.push(this.trans_unit)
         a.push(this.trans_address)
-        console.log('阀门允许-开始构建并且发送')
         this.$store.dispatch('invokeContract', {
           type: 3,
           fee: '10000000',
@@ -139,13 +137,11 @@
             }, 10000)
             // 初始化本地state
             that.$store.commit('callToast', {msgHeader: '成功！', msgContent: '转账成功，根据环境原因转账时间可能会略有延长', _confirmfunc: '了解', _cancelfunc: '关闭', deals: undefined, contract: 4})
-            console.log('开始')
             that.init()
           }
         })
       },
       init: function () {
-        console.log('开始init')
         this.trans_type = ''
         this.trans_num = undefined
         this.trans_address = ''
@@ -405,7 +401,7 @@
     float: right;
   }
   .record{
-    height: 105px;
+    height: 100%;
     width: 66%;
     margin: auto auto
   }
@@ -515,7 +511,7 @@
       font-size: 16px;
     }
     .record{
-      height: 105px;
+      height: 100%;
       width: 66%;
       margin: auto auto
     }
