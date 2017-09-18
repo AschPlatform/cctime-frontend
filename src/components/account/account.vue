@@ -93,10 +93,11 @@
                   that: that
                 })
                 // 刷新判断是否要显示名称修改
-                if (this.$store.state.userInfo.info.extra === null) {
-                  this.isHide = true
+                console.log(that.$store.state.userInfo)
+                if (that.$store.state.userInfo.info.extra === null) {
+                  that.isHide = true
                 } else {
-                  this.isHide = false
+                  that.isHide = false
                 }
               }, 10000)
             }
@@ -110,10 +111,10 @@
           that: this
         })
         // 刷新判断是否还有余额
-        if (this.account.length === 0) {
-          this.isEmpty = true
-        } else {
+        if (this.$store.state.userInfo.info.balances.length === 0) {
           this.isEmpty = false
+        } else {
+          this.isEmpty = true
         }
         this.$store.commit('callToast', {msgHeader: '成功！', msgContent: '刷新成功(不推荐使用F5)', _confirmfunc: '我看见了', _cancelfunc: '关闭', deals: undefined, contract: 4})
         // window.history.go(0)
