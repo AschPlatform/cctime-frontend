@@ -8,7 +8,7 @@
         <div class="deal_form">
         <select type="text" v-model="trans_type">
           <option disabled selected>转账币种</option>
-          <option v-for="item in this.userInfo.info.balances">{{item.currency}}&nbsp;&nbsp;&nbsp;(可用余额{{item.balance/1e8}})</option>
+          <option v-for="item in this.userInfo.info.balances" :value="item.currency">{{item.currency}}&nbsp;&nbsp;&nbsp;(可用余额{{item.balance/1e8}})</option>
         </select>
           <input style="display:none" type="text" name="fakeusernameremembered"/>
           <input style="display:none" type="password" name="fakepasswordremembered"/>
@@ -74,12 +74,20 @@
         // currentPage: 0,
         pageSpots: 5,
         pageContent: 5,
-        pageNum: 0
+        pageNum: 0,
+        // 转账阀门
+        isDealed: false
       }
     },
     methods: {
       // 转账
       toWithdraw: function () {
+        // 阀门检测
+        if (this.isDealed === true) {
+          console.log('阀门拒绝')
+          this.$store.commit('callToast', {msgHeader: '注意！', msgContent: '上一次交易尚未完成，请稍后', _confirmfunc: '了解', _cancelfunc: '关闭', deals: undefined, contract: 4})
+          return
+        }
         // 整数检测
         if (String(this.trans_num).indexOf('.') > 0) {
           this.$store.commit('callToast', {msgHeader: '注意！', msgContent: '转账金额必须为整数！', _confirmfunc: '了解', _cancelfunc: '关闭', deals: undefined, contract: 4})
@@ -105,9 +113,11 @@
         // 组织args
         let that = this
         let a = []
+        this.isDealed = true
         a.push(this.trans_type)
         a.push(this.trans_unit)
         a.push(this.trans_address)
+        console.log('阀门允许-开始构建并且发送')
         this.$store.dispatch('invokeContract', {
           type: 3,
           fee: '10000000',
@@ -115,6 +125,7 @@
           that: this,
           callback: function (err, res) {
             if (err) {
+              that.init()
               return
             }
             // 增加转账后更新
@@ -128,15 +139,18 @@
             }, 10000)
             // 初始化本地state
             that.$store.commit('callToast', {msgHeader: '成功！', msgContent: '转账成功，根据环境原因转账时间可能会略有延长', _confirmfunc: '了解', _cancelfunc: '关闭', deals: undefined, contract: 4})
+            console.log('开始')
             that.init()
           }
         })
       },
       init: function () {
+        console.log('开始init')
         this.trans_type = ''
         this.trans_num = undefined
         this.trans_address = ''
         this.trans_password = ''
+        this.isDealed = false
         // 分页初始量
         // this.currentPage = 0
       },

@@ -159,14 +159,14 @@ export default {
   }
   .toastmsg span{
     display: block;
-    font-size: 16px;
+    font-size: 18px;
   }
   .toastmsg input{
     outline: none;
     display: inline-block;
     width: 80%;
     height: 30px;
-    margin-top: 15px;
+    margin-top: 36px;
     border-radius: 6px;
   }
   .msg-header{
@@ -217,7 +217,7 @@ export default {
     }
     .toastmsg span{
       display: block;
-      font-size: 14px;
+      font-size: 16px;
     }
     .toastctr span{
       line-height: 200%;
@@ -225,7 +225,7 @@ export default {
     .toastmsg input{
       width: 60%;
       height: 20px;
-      margin-top: 10px;
+      margin-top: 36px;
       border-radius: 6px;
     }
     .toastctr span{
@@ -233,7 +233,7 @@ export default {
       height: 96%;
       line-height: 350%;
       width: 49%;
-      font-size: 14px;
+      font-size: 18px;
       font-weight: 700;
       cursor: pointer;
     }

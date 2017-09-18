@@ -637,7 +637,6 @@
     white-space: pre-wrap;
     display: block;
     font-size: 16px;
-    text-indent: 36px;
     line-height: 32px;
     margin-top: 30px;
     text-align: left;

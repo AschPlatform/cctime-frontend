@@ -2,7 +2,7 @@
   <div class="loginform">
     <div class="inner-wrap">
       <span class="title">用户登录</span>
-      <input type="password" class="password" v-model="secret" placeholder="  请输入密钥">
+      <input type="password" class="password" v-model="secret"  placeholder="  请输入密钥">
       <a class="signUp" href="http://mainnet.asch.so/#/login" target="_blank">尚未拥有账户？</a>
       <div class="loginbtn loginbtn1" @click="toLogin()">登陆</div>
       <div class="loginbtn loginbtn2" @click="toNotLogin()">取消</div>
@@ -30,6 +30,10 @@
           that.$store.commit('callToast', {msgHeader: '注意!', msgContent: '秘钥不能为空呦', _confirmfunc: '了解', _cancelfunc: '关闭', deals: undefined, contract: 4})
           return
         }
+        // if (this.secret.length > 20) {
+        //   that.$store.commit('callToast', {msgHeader: '注意!', msgContent: '秘钥不能过长呦', _confirmfunc: '了解', _cancelfunc: '关闭', deals: undefined, contract: 4})
+        //   return
+        // }
         this.$store.dispatch('getUserInfo', {
           secret: this.trimSecret,
           that: this

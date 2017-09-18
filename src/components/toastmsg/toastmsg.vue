@@ -203,6 +203,7 @@ export default {
   .toastctr span{
     display: inline-block;
     height: 96%;
+    font-size: 1.2em;
     line-height: 350%;
     width: 49%;
     font-weight: 700;
