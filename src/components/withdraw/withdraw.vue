@@ -88,11 +88,11 @@
           return
         }
         // 整数检测
-        if (String(this.trans_num).indexOf('.') > 0) {
-          this.$store.commit('callToast', {msgHeader: '注意！', msgContent: '转账金额必须为整数！', _confirmfunc: '了解', _cancelfunc: '关闭', deals: undefined, contract: 4})
-          this.init()
-          return
-        }
+        // if (String(this.trans_num).indexOf('.') > 0) {
+        //   this.$store.commit('callToast', {msgHeader: '注意！', msgContent: '转账金额必须为整数！', _confirmfunc: '了解', _cancelfunc: '关闭', deals: undefined, contract: 4})
+        //   this.init()
+        //   return
+        // }
         if (this.trans_type === '') {
           this.$store.commit('callToast', {msgHeader: '注意！', msgContent: '请先选择交易内容！', _confirmfunc: '了解', _cancelfunc: '关闭', deals: undefined, contract: 4})
           return

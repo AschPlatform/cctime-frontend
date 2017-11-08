@@ -21,7 +21,7 @@
       <h1>充币</h1>
     </div>
     <div class="address">
-      <p>要执行充币的操作请移步<a href="http://mainnet.asch.so">阿希钱包</a></p>
+      <p>要执行充币的操作请移步<a href="http://mainnet.asch.io" target="_blank">阿希钱包</a></p>
     </div>
   </div>
 </template>

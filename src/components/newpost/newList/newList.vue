@@ -9,7 +9,7 @@
     <div class="list_container">
         <span class="title">
         <router-link :to="'articles/' + item.id" class="title-header">{{item.title}}</router-link>
-        <a class="titlesuffix" :href="item.url" :title="item.url" v-show="item.url !== ''">{{this.getUrl}}</a>
+        <a class="titlesuffix" :href="item.url" :title="item.url" v-show="item.url !== ''" target="_blank">{{this.getUrl}}</a>
         </span>
         <br/>
         <span class="meta">

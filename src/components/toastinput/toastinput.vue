@@ -126,7 +126,11 @@ export default {
       return this.price * 100000000
     },
     getAcccountLost: function () {
-      return Number(this.price) + 0.1
+      if (this.price > 0) {
+        return Number(this.price) + 0.1
+      } else {
+        return 0
+      }
     }
   }
 }
