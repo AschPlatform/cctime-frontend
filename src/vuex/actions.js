@@ -1,5 +1,5 @@
 
-import Identicon from 'Identicon.js'
+import Identicon from 'identicon.js'
 import aschJS from 'asch-js'
 // 存储异步操作,获取数据用commit操作mutation
 // let baseUrl = '/api/dapps/d352263c517195a8b612260971c7af869edca305bb64b471686323817e57b2c1' // 真实环境
