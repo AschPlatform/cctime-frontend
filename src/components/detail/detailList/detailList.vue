@@ -39,13 +39,17 @@ export default {
       isReplyToggle: false
     }
   },
+  created () {
+    console.log(this, 'hahahaahahahahahahah')
+  },
   computed: {
     getId: function () {
-      return window.location.hash.split('/')[2]
+      return this.$route.params.id
+      // return window.location.hash.split('/')[2]
     },
-    getUrl: function () {
-      return window.location.hash.split('/')[1]
-    },
+    // getUrl: function () {
+    //   return window.location.hash.split('/')[1]
+    // },
     realT: function () {
       let pst = ''
       let t = Number(this.item.realTime)
