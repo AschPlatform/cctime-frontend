@@ -137,7 +137,8 @@
       // 获取当前文章ID
       getId: function () {
         console.log('2SP')
-        return window.location.hash.split('/')[2]
+        return this.$route.params.id
+        // return window.location.hash.split('/')[2]
       },
       // 上一篇文章id
       preId: function () {
@@ -459,49 +460,50 @@
     //   })
     // },
     created: function created () {
-      // 重置页码
-      this.$store.commit('toInitPage')
-      // 首先 判断是否session有文章url字段
-      console.log(window.location.href)
-      console.log('5SP')
-      var aaa = window.location.href.split('/')[5]
-      console.log(aaa)
-      if (window.sessionStorage.articleDetail) {
-        // 如果有字段
-        console.log('察觉到session的缓存')
-        console.log('6SP')
-        var sign = window.location.href.split('/')[5]
-        console.log('7SP')
-        var signS = window.sessionStorage.articleDetail.split('/')[5]
-        console.log(sign, signS, '___________________________________')
-        if (sign === signS) {
-          console.log('察觉到原页面刷新')
-          window.location.href = window.sessionStorage.articleDetail
-        } else {
-          this.$store.dispatch('getOnearticle', {
-            id: this.getId,
-            that: this
-          })
-          console.log(this.getId, 'created')
-          window.sessionStorage.articleDetail = window.location.href
-        }
-      } else {
-        // 判断是否为
-        // 说明外界加载该页面
-        this.$store.dispatch('getOnearticle', {
-          id: this.getId,
-          that: this
-        })
-        console.log(this.getId, 'created2')
-        window.sessionStorage.setItem('articleDetail', window.location.href)
-      }
+      // console.log(this)
+      // // 重置页码
+      // this.$store.commit('toInitPage')
+      // // 首先 判断是否session有文章url字段
+      // console.log(window.location.href)
+      // console.log('5SP')
+      // var aaa = window.location.href.split('/')[5]
+      // console.log(aaa)
+      // if (window.sessionStorage.articleDetail) {
+      //   // 如果有字段
+      //   console.log('察觉到session的缓存')
+      //   console.log('6SP')
+      //   var sign = window.location.href.split('/')[5]
+      //   console.log('7SP')
+      //   var signS = window.sessionStorage.articleDetail.split('/')[5]
+      //   console.log(sign, signS, '___________________________________')
+      //   if (sign === signS) {
+      //     console.log('察觉到原页面刷新')
+      //     window.location.href = window.sessionStorage.articleDetail
+      //   } else {
+      //     this.$store.dispatch('getOnearticle', {
+      //       id: this.getId,
+      //       that: this
+      //     })
+      //     console.log(this.getId, 'created')
+      //     window.sessionStorage.articleDetail = window.location.href
+      //   }
+      // } else {
+      //   // 判断是否为
+      //   // 说明外界加载该页面
+      //   this.$store.dispatch('getOnearticle', {
+      //     id: this.getId,
+      //     that: this
+      //   })
+      //   console.log(this.getId, 'created2')
+      //   window.sessionStorage.setItem('articleDetail', window.location.href)
+      // }
       this.$store.dispatch('getOnearticle', {
-        id: this.getId,
+        id: this.$route.params.id,
         that: this
       })
       console.log(this.getId, 'created3')
       this.$store.dispatch('getOnearticleComment', {
-        id: this.getId,
+        id: this.$route.params.id,
         limit: String(this.pageContent),
         offset: String(this.currentPage_comment * this.pageContent),
         that: this

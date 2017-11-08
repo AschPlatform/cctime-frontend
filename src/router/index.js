@@ -17,6 +17,8 @@ export default new Router({
   // scrollBehavior: function (to, from, savedPosition) {
   //   return savedPosition || { x: 0, y: 0 }
   // },
+  mode: 'history',
+  base: __dirname,
   routes: [
     {
       path: '/top',
