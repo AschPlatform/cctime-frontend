@@ -23,7 +23,7 @@
         </div>
       </div>
       <div class="ctr_group">
-        <router-link to="withdraw/">链内转账</router-link>
+        <router-link to="withdraw/">站内转账</router-link>
         <router-link to="recharge/">充/提币</router-link>
       </div>
       <div class="content_table">

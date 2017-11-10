@@ -59,6 +59,7 @@
 
 <script>
   import {mapState} from 'vuex'
+  import aschJS from 'asch-js'
   export default {
     name: 'withdraw',
     components: {
@@ -107,6 +108,10 @@
         }
         if (this.trans_num <= 0) {
           this.$store.commit('callToast', {msgHeader: '注意！', msgContent: '请确认交易数额大于零！', _confirmfunc: '了解', _cancelfunc: '关闭', deals: undefined, contract: 4})
+          return
+        }
+        if (!aschJS.crypto.isAddress(this.trans_address)) {
+          this.$store.commit('callToast', {msgHeader: '注意！', msgContent: '您输入的地址不符合阿希规范', _confirmfunc: '了解', _cancelfunc: '关闭', deals: undefined, contract: 4})
           return
         }
         // 组织args
@@ -282,6 +287,7 @@
       }
     },
     created: function () {
+      console.log(aschJS)
       let that = this
       // 以下是触发Action内容
       // 输出$state list内容
