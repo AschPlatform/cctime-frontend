@@ -1,8 +1,8 @@
 {
-  "name": "CCTime",
+  "name": "cctime",
   "version": "1.0.0",
   "description": "A Project built by ASCH decentralized techs",
-  "author": "Abise",
+  "author": "lbgod2222",
   "private": true,
   "scripts": {
     "dev": "node build/dev-server.js",
