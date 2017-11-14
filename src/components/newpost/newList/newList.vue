@@ -61,7 +61,7 @@ export default {
     voteBtn: function () {
       let that = this
       if (that.$store.state.isLogin === false) {
-        that.$store.commit('callToast', {msgHeader: '注意!', msgContent: '仅当您登陆后才能使用打赏功能', _confirmfunc: '去登录', _cancelfunc: '不了', deals: undefined, contract: 3})
+        that.$store.commit('callToast', {msgHeader: '注意!', msgContent: '仅当您登录后才能使用打赏功能', _confirmfunc: '去登录', _cancelfunc: '不了', deals: undefined, contract: 3})
         return
       }
       this.$store.commit('callInputToast', {msgHeader: '打赏', msgContent: '请输入打赏票数', _confirmfunc: null, _cancelfunc: null, deals: that.item.id, contract: 2})
@@ -74,7 +74,7 @@ export default {
     reportBtn: function () {
       let that = this
       if (that.$store.state.isLogin === false) {
-        that.$store.commit('callToast', {msgHeader: '注意!', msgContent: '仅当您登陆后才能使用举报功能', _confirmfunc: '去登录', _cancelfunc: '不了', deals: undefined, contract: 3})
+        that.$store.commit('callToast', {msgHeader: '注意!', msgContent: '仅当您登录后才能使用举报功能', _confirmfunc: '去登录', _cancelfunc: '不了', deals: undefined, contract: 3})
         return
       }
       this.$store.commit('callToast', {msgHeader: '警告', msgContent: '是否对该文章进行举报？', _confirmfunc: '举报', _cancelfunc: '不了', deals: that.item.id, contract: 2})

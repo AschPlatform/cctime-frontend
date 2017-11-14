@@ -34,7 +34,7 @@ let state = {
   currentPage: 0,
   currentPage_account: 0,
   currentPage_comment: 0,
-  // 登陆状态 (转用topbar内部判定)
+  // 登录状态 (转用topbar内部判定)
   isLogin: false,
   // 用户状态
   userInfo: { secret: '', info: {} },
