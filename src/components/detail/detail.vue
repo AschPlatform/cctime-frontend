@@ -294,7 +294,7 @@
       voteBtn: function () {
         let that = this
         if (that.$store.state.isLogin === false) {
-          that.$store.commit('callToast', {msgHeader: '注意!', msgContent: '仅当您登陆后才能使用打赏功能', _confirmfunc: '去登陆', _cancelfunc: '不了', deals: undefined, contract: 3})
+          that.$store.commit('callToast', {msgHeader: '注意!', msgContent: '仅当d登录后才能使用打赏功能', _confirmfunc: '去登录', _cancelfunc: '不了', deals: undefined, contract: 3})
           return
         }
         if (this.a_num === 0) {
@@ -348,7 +348,7 @@
       // 发布评论
       subCommment: function () {
         if (this.$store.state.isLogin === false) {
-          this.$store.commit('callToast', {msgHeader: '注意!', msgContent: '仅当您登陆后才能使用评论功能', _confirmfunc: '去登陆', _cancelfunc: '取消', deals: undefined, contract: 3})
+          this.$store.commit('callToast', {msgHeader: '注意!', msgContent: '仅当您登录后才能使用评论功能', _confirmfunc: '去登录', _cancelfunc: '取消', deals: undefined, contract: 3})
           return
         }
         let reg = '^[ ]+$'

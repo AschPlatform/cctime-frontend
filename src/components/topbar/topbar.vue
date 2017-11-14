@@ -6,7 +6,7 @@
         <router-link to="/top" class="fl btn_hot" active-class="active"><span>HOT</span></router-link>
         <router-link to="/new" class="fl btn_new" active-class="active"><span>NEW</span></router-link>
         <div class="right-part">
-          <router-link to="/login" class="loginbtn btn" v-show="!this.isLogin">登陆</router-link>
+          <router-link to="/login" class="loginbtn btn" v-show="!this.isLogin">登录</router-link>
           <a href="http://mainnet.asch.io/#/login" target="_blank" class="loginbtn btn" v-show="!this.isLogin">注册</a>
           <span class="logoutbtn btn" @click="logout" v-show="this.isLogin">注销</span>
           <router-link to="/account" class="accountbtn btn" v-show="this.isLogin">我的账户</router-link>
