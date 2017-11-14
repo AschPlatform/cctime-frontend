@@ -639,7 +639,7 @@
     white-space: pre-wrap;
     display: block;
     font-size: 16px;
-    line-height: 32px;
+    line-height: 24px;
     margin-top: 30px;
     text-align: left;
     font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
@@ -860,7 +860,7 @@
       }
       #article pre{
         font-size: 16px;
-        line-height: 32px;
+        line-height: 24px;
       }
       .interaction .vote{
         font-size: 9px;
