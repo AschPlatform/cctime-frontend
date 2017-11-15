@@ -59,7 +59,7 @@
 
 <script>
   import {mapState} from 'vuex'
-  import aschJS from '../../../node_modules/asch-js'
+  import aschJS from 'asch-js'
   export default {
     name: 'withdraw',
     components: {
