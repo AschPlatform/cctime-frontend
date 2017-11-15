@@ -140,6 +140,9 @@
                 that: that
               })
             }, 10000)
+            setTimeout(function () {
+              that.$router.go(0)
+            }, 12000)
             // 初始化本地state
             that.$store.commit('callToast', {msgHeader: '成功！', msgContent: '转账成功，根据环境原因转账时间可能会略有延长', _confirmfunc: '了解', _cancelfunc: '关闭', deals: undefined, contract: 4})
             that.init()
