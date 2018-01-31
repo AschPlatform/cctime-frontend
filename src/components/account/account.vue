@@ -6,17 +6,17 @@
     </div>
     <div class="content">
       <div class="content_header">
-        <img class="logo" :src="'data:image/png;base64,' + this.$store.state.userInfo.info.logo"></img>
+        <img class="logo" :src="'data:image/png;base64,' + this.$store.state.userInfo.info.logo">
         <div class="info_contain">
           <div class="info_username">
             用户名：<span v-show="this.isSetNickToggle == false">{{this.accountName}}</span>
             <!--设置收缩框-->
             <div class="setNickBox" v-show="this.isSetNickToggle == true">
-              <input type="text" placeholder="  输入昵称" v-model="nickName" :value="this.accountName"/>
+              <input type="text" placeholder="  输入昵称" v-model="nickName"/>
               <div class="check" @click="setNickName">确认</div>
               <div class="check" @click="toggleNickBox">取消</div>
             </div>
-            <img src="/static/img/rewrite.png" @click="toggleNickBox" v-show="!isSetNickToggle" :class="{ hidebox: isHide }"></img>
+            <img src="/static/img/rewrite.png" @click="toggleNickBox" v-show="!isSetNickToggle" :class="{ hidebox: isHide }">
           </div>
           <div class="info_address">地&nbsp;&nbsp;址：<span>{{this.address}}</span></div>
           <span v-if="this.isEmpty" class="warning">{{accountInfo}}</span>
